@@ -40,9 +40,9 @@
   </dependencyManagement>
 
   <modules>
-    <module>user-console</module>
-    <module>core-api</module>
-    <module>statistics-api</module>
+    <module>user-service</module>
+    <module>splitter-service</module>
+    <module>statistics-service</module>
   </modules>
 
   <build>
