@@ -1,36 +1,22 @@
-package net.bondar;
+package net.bondar.utils;
 
 
+import net.bondar.Command;
+import net.bondar.inretfaces.IParametersParser;
 import org.apache.commons.cli.*;
 
 /**
  *
  */
-public class CliOptionsViewer {
-    private String[] args;
+public class CliParameterParser implements IParametersParser{
     private Options options = new Options();
 
-    public CliOptionsViewer(String[] args) {
-        this.args = args;
-//        options.addOption("h", "help", false, "Show help.");
+    public CliParameterParser() {
         options.addOption("p", true, "Path to the file you want to split.");
         options.addOption("s", true, "Size of the parts (in Mb).");
     }
 
-//    public Command parse() {
-////        if (args[0].equalsIgnoreCase("exit")) {
-////            return Command.EXIT;
-////        } else {
-//            String[] parameters = new String[args.length - 1];
-//            System.arraycopy(args, 1, parameters, 0, parameters.length);
-//            Command currentCommand = parseParameters(args);
-//            if (currentCommand != null) {
-//                return currentCommand;
-//            } else throw new ParsingException("Error while parsing input parameters");
-////        }
-//    }
-
-    public Command parse() {
+    public Command parse(String[] args) {
         Command currentCommand = null;
         CommandLineParser parser = new BasicParser();
         try {

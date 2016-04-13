@@ -1,4 +1,4 @@
-package net.bondar;
+package net.bondar.exceptions;
 
 /**
  *

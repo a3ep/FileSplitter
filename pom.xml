@@ -5,6 +5,7 @@
   <groupId>net.bondar</groupId>
   <artifactId>FileSplitter</artifactId>
   <version>1.0-SNAPSHOT</version>
+
   <packaging>pom</packaging>
   <name>FileSplitter</name>
   <url>${project.url}</url>
