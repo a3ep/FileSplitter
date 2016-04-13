@@ -1,15 +1,18 @@
 package net.bondar.utils;
 
+import net.bondar.domain.Task;
 import net.bondar.interfaces.AbstractIteratorFactory;
 import net.bondar.interfaces.IProcessor;
 import net.bondar.interfaces.Iterable;
 
 import java.io.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  *
  */
-public class SplitProcessor implements IProcessor{
+public class SplitProcessor implements IProcessor {
 
     /**
      *
@@ -19,66 +22,58 @@ public class SplitProcessor implements IProcessor{
     /**
      *
      */
-    private String chunkSize;
+    private int partSize;
     /**
      *
      */
-    private AbstractIteratorFactory iFactory;
+
+    private File file;
+    /**
+     *
+     */
+    private AbstractIteratorFactory iteratorFactory;
+
+    private Iterable iterator;
 
     /**
      *
      * @param fileDest
-     * @param chunkSize
-     * @param iFactory
+     * @param partSize
+     * @param iteratorFactory
      */
-    public SplitProcessor(String fileDest, String chunkSize, AbstractIteratorFactory iFactory) {
+    public SplitProcessor(String fileDest, int partSize, AbstractIteratorFactory iteratorFactory) {
         this.fileDest = fileDest;
-        this.chunkSize = chunkSize;
-        this.iFactory = iFactory;
+        this.partSize = partSize;
+        this.iteratorFactory = iteratorFactory;
+        this.file=new File(fileDest);
+        this.iterator = iteratorFactory.createIterator((int)file.length(), partSize);
     }
+
+   public void process(){
+       ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+       for(int i=0; i<executor.getCorePoolSize();i++){
+           executor.execute(this::processTask);
+       }
+   }
 
     /**
      *
      */
-    public void process() {
-        int partCounter = 1;
-        File file = new File(fileDest);
-        int partSize = Integer.parseInt(chunkSize.substring(0, chunkSize.indexOf("M")).replace(" ", "")) * 1024 * 1024;
-        byte[] buffer = new byte[partSize];
-
-        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
-            Iterable iterator = iFactory.createIterator(bis, buffer);
-            while (iterator.hasNext()) {
-                File partFile = new File(file.getParent(), file.getName() + "_part_" + String.format("%03d", partCounter++));
-                try (FileOutputStream fos = new FileOutputStream(partFile)) {
-                    fos.write(iterator.getBuffer(), 0, iterator.getTmpNumberOfData());
-                }
+    public void processTask() {
+        System.out.println("Thread "+Thread.currentThread().getName() + " processed task");
+        while (true) {
+            Task task = iterator.getNext();
+            byte[] buffer = new byte[task.getStartPosition() + task.getEndPosition()];
+            if (task.getPartFileName().equals("")) {
+                return;
             }
-        }catch (IOException e){
-            e.printStackTrace();
+            try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+                FileOutputStream fos = new FileOutputStream(new File(file.getParent(), file.getName()+task.getPartFileName()))){
+                bis.read(buffer, task.getStartPosition(), task.getEndPosition());
+                fos.write(buffer);
+            }catch(IOException e){
+                e.printStackTrace();
+            }
         }
-//        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
-//            ReadFileIterator iterator = new ReadFileIterator(bis, buffer);
-//            ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
-//            List<Runnable> taskList = new ArrayList<>();
-//            while (true) {
-//                if (iterator.hasNext()) {
-//                    byte[] tmpBuffer = iterator.getBuffer();
-//                    int tmpNumberOfData = iterator.getTmpNumberOfData();
-//                    Task task = new Task(partCounter++, tmpNumberOfData, tmpBuffer, file);
-//                    taskList.add(task);
-//                } else {
-//                    break;
-//                }
-//            }
-//            for (Runnable task : taskList) {
-//                executor.execute(task);
-//            }
-//            executor.shutdown();
-//            while (!executor.isTerminated()) {
-//            }
-//            System.out.println("Finished all threads");
-//        }
-
     }
 }

@@ -31,7 +31,9 @@ public class CliParameterParser implements IParametersParser{
             else if (cmd.hasOption("p")) {
                 if (cmd.hasOption("s")) {
                     Command.SPLIT.setFirstParameter(cmd.getOptionValue("p"));
-                    Command.SPLIT.setSecondParameter(cmd.getOptionValue("s"));
+                    String sizeToString = cmd.getOptionValue("s");
+                    int size = Integer.parseInt(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", "")) * 1024 * 1024;
+                    Command.SPLIT.setSecondParameter(size);
                     currentCommand = Command.SPLIT;
                 } else {
                     Command.MERGE.setFirstParameter(cmd.getOptionValue("p"));

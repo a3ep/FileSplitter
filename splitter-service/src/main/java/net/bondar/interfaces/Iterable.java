@@ -1,15 +1,11 @@
 package net.bondar.interfaces;
 
+import net.bondar.domain.Task;
+
 /**
  *
  */
 public interface Iterable {
 
-    boolean hasNext();
-
-    int next();
-
-    byte[] getBuffer();
-
-    int getTmpNumberOfData();
+    Task getNext();
 }

@@ -21,15 +21,16 @@ public class MergeProcessor implements IProcessor {
     /**
      *
      */
-    private AbstractIteratorFactory iFactory;
+    private AbstractIteratorFactory iteratorFactory;
 
     /**
+     *
      * @param partFileDest
-     * @param iFactory
+     * @param iteratorFactory
      */
-    public MergeProcessor(String partFileDest, AbstractIteratorFactory iFactory) {
+    public MergeProcessor(String partFileDest, AbstractIteratorFactory iteratorFactory) {
         this.partFileDest = partFileDest;
-        this.iFactory = iFactory;
+        this.iteratorFactory = iteratorFactory;
     }
 
     /**
@@ -42,7 +43,7 @@ public class MergeProcessor implements IProcessor {
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(completeFile))) {
             for (File file : partFileList) {
                 try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
-                    Iterable iterator = iFactory.createIterator(bis, null);
+                    ReadFileIterator iterator = iteratorFactory.createIterator(bis);
                     while (iterator.hasNext()) {
                         bos.write(iterator.next());
                     }

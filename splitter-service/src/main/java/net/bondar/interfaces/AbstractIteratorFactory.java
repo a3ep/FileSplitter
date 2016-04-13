@@ -1,5 +1,7 @@
 package net.bondar.interfaces;
 
+import net.bondar.utils.ReadFileIterator;
+
 import java.io.BufferedInputStream;
 
 /**
@@ -9,9 +11,11 @@ public interface AbstractIteratorFactory {
 
     /**
      *
-     * @param bis
-     * @param buffer
+     * @param fileLength
+     * @param partLength
      * @return
      */
-    Iterable createIterator(BufferedInputStream bis, byte[] buffer);
+    Iterable createIterator(int fileLength, int partLength);
+    ReadFileIterator createIterator(BufferedInputStream bis);
+
 }

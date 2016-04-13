@@ -3,7 +3,7 @@ package net.bondar.domain;
 
 public enum Command {
     EXIT,
-    SPLIT("", ""),
+    SPLIT("", 0),
     MERGE("");
 
     /**
@@ -11,7 +11,7 @@ public enum Command {
      * @param firstParameter
      * @param secondParameter
      */
-    Command(String firstParameter, String secondParameter) {
+    Command(String firstParameter, int secondParameter) {
         this.firstParameter = firstParameter;
         this.secondParameter = secondParameter;
     }
@@ -50,7 +50,7 @@ public enum Command {
      *
      * @return
      */
-    public String getSecondParameter() {
+    public int getSecondParameter() {
         return secondParameter;
     }
 
@@ -58,7 +58,7 @@ public enum Command {
      *
      * @param secondParameter
      */
-    public void setSecondParameter(String secondParameter) {
+    public void setSecondParameter(int secondParameter) {
         this.secondParameter = secondParameter;
     }
 
@@ -70,5 +70,5 @@ public enum Command {
     /**
      *
      */
-    private String secondParameter;
+    private int secondParameter;
 }

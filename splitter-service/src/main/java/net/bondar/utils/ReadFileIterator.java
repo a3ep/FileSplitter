@@ -1,5 +1,6 @@
 package net.bondar.utils;
 
+import net.bondar.domain.Task;
 import net.bondar.interfaces.Iterable;
 
 import java.io.BufferedInputStream;
@@ -63,5 +64,10 @@ public class ReadFileIterator implements Iterable{
      */
     public int next() {
         return tmpNumberOfData;
+    }
+
+    @Override
+    public Task getNext() {
+        return null;
     }
 }
