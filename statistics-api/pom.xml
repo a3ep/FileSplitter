@@ -10,11 +10,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>net.bondar</groupId>
     <artifactId>statistics-api</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>${project.modulesName} statictics</name>
+    <name>${project.modulesName} statistics</name>
 
     
 </project>
