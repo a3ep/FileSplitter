@@ -21,13 +21,13 @@ public class SplitIterator implements Iterable{
     }
 
     public synchronized Task getNext() {
-        if(currentPosition==fileLength) return new Task();
+        if(currentPosition>fileLength) return new Task();
         int start = currentPosition;
         int end = currentPosition + partLength;
         if (end > fileLength) end = fileLength;
         String partName = "_part_" + String.format("%03d", partCounter++);
-        Task task = new Task(partName, start, end);
-        currentPosition=end;
+        Task task = new Task(partName, start, end, partCounter-1);
+        currentPosition=end+1;
         log.info("start="+start+ " end="+end);
         return task;
     }

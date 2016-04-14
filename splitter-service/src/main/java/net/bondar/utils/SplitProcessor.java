@@ -1,6 +1,7 @@
 package net.bondar.utils;
 
 import net.bondar.domain.Task;
+import net.bondar.exceptions.FileWritingException;
 import net.bondar.interfaces.AbstractIteratorFactory;
 import net.bondar.interfaces.IProcessor;
 import net.bondar.interfaces.Iterable;
@@ -37,7 +38,6 @@ public class SplitProcessor implements IProcessor {
     private Iterable iterator;
 
     /**
-     *
      * @param fileDest
      * @param partSize
      * @param iteratorFactory
@@ -46,35 +46,44 @@ public class SplitProcessor implements IProcessor {
         this.fileDest = fileDest;
         this.partSize = partSize;
         this.iteratorFactory = iteratorFactory;
-        this.file=new File(fileDest);
-        this.iterator = iteratorFactory.createIterator((int)file.length(), partSize);
+        this.file = new File(fileDest);
+        this.iterator = iteratorFactory.createIterator((int) file.length(), partSize);
     }
 
-   public void process(){
-       ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-       for(int i=0; i<executor.getCorePoolSize();i++){
-           executor.execute(this::processTask);
-       }
-   }
+    public void process() {
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+        for (int i = 0; i < executor.getCorePoolSize(); i++) {
+            executor.execute(this::processTask);
+        }
+    }
 
     /**
      *
      */
     public void processTask() {
-        System.out.println("Thread "+Thread.currentThread().getName() + " processed task");
         Task task = iterator.getNext();
         while (!task.getStatus().equals("NULL")) {
-            int byteLength = task.getEndPosition() - task.getStartPosition();
-            log.info("byteLength="+byteLength);
-            byte[] buffer = new byte[byteLength];
-            try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-                FileOutputStream fos = new FileOutputStream(new File(file.getParent(), file.getName()+task.getPartFileName()))){
-                bis.read(buffer, task.getStartPosition(), byteLength);
-                fos.write(buffer);
-            }catch(IOException e){
-                e.printStackTrace();
+            log.info("Thread " + Thread.currentThread().getName() + " processed " + task.getName() + task.getCounter());
+            File partFile = new File(file.getParent(), file.getName() + task.getPartFileName());
+            try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
+                 RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
+                //Set the file-pointer to the start position of partFile
+                log.info("Start to write Filepart : " + partFile.getName());
+                sourceFile.seek(task.getStartPosition());
+                int start = task.getStartPosition();
+                int finish = task.getEndPosition();
+                //create buffer for copying
+                byte[] array = new byte[finish - start];
+                //process of copying
+                sourceFile.read(array);
+                outputFile.write(array);
+                log.info("Finish to write Filepart: " + partFile.getName());
+                task = iterator.getNext();
+            } catch (IOException e) {
+                log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
+                throw new FileWritingException("Error during writing part:" + partFile.getName() +
+                        ". Exception:" + e.getMessage());
             }
-            task=iterator.getNext();
         }
     }
 }
