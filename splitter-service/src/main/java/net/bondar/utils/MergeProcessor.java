@@ -15,7 +15,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -39,7 +42,6 @@ public class MergeProcessor implements IProcessor {
     private final ThreadPoolExecutor pool;
 
     /**
-     *
      * @param partFileDest
      * @param iteratorFactory
      */
@@ -61,6 +63,7 @@ public class MergeProcessor implements IProcessor {
                             pool.getQueue().put(r);
                         } catch (InterruptedException e) {
                             log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
+                            throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
                         }
                     }
                 });
@@ -78,6 +81,7 @@ public class MergeProcessor implements IProcessor {
             Thread.currentThread().sleep(2000);
         } catch (InterruptedException e) {
             log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
+            throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
     }
 

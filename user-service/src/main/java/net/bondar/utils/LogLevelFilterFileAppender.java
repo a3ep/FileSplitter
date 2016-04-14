@@ -14,25 +14,58 @@ import java.io.IOException;
  */
 public class LogLevelFilterFileAppender extends FileAppender {
 
+    /**
+     *
+     */
     private final static String DOT = ".";
+
+
+    /**
+     *
+     */
     private final static String HIPHEN = "-";
+
+    /**
+     *
+     */
     private static final String ORIG_LOG_FILE_NAME = "OrginalLogFileName";
 
+    /**
+     *
+     */
     public LogLevelFilterFileAppender() {
-
     }
 
+    /**
+     * @param layout
+     * @param fileName
+     * @param append
+     * @param bufferedIO
+     * @param bufferSize
+     * @throws IOException
+     */
     public LogLevelFilterFileAppender(Layout layout, String fileName,
                                       boolean append, boolean bufferedIO, int bufferSize)
             throws IOException {
         super(layout, fileName, append, bufferedIO, bufferSize);
     }
 
+    /**
+     * @param layout
+     * @param fileName
+     * @param append
+     * @throws IOException
+     */
     public LogLevelFilterFileAppender(Layout layout, String fileName,
                                       boolean append) throws IOException {
         super(layout, fileName, append);
     }
 
+    /**
+     * @param layout
+     * @param fileName
+     * @throws IOException
+     */
     public LogLevelFilterFileAppender(Layout layout, String fileName)
             throws IOException {
         super(layout, fileName);
@@ -60,6 +93,11 @@ public class LogLevelFilterFileAppender extends FileAppender {
         super.append(event);
     }
 
+    /**
+     * @param oldLogFileName
+     * @param level
+     * @return
+     */
     private String appendLevelToFileName(String oldLogFileName, String level) {
         if (oldLogFileName != null) {
             final File logFile = new File(oldLogFileName);

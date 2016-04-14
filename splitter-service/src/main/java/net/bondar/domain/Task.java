@@ -38,7 +38,6 @@ public class Task {
     private final File file;
 
     /**
-     *
      * @param partFileName
      * @param startPosition
      * @param endPosition
@@ -54,7 +53,6 @@ public class Task {
     }
 
     /**
-     *
      * @param file
      * @param startPosition
      * @param counter
@@ -81,7 +79,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public String getStatus() {
@@ -89,7 +86,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public String getPartFileName() {
@@ -97,7 +93,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public long getStartPosition() {
@@ -105,7 +100,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public long getEndPosition() {
@@ -113,7 +107,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public int getCounter() {
@@ -121,7 +114,6 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
     public File getFile() {
@@ -129,8 +121,9 @@ public class Task {
     }
 
     /**
-     *
      * @return
      */
-    public String getName(){return "Task #";}
+    public String getName() {
+        return "Task #";
+    }
 }

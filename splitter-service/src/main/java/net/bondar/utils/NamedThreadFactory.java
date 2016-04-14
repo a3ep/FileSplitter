@@ -18,7 +18,6 @@ public class NamedThreadFactory extends AbstractThreadFactory {
     private String prefix;
 
     /**
-     *
      * @param prefix
      */
     public NamedThreadFactory(String prefix) {
@@ -26,7 +25,6 @@ public class NamedThreadFactory extends AbstractThreadFactory {
     }
 
     /**
-     *
      * @param r
      * @return
      */

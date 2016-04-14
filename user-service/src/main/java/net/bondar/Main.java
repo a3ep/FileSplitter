@@ -20,7 +20,6 @@ public class Main {
             AbstractProcessorFactory processorFactory = new SplitMergeProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
 
-
             IService service = new FileService(parametersParser, processorFactory, iteratorFactory);
             service.run();
         } catch (Throwable t) {

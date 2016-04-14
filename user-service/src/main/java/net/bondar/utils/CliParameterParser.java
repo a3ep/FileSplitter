@@ -2,7 +2,7 @@ package net.bondar.utils;
 
 
 import net.bondar.domain.Command;
-import net.bondar.exceptions.UserServiceException;
+import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.IParametersParser;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
@@ -33,7 +33,6 @@ public class CliParameterParser implements IParametersParser {
     }
 
     /**
-     *
      * @param args
      * @return
      */
@@ -63,12 +62,13 @@ public class CliParameterParser implements IParametersParser {
                     currentCommand = Command.MERGE;
                 }
             } else {
-                log.error("Wrong input command ->"+ Arrays.toString(args));
+                log.error("Wrong input command ->" + Arrays.toString(args));
                 help();
+                return currentCommand;
             }
-        } catch (NumberFormatException |ParseException e) {
-            log.warn("Catches "+e.getClass()+", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
-            throw new UserServiceException("Error during parsing " + Arrays.toString(args) + ". Exception:" + e.getMessage());
+        } catch (NumberFormatException | ParseException e) {
+            log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
+            throw new ApplicationException("Error during parsing " + Arrays.toString(args) + ". Exception:" + e.getMessage());
         }
         log.info("Finish parsing input: " + Arrays.toString(args));
         return currentCommand;
@@ -81,7 +81,6 @@ public class CliParameterParser implements IParametersParser {
         log.info("Input \"help\" to show help, \"split -p <args> -s <args>\" to split or \"merge -p <args>\" to merge.\"");
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("FileSplitter options.", options);
-        System.exit(0);
     }
 
 

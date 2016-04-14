@@ -7,10 +7,9 @@ import net.bondar.interfaces.IProcessor;
 /**
  *
  */
-public class SplitMergeProcessorFactory implements AbstractProcessorFactory{
+public class SplitMergeProcessorFactory implements AbstractProcessorFactory {
 
     /**
-     *
      * @param fileDest
      * @param iteratorFactory
      * @param partSize
@@ -18,9 +17,9 @@ public class SplitMergeProcessorFactory implements AbstractProcessorFactory{
      */
     @Override
     public IProcessor createProcessor(String fileDest, AbstractIteratorFactory iteratorFactory, int partSize) {
-        if(partSize==0){
+        if (partSize == 0) {
             return new MergeProcessor(fileDest, iteratorFactory);
-        }else {
+        } else {
             return new SplitProcessor(fileDest, partSize, iteratorFactory);
         }
     }

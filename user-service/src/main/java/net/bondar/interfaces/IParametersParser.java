@@ -8,7 +8,6 @@ import net.bondar.domain.Command;
 public interface IParametersParser {
 
     /**
-     *
      * @param args
      * @return
      */

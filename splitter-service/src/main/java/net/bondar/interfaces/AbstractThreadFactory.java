@@ -5,10 +5,9 @@ import java.util.concurrent.ThreadFactory;
 /**
  *
  */
-public abstract class AbstractThreadFactory implements ThreadFactory{
+public abstract class AbstractThreadFactory implements ThreadFactory {
 
     /**
-     *
      * @param r
      * @return
      */

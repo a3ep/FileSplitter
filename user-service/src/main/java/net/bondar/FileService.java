@@ -1,7 +1,7 @@
 package net.bondar;
 
 import net.bondar.domain.Command;
-import net.bondar.exceptions.UserServiceException;
+import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.*;
 import org.apache.log4j.Logger;
 
@@ -45,21 +45,26 @@ public class FileService implements IService {
 
     @Override
     public void run() {
-        log.info("Start application.");
-        String input;
-        String[] args = {"help"};
-        while (true) {
-            try {
-                log.info("Input your parameters:");
-                input = br.readLine();
-                args = input.split(" ");
-                log.info("Introduced string -> " + input);
-                Command inputCommand = parametersParser.parse(args);
-                //checks input command
-                switchForCommand(inputCommand);
-            } catch (IOException e) {
-                log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+        try {
+            log.info("Start application.");
+            String input;
+            String[] args = {"help"};
+            while (true) {
+                try {
+                    log.info("Input your parameters:");
+                    input = br.readLine();
+                    args = input.split(" ");
+                    log.info("Introduced string -> " + input);
+                    Command inputCommand = parametersParser.parse(args);
+                    //checks input command
+                    switchForCommand(inputCommand);
+                } catch (IOException e) {
+                    log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+                    throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
+                }
             }
+        } catch (ApplicationException e) {
+            log.warn("File Splitter Application error. Message " + e.getMessage());
         }
     }
 
@@ -68,6 +73,7 @@ public class FileService implements IService {
      */
     private void switchForCommand(Command inputCommand) {
         IProcessor processor;
+        if (inputCommand == null) return;
         switch (inputCommand) {
             case EXIT:
                 log.info("Closing resources...");
@@ -75,6 +81,7 @@ public class FileService implements IService {
                     br.close();
                 } catch (IOException e) {
                     log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+                    throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
                 }
                 log.info("Closing application...");
                 System.exit(0);

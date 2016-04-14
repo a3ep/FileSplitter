@@ -11,7 +11,10 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.concurrent.*;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -60,6 +63,7 @@ public class SplitProcessor implements IProcessor {
                             pool.getQueue().put(r);
                         } catch (InterruptedException e) {
                             log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
+                            throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
                         }
                     }
                 });
@@ -77,6 +81,7 @@ public class SplitProcessor implements IProcessor {
             Thread.currentThread().sleep(2000);
         } catch (InterruptedException e) {
             log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
+            throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
     }
 
