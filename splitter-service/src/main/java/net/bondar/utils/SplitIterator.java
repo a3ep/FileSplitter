@@ -2,11 +2,14 @@ package net.bondar.utils;
 
 import net.bondar.domain.Task;
 import net.bondar.interfaces.Iterable;
+import org.apache.log4j.Logger;
 
 /**
  *
  */
 public class SplitIterator implements Iterable{
+
+    private final static Logger log = Logger.getLogger(SplitIterator.class);
     private int partCounter = 1;
     private int currentPosition = 0;
     private int fileLength;
@@ -22,11 +25,12 @@ public class SplitIterator implements Iterable{
             return new Task();
         }
         int start = currentPosition;
-        int end = currentPosition + partLength;
-        if (end > fileLength) end = fileLength;
+        int end = currentPosition + partLength-1;
+        if (end > fileLength) end = fileLength-1;
         String partName = "_part_" + String.format("%03d", partCounter++);
         Task task = new Task(partName, start, end);
         currentPosition=end;
+        log.info("start="+start+ " end="+end);
         return task;
     }
 

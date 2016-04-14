@@ -4,6 +4,7 @@ import net.bondar.domain.Task;
 import net.bondar.interfaces.AbstractIteratorFactory;
 import net.bondar.interfaces.IProcessor;
 import net.bondar.interfaces.Iterable;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.concurrent.Executors;
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  *
  */
 public class SplitProcessor implements IProcessor {
-
+    private final static Logger log = Logger.getLogger(SplitProcessor.class);
     /**
      *
      */
@@ -50,7 +51,7 @@ public class SplitProcessor implements IProcessor {
     }
 
    public void process(){
-       ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+       ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
        for(int i=0; i<executor.getCorePoolSize();i++){
            executor.execute(this::processTask);
        }
@@ -63,13 +64,15 @@ public class SplitProcessor implements IProcessor {
         System.out.println("Thread "+Thread.currentThread().getName() + " processed task");
         while (true) {
             Task task = iterator.getNext();
-            byte[] buffer = new byte[task.getStartPosition() + task.getEndPosition()];
             if (task.getPartFileName().equals("")) {
                 return;
             }
+            int byteLength = task.getEndPosition() - task.getStartPosition()+1;
+            log.info("byteLength="+byteLength);
+            byte[] buffer = new byte[byteLength];
             try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
                 FileOutputStream fos = new FileOutputStream(new File(file.getParent(), file.getName()+task.getPartFileName()))){
-                bis.read(buffer, task.getStartPosition(), task.getEndPosition());
+                bis.read(buffer, task.getStartPosition(), byteLength);
                 fos.write(buffer);
             }catch(IOException e){
                 e.printStackTrace();

@@ -13,8 +13,10 @@ import java.io.InputStreamReader;
  */
 public class FileSplitterService implements IService {
     //split -p /home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip -s 1M
+    //split -p /home/vsevolod/test/Howfast.ogg -s 1M
     //exit
     //merge -p /home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip_part_001
+    //merge -p /home/vsevolod/test/Howfast.ogg_part_001
     //    private String[] args = new String[]{"exit"};
     //    private String[] args = new String[]{"help"};
     //    private String[] args = new String[]{"split", "-p", "/home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip", "-s", "1M"};
