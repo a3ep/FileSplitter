@@ -53,6 +53,7 @@ public class FileService implements IService {
             try {
                 log.info("Input your parameters:");
                 input = br.readLine();
+
                 args = input.split(" ");
                 log.info("Introduced string -> " + input);
                 Command inputCommand = parametersParser.parse(args);
