@@ -62,12 +62,9 @@ public class SplitProcessor implements IProcessor {
      */
     public void processTask() {
         System.out.println("Thread "+Thread.currentThread().getName() + " processed task");
-        while (true) {
-            Task task = iterator.getNext();
-            if (task.getPartFileName().equals("")) {
-                return;
-            }
-            int byteLength = task.getEndPosition() - task.getStartPosition()+1;
+        Task task = iterator.getNext();
+        while (!task.getStatus().equals("NULL")) {
+            int byteLength = task.getEndPosition() - task.getStartPosition();
             log.info("byteLength="+byteLength);
             byte[] buffer = new byte[byteLength];
             try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
@@ -77,6 +74,7 @@ public class SplitProcessor implements IProcessor {
             }catch(IOException e){
                 e.printStackTrace();
             }
+            task=iterator.getNext();
         }
     }
 }
