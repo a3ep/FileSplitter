@@ -3,6 +3,8 @@ package net.bondar.interfaces;
 import net.bondar.utils.ReadFileIterator;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,6 @@ public interface AbstractIteratorFactory {
      * @return
      */
     Iterable createIterator(int fileLength, int partLength);
-    ReadFileIterator createIterator(BufferedInputStream bis);
+    Iterable createIterator(List<File> parts);
 
 }

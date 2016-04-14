@@ -7,7 +7,9 @@ import net.bondar.interfaces.IProcessor;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -15,26 +17,20 @@ import java.util.concurrent.ThreadPoolExecutor;
  *
  */
 public class SplitProcessor implements IProcessor {
+
+    /**
+     *
+     */
     private final static Logger log = Logger.getLogger(SplitProcessor.class);
-    /**
-     *
-     */
-    private String fileDest;
 
     /**
      *
      */
-    private int partSize;
-    /**
-     *
-     */
-
     private File file;
+
     /**
      *
      */
-    private AbstractIteratorFactory iteratorFactory;
-
     private Iterable iterator;
 
     /**
@@ -43,13 +39,14 @@ public class SplitProcessor implements IProcessor {
      * @param iteratorFactory
      */
     public SplitProcessor(String fileDest, int partSize, AbstractIteratorFactory iteratorFactory) {
-        this.fileDest = fileDest;
-        this.partSize = partSize;
-        this.iteratorFactory = iteratorFactory;
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator((int) file.length(), partSize);
     }
 
+    /**
+     *
+     */
+    @Override
     public void process() {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
         for (int i = 0; i < executor.getCorePoolSize(); i++) {
@@ -67,13 +64,11 @@ public class SplitProcessor implements IProcessor {
             File partFile = new File(file.getParent(), file.getName() + task.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
-                //Set the file-pointer to the start position of partFile
                 log.info("Start to write Filepart : " + partFile.getName());
+                // /Set the file-pointer to the start position of partFile
                 sourceFile.seek(task.getStartPosition());
-                int start = task.getStartPosition();
-                int finish = task.getEndPosition();
                 //create buffer for copying
-                byte[] array = new byte[finish - start];
+                byte[] array = new byte[(int)(task.getEndPosition() - task.getStartPosition())];
                 //process of copying
                 sourceFile.read(array);
                 outputFile.write(array);
