@@ -3,13 +3,13 @@ package net.bondar.exceptions;
 /**
  *
  */
-public class FileWritingException extends  RuntimeException{
+public class ApplicationException extends  RuntimeException{
 
     /**
      *
      * @param message
      */
-    public FileWritingException(String message) {
+    public ApplicationException(String message) {
         super(message);
     }
 }

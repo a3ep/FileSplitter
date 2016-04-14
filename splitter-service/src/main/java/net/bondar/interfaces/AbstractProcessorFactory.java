@@ -1,5 +1,7 @@
 package net.bondar.interfaces;
 
+import net.bondar.utils.ApplicationConfigLoader;
+
 /**
  *
  */

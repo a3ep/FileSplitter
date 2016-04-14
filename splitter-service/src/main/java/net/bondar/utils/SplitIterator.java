@@ -8,8 +8,7 @@ import org.apache.log4j.Logger;
  *
  */
 public class SplitIterator implements Iterable{
-
-    private final static Logger log = Logger.getLogger(SplitIterator.class);
+    private final Logger log = Logger.getLogger("splitterLogger");
     private int partCounter = 1;
     private long currentPosition = 0;
     private long fileLength;
@@ -28,7 +27,6 @@ public class SplitIterator implements Iterable{
         String partName = "_part_" + String.format("%03d", partCounter++);
         Task task = new Task(partName, start, end, partCounter-1);
         currentPosition=end+1;
-        log.info("start="+start+ " end="+end);
         return task;
     }
 

@@ -2,6 +2,7 @@ package net.bondar.utils;
 
 import net.bondar.domain.Task;
 import net.bondar.interfaces.Iterable;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
@@ -11,6 +12,10 @@ import java.util.List;
  */
 public class MergeIterator implements Iterable {
 
+    /**
+     *
+     */
+    private final Logger log = Logger.getLogger("splitterLogger");
     /**
      *
      */

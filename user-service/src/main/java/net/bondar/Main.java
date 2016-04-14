@@ -21,7 +21,7 @@ public class Main {
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
 
 
-            IService service = new FileSplitterService(parametersParser, processorFactory, iteratorFactory);
+            IService service = new FileService(parametersParser, processorFactory, iteratorFactory);
             service.run();
         } catch (Throwable t) {
             t.printStackTrace();

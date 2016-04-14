@@ -1,8 +1,10 @@
 package net.bondar;
 
 import net.bondar.domain.Command;
+import net.bondar.exceptions.UserServiceException;
 import net.bondar.interfaces.*;
-import net.bondar.interfaces.Iterable;
+import net.bondar.utils.ApplicationConfigLoader;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.io.InputStreamReader;
 /**
  *
  */
-public class FileSplitterService implements IService {
+public class FileService implements IService {
     //split -p /home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip -s 1M
     //split -p /home/vsevolod/test/Howfast.ogg -s 1M
     //exit
@@ -25,6 +27,8 @@ public class FileSplitterService implements IService {
     /**
      *
      */
+    private final Logger log = Logger.getLogger("userLogger");
+
     private IParametersParser parametersParser;
 
     private AbstractProcessorFactory processorFactory;
@@ -32,7 +36,7 @@ public class FileSplitterService implements IService {
     private AbstractIteratorFactory iteratorFactory;
 
 
-    public FileSplitterService(IParametersParser parametersParser, AbstractProcessorFactory processorFactory, AbstractIteratorFactory iteratorFactory) {
+    public FileService(IParametersParser parametersParser, AbstractProcessorFactory processorFactory, AbstractIteratorFactory iteratorFactory) {
         this.parametersParser = parametersParser;
         this.processorFactory = processorFactory;
         this.iteratorFactory = iteratorFactory;
@@ -40,36 +44,44 @@ public class FileSplitterService implements IService {
 
     @Override
     public void run() {
+        log.info("Start application.");
         IProcessor processor;
         String input;
         String[] args = {"help"};
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
-                System.out.println("Input your parameters:");
+                log.info("Input your parameters:");
                 input = br.readLine();
                 args = input.split(" ");
-
+                log.info("Introduced string -> " + input);
                 Command inputCommand = parametersParser.parse(args);
                 switch (inputCommand) {
                     case EXIT:
+                        log.info("Closing resources...");
                         br.close();
+                        log.info("Closing application...");
                         System.exit(0);
                     case SPLIT:
-                        System.out.println("start split");
+                        log.info("Start splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
                         processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, inputCommand.getSecondParameter());
                         processor.process();
-                        System.out.println("finish split");
+                        log.info("Finish splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
                         break;
                     case MERGE:
-                        System.out.println("start merge");
+                        log.info("Start merging file -> " + inputCommand.getFirstParameter()
+                                .substring(inputCommand.getFirstParameter()
+                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
                         processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, 0);
                         processor.process();
-                        System.out.println("finish merge");
+                        log.info("Finish merging file -> " + inputCommand.getFirstParameter()
+                                .substring(inputCommand.getFirstParameter()
+                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
                         break;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+                throw new UserServiceException("Error during processing user input. Exception:" + e.getMessage());
             }
         }
     }
