@@ -3,7 +3,6 @@ package net.bondar;
 import net.bondar.domain.Command;
 import net.bondar.exceptions.UserServiceException;
 import net.bondar.interfaces.*;
-import net.bondar.utils.ApplicationConfigLoader;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -29,11 +28,15 @@ public class FileService implements IService {
      */
     private final Logger log = Logger.getLogger("userLogger");
 
-    private IParametersParser parametersParser;
+    private final IParametersParser parametersParser;
 
-    private AbstractProcessorFactory processorFactory;
+    private final AbstractProcessorFactory processorFactory;
 
-    private AbstractIteratorFactory iteratorFactory;
+    private final AbstractIteratorFactory iteratorFactory;
+
+    private IProcessor processor;
+
+    private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
     public FileService(IParametersParser parametersParser, AbstractProcessorFactory processorFactory, AbstractIteratorFactory iteratorFactory) {
@@ -45,45 +48,56 @@ public class FileService implements IService {
     @Override
     public void run() {
         log.info("Start application.");
-        IProcessor processor;
         String input;
         String[] args = {"help"};
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
                 log.info("Input your parameters:");
                 input = br.readLine();
-
                 args = input.split(" ");
                 log.info("Introduced string -> " + input);
                 Command inputCommand = parametersParser.parse(args);
-                switch (inputCommand) {
-                    case EXIT:
-                        log.info("Closing resources...");
-                        br.close();
-                        log.info("Closing application...");
-                        System.exit(0);
-                    case SPLIT:
-                        log.info("Start splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
-                        processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, inputCommand.getSecondParameter());
-                        processor.process();
-                        log.info("Finish splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
-                        break;
-                    case MERGE:
-                        log.info("Start merging file -> " + inputCommand.getFirstParameter()
-                                .substring(inputCommand.getFirstParameter()
-                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
-                        processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, 0);
-                        processor.process();
-                        log.info("Finish merging file -> " + inputCommand.getFirstParameter()
-                                .substring(inputCommand.getFirstParameter()
-                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
-                        break;
-                }
+                //checks input command
+                switchForCommand(inputCommand);
             } catch (IOException e) {
                 log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
                 throw new UserServiceException("Error during processing user input. Exception:" + e.getMessage());
             }
+        }
+    }
+
+    /**
+     *
+     * @param inputCommand
+     */
+    private void switchForCommand(Command inputCommand) {
+        switch (inputCommand) {
+            case EXIT:
+                log.info("Closing resources...");
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+                    throw new UserServiceException("Error during processing user input. Exception:" + e.getMessage());
+                }
+                log.info("Closing application...");
+                System.exit(0);
+            case SPLIT:
+                log.info("Start splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
+                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, inputCommand.getSecondParameter());
+                processor.process();
+                log.info("Finish splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
+                break;
+            case MERGE:
+                log.info("Start merging file -> " + inputCommand.getFirstParameter()
+                        .substring(inputCommand.getFirstParameter()
+                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
+                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, 0);
+                processor.process();
+                log.info("Finish merging file -> " + inputCommand.getFirstParameter()
+                        .substring(inputCommand.getFirstParameter()
+                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
+                break;
         }
     }
 }
