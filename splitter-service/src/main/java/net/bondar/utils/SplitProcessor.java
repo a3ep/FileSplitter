@@ -59,7 +59,7 @@ public class SplitProcessor implements IProcessor {
                         try {
                             pool.getQueue().put(r);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
                         }
                     }
                 });
@@ -72,6 +72,11 @@ public class SplitProcessor implements IProcessor {
     public void process() {
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
             pool.execute(this::processTask);
+        }
+        try {
+            Thread.currentThread().sleep(2000);
+        } catch (InterruptedException e) {
+            log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
         }
     }
 
@@ -97,8 +102,6 @@ public class SplitProcessor implements IProcessor {
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
-                throw new ApplicationException("Error during writing part:" + partFile.getName() +
-                        ". Exception:" + e.getMessage());
             }
         }
     }

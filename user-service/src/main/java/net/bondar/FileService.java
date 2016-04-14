@@ -34,8 +34,6 @@ public class FileService implements IService {
 
     private final AbstractIteratorFactory iteratorFactory;
 
-    private IProcessor processor;
-
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 
@@ -61,16 +59,15 @@ public class FileService implements IService {
                 switchForCommand(inputCommand);
             } catch (IOException e) {
                 log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
-                throw new UserServiceException("Error during processing user input. Exception:" + e.getMessage());
             }
         }
     }
 
     /**
-     *
      * @param inputCommand
      */
     private void switchForCommand(Command inputCommand) {
+        IProcessor processor;
         switch (inputCommand) {
             case EXIT:
                 log.info("Closing resources...");
@@ -78,7 +75,6 @@ public class FileService implements IService {
                     br.close();
                 } catch (IOException e) {
                     log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
-                    throw new UserServiceException("Error during processing user input. Exception:" + e.getMessage());
                 }
                 log.info("Closing application...");
                 System.exit(0);

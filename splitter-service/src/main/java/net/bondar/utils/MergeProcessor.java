@@ -60,7 +60,7 @@ public class MergeProcessor implements IProcessor {
                         try {
                             pool.getQueue().put(r);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
                         }
                     }
                 });
@@ -73,6 +73,11 @@ public class MergeProcessor implements IProcessor {
     public void process() {
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
             pool.execute(this::processTask);
+        }
+        try {
+            Thread.currentThread().sleep(2000);
+        } catch (InterruptedException e) {
+            log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
         }
     }
 
@@ -100,8 +105,6 @@ public class MergeProcessor implements IProcessor {
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + part.getName() + " into " + completeFileName + ". Message " + e.getMessage());
-                throw new ApplicationException("Error during writing part:" + part.getName() +
-                        " into " + completeFileName + ". Exception:" + e.getMessage());
             }
         }
     }
