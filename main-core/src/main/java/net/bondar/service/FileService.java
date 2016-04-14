@@ -1,4 +1,4 @@
-package net.bondar;
+package net.bondar.service;
 
 import net.bondar.domain.Command;
 import net.bondar.exceptions.ApplicationException;

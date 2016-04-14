@@ -43,6 +43,7 @@
     <module>user-service</module>
     <module>splitter-service</module>
     <module>statistics-service</module>
+    <module>main-core</module>
   </modules>
 
   <build>

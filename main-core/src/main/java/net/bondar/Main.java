@@ -1,10 +1,10 @@
 package net.bondar;
 
-
 import net.bondar.interfaces.AbstractIteratorFactory;
 import net.bondar.interfaces.AbstractProcessorFactory;
 import net.bondar.interfaces.IParametersParser;
 import net.bondar.interfaces.IService;
+import net.bondar.service.FileService;
 import net.bondar.utils.CliParameterParser;
 import net.bondar.utils.SplitMergeIteratorFactory;
 import net.bondar.utils.SplitMergeProcessorFactory;
