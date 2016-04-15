@@ -1,4 +1,4 @@
-package net.bondar.utils;
+package net.bondar.log;
 
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;

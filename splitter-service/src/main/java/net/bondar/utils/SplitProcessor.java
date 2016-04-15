@@ -1,5 +1,8 @@
 package net.bondar.utils;
 
+import net.bondar.StatisticHolder;
+import net.bondar.StatisticTimerTask;
+import net.bondar.StatisticViewer;
 import net.bondar.domain.Task;
 import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.AbstractIteratorFactory;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -49,6 +53,20 @@ public class SplitProcessor implements IProcessor {
     private List<File> files = new ArrayList<>();
 
     /**
+     *
+     */
+    private StatisticHolder statisticHolder;
+    /**
+     *
+     */
+    private StatisticTimerTask statisticTimerTask;
+
+    /**
+     *
+     */
+    private Timer timer = new Timer();
+
+    /**
      * @param fileDest
      * @param partSize
      * @param iteratorFactory
@@ -57,6 +75,8 @@ public class SplitProcessor implements IProcessor {
         IConfigLoader configLoader = new ApplicationConfigLoader();
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator((int) file.length(), partSize);
+        this.statisticHolder = new StatisticHolder();
+        this.statisticTimerTask = new StatisticTimerTask(new StatisticViewer(fileDest, statisticHolder));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
                 Integer.parseInt(configLoader.getValue("threadsCount")),
@@ -97,15 +117,17 @@ public class SplitProcessor implements IProcessor {
      */
     @Override
     public void process() {
+        timer.schedule(statisticTimerTask, 0, 1000);
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
             pool.execute(this::processTask);
         }
         try {
-            Thread.currentThread().sleep(2000);
+            Thread.currentThread().sleep(10000);
         } catch (InterruptedException e) {
             log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
             throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
+        timer.cancel();
     }
 
     /**
@@ -129,6 +151,12 @@ public class SplitProcessor implements IProcessor {
                 log.info("Finish to write: " + partFile.getName());
                 synchronized (this) {
                     files.add(partFile);
+                }
+                statisticHolder.putInformation(Thread.currentThread().getName(), array.length);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 task = iterator.getNext();
             } catch (IOException e) {

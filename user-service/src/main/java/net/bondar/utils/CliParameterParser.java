@@ -53,7 +53,7 @@ public class CliParameterParser implements IParametersParser {
                     log.info("Input command -> SPLIT");
                     Command.SPLIT.setFirstParameter(cmd.getOptionValue("p"));
                     String sizeToString = cmd.getOptionValue("s");
-                    int size = Integer.parseInt(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", "")) * 512 * 1024;
+                    int size = Integer.parseInt(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", "")) * 1024 * 1024;
                     Command.SPLIT.setSecondParameter(size);
                     currentCommand = Command.SPLIT;
                 } else {
