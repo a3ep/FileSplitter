@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,6 +44,11 @@ public class SplitProcessor implements IProcessor {
     private final ThreadPoolExecutor pool;
 
     /**
+     *
+     */
+    private List<File> files = new ArrayList<>();
+
+    /**
      * @param fileDest
      * @param partSize
      * @param iteratorFactory
@@ -67,6 +74,22 @@ public class SplitProcessor implements IProcessor {
                         }
                     }
                 });
+    }
+
+    /**
+     *
+     * @return
+     */
+    public File getFile() {
+        return file;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<File> getFiles() {
+        return files;
     }
 
     /**
@@ -104,9 +127,13 @@ public class SplitProcessor implements IProcessor {
                 sourceFile.read(array);
                 outputFile.write(array);
                 log.info("Finish to write: " + partFile.getName());
+                synchronized (this) {
+                    files.add(partFile);
+                }
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
+                return;
             }
         }
     }

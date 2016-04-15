@@ -11,10 +11,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -33,13 +30,22 @@ public class MergeProcessor implements IProcessor {
     /**
      *
      */
-    private final String completeFileName;
+    private final String partDest;
+
     /**
      *
      */
     private final Iterable iterator;
 
+    /**
+     *
+     */
     private final ThreadPoolExecutor pool;
+
+    /**
+     *
+     */
+    private final File file;
 
     /**
      * @param partFileDest
@@ -47,7 +53,8 @@ public class MergeProcessor implements IProcessor {
      */
     public MergeProcessor(String partFileDest, AbstractIteratorFactory iteratorFactory) {
         IConfigLoader configLoader = new ApplicationConfigLoader();
-        this.completeFileName = partFileDest.substring(0, partFileDest.indexOf("_"));
+        this.partDest = partFileDest;
+        this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
         List<File> parts = getPartsList(partFileDest);
         this.iterator = iteratorFactory.createIterator(parts);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
@@ -67,6 +74,24 @@ public class MergeProcessor implements IProcessor {
                         }
                     }
                 });
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public File getFile() {
+        return file;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public List<File> getFiles() {
+        return getPartsList(partDest);
     }
 
     /**
@@ -94,8 +119,8 @@ public class MergeProcessor implements IProcessor {
             log.info("Thread " + Thread.currentThread().getName() + " processed " + task.getName() + task.getCounter());
             File part = task.getFile();
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
-                 RandomAccessFile outputFile = new RandomAccessFile(completeFileName, "rw")) {
-                log.info("Start to write " + part.getName() + " into Complete file : " + completeFileName);
+                 RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
+                log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
                 byte[] array = new byte[(int) part.length()];
 
                 //Set the file-pointer to the start position of partFile
@@ -105,10 +130,11 @@ public class MergeProcessor implements IProcessor {
                 //process of copying
                 sourceFile.read(array);
                 outputFile.write(array);
-                log.info("Finish to write " + part.getName() + " into " + completeFileName);
+                log.info("Finish to write " + part.getName() + " into " + file.getName());
                 task = iterator.getNext();
             } catch (IOException e) {
-                log.warn("Catches IOException, during writing " + part.getName() + " into " + completeFileName + ". Message " + e.getMessage());
+                log.warn("Catches IOException, during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());
+                return;
             }
         }
     }
@@ -122,6 +148,8 @@ public class MergeProcessor implements IProcessor {
         String partName = partFile.getName();
         String destName = partName.substring(0, partName.indexOf("_part_"));
         File file = partFile.getParentFile();
+        System.out.println();
+        System.out.println();
         File[] files = file.listFiles((File dir, String name) -> name.matches(destName + ".+\\_\\d+"));
         Arrays.sort(files);
         List<File> parts = new LinkedList<>();

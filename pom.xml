@@ -23,8 +23,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
+        <version>4.12</version>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>
@@ -40,10 +39,10 @@
   </dependencyManagement>
 
   <modules>
+    <module>main-core</module>
     <module>user-service</module>
     <module>splitter-service</module>
     <module>statistics-service</module>
-    <module>main-core</module>
   </modules>
 
   <build>

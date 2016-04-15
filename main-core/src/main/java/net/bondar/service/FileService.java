@@ -28,21 +28,40 @@ public class FileService implements IService {
      */
     private final Logger log = Logger.getLogger("userLogger");
 
+    /**
+     *
+     */
     private final IParametersParser parametersParser;
 
+    /**
+     *
+     */
     private final AbstractProcessorFactory processorFactory;
 
+    /**
+     *
+     */
     private final AbstractIteratorFactory iteratorFactory;
 
+    /**
+     *
+     */
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-
+    /**
+     * @param parametersParser
+     * @param processorFactory
+     * @param iteratorFactory
+     */
     public FileService(IParametersParser parametersParser, AbstractProcessorFactory processorFactory, AbstractIteratorFactory iteratorFactory) {
         this.parametersParser = parametersParser;
         this.processorFactory = processorFactory;
         this.iteratorFactory = iteratorFactory;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         try {
@@ -86,10 +105,13 @@ public class FileService implements IService {
                 log.info("Closing application...");
                 System.exit(0);
             case SPLIT:
-                log.info("Start splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
-                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, inputCommand.getSecondParameter());
+                log.info("Start splitting file -> " + inputCommand.getFirstParameter()
+                        .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
+                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(),
+                        iteratorFactory, inputCommand.getSecondParameter());
                 processor.process();
-                log.info("Finish splitting file -> " + inputCommand.getFirstParameter().substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
+                log.info("Finish splitting file -> " + inputCommand.getFirstParameter()
+                        .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
                 break;
             case MERGE:
                 log.info("Start merging file -> " + inputCommand.getFirstParameter()
