@@ -1,10 +1,9 @@
 package net.bondar.utils;
 
+import net.bondar.*;
 import net.bondar.domain.Task;
 import net.bondar.exceptions.ApplicationException;
-import net.bondar.interfaces.AbstractIteratorFactory;
-import net.bondar.interfaces.IConfigLoader;
-import net.bondar.interfaces.IProcessor;
+import net.bondar.interfaces.*;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
@@ -48,6 +47,11 @@ public class MergeProcessor implements IProcessor {
     private final File file;
 
     /**
+     *
+     */
+    private IStatisticService statisticService;
+
+    /**
      * @param partFileDest
      * @param iteratorFactory
      */
@@ -57,6 +61,10 @@ public class MergeProcessor implements IProcessor {
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
         List<File> parts = getPartsList(partFileDest);
         this.iterator = iteratorFactory.createIterator(parts);
+        IStatisticHolder statisticHolder = new FileStatisticHolder();
+        IStatisticBuilder statisticBuilder = new FileStatisticBuilder(parts, statisticHolder);
+        IStatisticViewer statisticViewer = new FileStatisticViewer(statisticBuilder);
+        this.statisticService = new FileStatisticService(statisticHolder, statisticBuilder, new FileStatisticTimerTask(statisticViewer));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
                 Integer.parseInt(configLoader.getValue("threadsCount")),
@@ -99,15 +107,19 @@ public class MergeProcessor implements IProcessor {
      */
     @Override
     public void process() {
+        statisticService.show(0, 1000);
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
             pool.execute(this::processTask);
         }
+        pool.shutdown();
         try {
-            Thread.currentThread().sleep(2000);
+            pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
-            log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
+            log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
+            statisticService.hide();
             throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
+        statisticService.hide();
     }
 
     /**
@@ -122,15 +134,14 @@ public class MergeProcessor implements IProcessor {
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
                 log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
                 byte[] array = new byte[(int) part.length()];
-
                 //Set the file-pointer to the start position of partFile
                 long start = task.getStartPosition();
                 outputFile.seek(start);
-
                 //process of copying
                 sourceFile.read(array);
                 outputFile.write(array);
                 log.info("Finish to write " + part.getName() + " into " + file.getName());
+                statisticService.holdInformation(Thread.currentThread().getName(), (long)array.length);
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());

@@ -1,13 +1,9 @@
 package net.bondar.utils;
 
-import net.bondar.StatisticHolder;
-import net.bondar.StatisticTimerTask;
-import net.bondar.StatisticViewer;
+import net.bondar.*;
 import net.bondar.domain.Task;
 import net.bondar.exceptions.ApplicationException;
-import net.bondar.interfaces.AbstractIteratorFactory;
-import net.bondar.interfaces.IConfigLoader;
-import net.bondar.interfaces.IProcessor;
+import net.bondar.interfaces.*;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
@@ -16,7 +12,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -55,16 +50,7 @@ public class SplitProcessor implements IProcessor {
     /**
      *
      */
-    private StatisticHolder statisticHolder;
-    /**
-     *
-     */
-    private StatisticTimerTask statisticTimerTask;
-
-    /**
-     *
-     */
-    private Timer timer = new Timer();
+    private IStatisticService statisticService;
 
     /**
      * @param fileDest
@@ -75,8 +61,10 @@ public class SplitProcessor implements IProcessor {
         IConfigLoader configLoader = new ApplicationConfigLoader();
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator((int) file.length(), partSize);
-        this.statisticHolder = new StatisticHolder();
-        this.statisticTimerTask = new StatisticTimerTask(new StatisticViewer(fileDest, statisticHolder));
+        IStatisticHolder statisticHolder = new FileStatisticHolder();
+        IStatisticBuilder statisticBuilder = new FileStatisticBuilder(file.length(), statisticHolder);
+        IStatisticViewer statisticViewer = new FileStatisticViewer(statisticBuilder);
+        this.statisticService = new FileStatisticService(statisticHolder, statisticBuilder, new FileStatisticTimerTask(statisticViewer));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
                 Integer.parseInt(configLoader.getValue("threadsCount")),
@@ -97,7 +85,6 @@ public class SplitProcessor implements IProcessor {
     }
 
     /**
-     *
      * @return
      */
     public File getFile() {
@@ -105,7 +92,6 @@ public class SplitProcessor implements IProcessor {
     }
 
     /**
-     *
      * @return
      */
     public List<File> getFiles() {
@@ -117,17 +103,18 @@ public class SplitProcessor implements IProcessor {
      */
     @Override
     public void process() {
-        timer.schedule(statisticTimerTask, 0, 1000);
+        statisticService.show(0, 1000);
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
             pool.execute(this::processTask);
         }
+        pool.shutdown();
         try {
-            Thread.currentThread().sleep(10000);
+            pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
-            log.warn("Catches InterruptedException, during main thread sleeping. Message " + e.getMessage());
+            log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
             throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
-        timer.cancel();
+        statisticService.hide();
     }
 
     /**
@@ -152,12 +139,7 @@ public class SplitProcessor implements IProcessor {
                 synchronized (this) {
                     files.add(partFile);
                 }
-                statisticHolder.putInformation(Thread.currentThread().getName(), array.length);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                statisticService.holdInformation(Thread.currentThread().getName(), (long) array.length);
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());

@@ -1,19 +1,17 @@
 package net.bondar;
 
+import net.bondar.interfaces.IStatisticBuilder;
+import net.bondar.interfaces.IStatisticHolder;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
  *
  */
-public class StatisticViewer {
-
-    /**
-     *
-     */
-    private final Logger log = Logger.getLogger("userLogger");
+public class FileStatisticBuilder implements IStatisticBuilder{
 
     /**
      *
@@ -23,29 +21,29 @@ public class StatisticViewer {
     /**
      *
      */
-    private StatisticHolder statisticHolder;
-
-    /**
-     *
-     */
     private Map<String, Long> statInfo;
 
     /**
      *
-     * @param fileDest
+     * @param fileSize
      * @param statisticHolder
      */
-    public StatisticViewer(String fileDest, StatisticHolder statisticHolder) {
-        fileSize = new File(fileDest).length();
-        this.statisticHolder = statisticHolder;
-        this.statInfo = statisticHolder.getMapStatistic();
+    public FileStatisticBuilder(double fileSize, IStatisticHolder statisticHolder) {
+        this.fileSize = fileSize;
+        this.statInfo = statisticHolder.getStatistic();
+    }
+
+    public FileStatisticBuilder(List<File> files, IStatisticHolder statisticHolder) {
+        fileSize = getFileSize(files);
+        this.statInfo = statisticHolder.getStatistic();
     }
 
     /**
      *
+     * @return
      */
-    public void showStatistic() {
-        if(statInfo.isEmpty())return;
+    public String buildStatisticString() {
+        if(statInfo.isEmpty())return null;
         StringBuilder builder = new StringBuilder("Total progress : ");
         long totalWriteSize = 1;
         for (Long value : statInfo.values()) {
@@ -61,6 +59,15 @@ public class StatisticViewer {
         }
         double timeRemaining = fileSize / totalWriteSize;
         builder.append("time remaining : ").append((int)timeRemaining).append(" c");
-        log.info(builder.toString());
+        return builder.toString();
     }
+
+    private double getFileSize(List<File> files){
+        double fileSize=0;
+        for (File f: files){
+            fileSize+=f.length();
+        }
+        return fileSize;
+    }
+
 }
