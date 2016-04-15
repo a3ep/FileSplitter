@@ -5,11 +5,14 @@ import net.bondar.interfaces.IProcessor;
 import net.bondar.utils.MergeProcessor;
 import net.bondar.utils.SplitMergeIteratorFactory;
 import net.bondar.utils.SplitProcessor;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -18,30 +21,43 @@ import static junit.framework.TestCase.assertEquals;
 /**
  *
  */
-public class TestSplitter {
+public class TestFileSplitter {
     private static IProcessor splitProcessor;
     private static IProcessor mergeProcessor;
-    private static String fileDest = "/home/vsevolod/IdeaProjects/FileSplitter/main-core/src/test/resources/split/Test.ogg";
-    private static String partDest = "/home/vsevolod/IdeaProjects/FileSplitter/main-core/src/test/resources/merge/Test.ogg_part_001";
     private static List<File> splitParts;
     private static File resultFile;
 
-    @BeforeClass
-    public static void setUp() {
-        File file = new File(fileDest);
-        File part = new File(partDest);
+    /**
+     *
+     */
+    @Before
+    public void init() {
         int partSize = 1024 * 1024;
-        AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
-        splitProcessor = new SplitProcessor(file.getAbsolutePath(), partSize, iteratorFactory);
-        mergeProcessor = new MergeProcessor(part.getAbsolutePath(), iteratorFactory);
+        try {
+            File file = new File("test.txt");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            while (file.length() < 10 * partSize) {
+                bw.write(1);
+            }
+            bw.close();
+            AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
+            splitProcessor = new SplitProcessor(file.getAbsolutePath(), partSize, iteratorFactory);
+            splitProcessor.process();
+            mergeProcessor = new MergeProcessor(file.getAbsolutePath() + "_part_001", iteratorFactory);
+            mergeProcessor.process();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
+    /**
+     *
+     */
     @Test
     public void testFileSplitter() {
         long splitPartsSize = 0;
         long mergePartsSize = 0;
-        splitProcessor.process();
-        mergeProcessor.process();
         resultFile = mergeProcessor.getFile();
         splitParts = splitProcessor.getFiles();
         List<File> mergeParts = mergeProcessor.getFiles();
@@ -54,10 +70,13 @@ public class TestSplitter {
 
     }
 
-    @AfterClass
-    public static void destroy() {
+    /**
+     *
+     */
+    @After
+    public void destroy() {
         resultFile.delete();
-        for (File f: splitParts){
+        for (File f : splitParts) {
             f.delete();
         }
     }
