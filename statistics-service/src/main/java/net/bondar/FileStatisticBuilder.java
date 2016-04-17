@@ -43,7 +43,9 @@ public class FileStatisticBuilder implements IStatisticBuilder{
      * @return
      */
     public String buildStatisticString() {
-        if(statInfo.isEmpty())return null;
+        if(statInfo.isEmpty()){
+            return null;
+        }
         StringBuilder builder = new StringBuilder("Total progress : ");
         long totalWriteSize = 1;
         for (Long value : statInfo.values()) {
@@ -62,6 +64,11 @@ public class FileStatisticBuilder implements IStatisticBuilder{
         return builder.toString();
     }
 
+    /**
+     *
+     * @param files
+     * @return
+     */
     private double getFileSize(List<File> files){
         double fileSize=0;
         for (File f: files){

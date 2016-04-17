@@ -13,16 +13,11 @@ import java.io.InputStreamReader;
  *
  */
 public class FileService implements IService {
-    //split -p /home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip -s 1M
     //split -p /home/vsevolod/test/Howfast.ogg -s 1M
+    //split -p /home/vsevolod/Загрузки/111/Modern.Family.S07E18.rus.LostFilm.TV.avi -s 20M
     //exit
-    //merge -p /home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip_part_001
     //merge -p /home/vsevolod/test/Howfast.ogg_part_001
-    //    private String[] args = new String[]{"exit"};
-    //    private String[] args = new String[]{"help"};
-    //    private String[] args = new String[]{"split", "-p", "/home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip", "-s", "1M"};
-    //    private String[] args = new String[]{"merge", "-p", "/home/vsevolod/Загрузки/111/SkillsUpWebApp-master.zip_part_001"};
-    //    private String[] args = new String[]{"asdgasdg"};
+    //merge -p /home/vsevolod/Загрузки/111/Modern.Family.S07E18.rus.LostFilm.TV.avi_part_001
     /**
      *
      */

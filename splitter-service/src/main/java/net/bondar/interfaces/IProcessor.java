@@ -13,7 +13,9 @@ public interface IProcessor {
      */
     void process();
 
+    /**
+     *
+     * @return
+     */
     File getFile();
-
-    List<File> getFiles();
 }

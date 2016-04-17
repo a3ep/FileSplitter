@@ -45,11 +45,6 @@ public class SplitProcessor implements IProcessor {
     /**
      *
      */
-    private List<File> files = new ArrayList<>();
-
-    /**
-     *
-     */
     private IStatisticService statisticService;
 
     /**
@@ -92,13 +87,6 @@ public class SplitProcessor implements IProcessor {
     }
 
     /**
-     * @return
-     */
-    public List<File> getFiles() {
-        return files;
-    }
-
-    /**
      *
      */
     @Override
@@ -130,21 +118,39 @@ public class SplitProcessor implements IProcessor {
                 log.info("Start to write: " + partFile.getName());
                 // /Set the file-pointer to the start position of partFile
                 sourceFile.seek(task.getStartPosition());
-                //create buffer for copying
-                byte[] array = new byte[(int) (task.getEndPosition() - task.getStartPosition())];
-                //process of copying
-                sourceFile.read(array);
-                outputFile.write(array);
-                log.info("Finish to write: " + partFile.getName());
-                synchronized (this) {
-                    files.add(partFile);
+                long start = task.getStartPosition();
+                long finish = task.getEndPosition();
+                int buffer = 1024*1024;
+
+                while(start<finish) {
+                    //create buffer for copying
+                    byte[] array = new byte[getAvaliableSize(finish, start, buffer)];
+                    log.info("Avaliable size = "+array.length);
+                    //process of copying
+                    sourceFile.read(array);
+                    outputFile.write(array);
+                    start += array.length;
+                    statisticService.holdInformation(Thread.currentThread().getName(), start-task.getStartPosition());
                 }
-                statisticService.holdInformation(Thread.currentThread().getName(), (long) array.length);
+                log.info("Finish to write: " + partFile.getName());
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
                 return;
             }
         }
+    }
+
+    /**
+     *
+     * @param finish
+     * @param start
+     * @param buffer
+     * @return
+     */
+    private int getAvaliableSize(long finish, long start, int buffer){
+        if(finish-start>buffer) return buffer;
+        else return (int) (finish-start);
+
     }
 }

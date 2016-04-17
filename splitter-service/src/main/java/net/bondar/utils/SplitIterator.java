@@ -52,9 +52,6 @@ public class SplitIterator implements Iterable {
         if (end > fileLength) end = fileLength;
         String partName = "_part_" + String.format("%03d", partCounter++);
         Task task = new Task(partName, start, end, partCounter - 1);
-        log.info("Building new task with parameters: partName = " + task.getName()
-                + ", startIndex = " + task.getStartPosition()
-                + ", endIndex = " + task.getEndPosition());
         currentPosition = end + 1;
         return task;
     }

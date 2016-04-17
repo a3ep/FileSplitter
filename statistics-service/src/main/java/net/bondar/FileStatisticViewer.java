@@ -31,6 +31,8 @@ public class FileStatisticViewer implements IStatisticViewer {
      */
     public void showStatistic() {
         String info = statisticBuilder.buildStatisticString();
-        if(info!=null) log.info(info);
+        if(info!=null) {
+            log.info(info);
+        }
     }
 }

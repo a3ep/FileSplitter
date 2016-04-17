@@ -10,7 +10,10 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -95,15 +98,6 @@ public class MergeProcessor implements IProcessor {
 
     /**
      *
-     * @return
-     */
-    @Override
-    public List<File> getFiles() {
-        return getPartsList(partDest);
-    }
-
-    /**
-     *
      */
     @Override
     public void process() {
@@ -133,15 +127,20 @@ public class MergeProcessor implements IProcessor {
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
                 log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
-                byte[] array = new byte[(int) part.length()];
-                //Set the file-pointer to the start position of partFile
                 long start = task.getStartPosition();
+                long finish = start+part.length();
+                int buffer = 1024 * 1024;
+                //Set the file-pointer to the start position of partFile
                 outputFile.seek(start);
-                //process of copying
-                sourceFile.read(array);
-                outputFile.write(array);
+                while (start < finish) {
+                    byte[] array = new byte[getAvaliableSize(finish, start, buffer)];
+                    //process of copying
+                    sourceFile.read(array);
+                    outputFile.write(array);
+                    start+=array.length;
+                    statisticService.holdInformation(Thread.currentThread().getName(), start-task.getStartPosition());
+                }
                 log.info("Finish to write " + part.getName() + " into " + file.getName());
-                statisticService.holdInformation(Thread.currentThread().getName(), (long)array.length);
                 task = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());
@@ -159,12 +158,23 @@ public class MergeProcessor implements IProcessor {
         String partName = partFile.getName();
         String destName = partName.substring(0, partName.indexOf("_part_"));
         File file = partFile.getParentFile();
-        System.out.println();
-        System.out.println();
         File[] files = file.listFiles((File dir, String name) -> name.matches(destName + ".+\\_\\d+"));
         Arrays.sort(files);
         List<File> parts = new LinkedList<>();
         Collections.addAll(parts, files);
         return parts;
+    }
+
+    /**
+     *
+     * @param finish
+     * @param start
+     * @param buffer
+     * @return
+     */
+    private int getAvaliableSize(long finish, long start, int buffer){
+        if(finish-start>buffer) return buffer;
+        else return (int) (finish-start);
+
     }
 }

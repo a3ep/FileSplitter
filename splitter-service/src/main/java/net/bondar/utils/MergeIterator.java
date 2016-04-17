@@ -49,9 +49,6 @@ public class MergeIterator implements Iterable {
         long start = currentPosition;
         File part = parts.remove(0);
         Task task = new Task(part, start, counter++);
-        log.info("Building new task with parameters: part = " + task.getFile().getName()
-                + ", startIndex = " + task.getStartPosition()
-                + ", taskNumber = " + task.getCounter());
         currentPosition += (int) part.length() + 1;
         return task;
     }

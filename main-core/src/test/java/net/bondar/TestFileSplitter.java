@@ -24,7 +24,6 @@ import static junit.framework.TestCase.assertEquals;
 public class TestFileSplitter {
     private static IProcessor splitProcessor;
     private static IProcessor mergeProcessor;
-    private static List<File> splitParts;
     private static File resultFile;
 
     /**
@@ -56,18 +55,8 @@ public class TestFileSplitter {
      */
     @Test
     public void testFileSplitter() {
-        long splitPartsSize = 0;
-        long mergePartsSize = 0;
         resultFile = mergeProcessor.getFile();
-        splitParts = splitProcessor.getFiles();
-        List<File> mergeParts = mergeProcessor.getFiles();
-        for (int i = 0; i < splitParts.size(); i++) {
-            splitPartsSize += splitParts.get(i).length();
-            mergePartsSize += mergeParts.get(i).length();
-        }
         assertEquals(splitProcessor.getFile().length(), resultFile.length());
-        assertEquals(splitPartsSize, mergePartsSize);
-
     }
 
     /**
@@ -76,8 +65,5 @@ public class TestFileSplitter {
     @After
     public void destroy() {
         resultFile.delete();
-        for (File f : splitParts) {
-            f.delete();
-        }
     }
 }
