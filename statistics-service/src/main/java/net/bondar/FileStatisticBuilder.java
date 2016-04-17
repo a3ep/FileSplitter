@@ -1,8 +1,8 @@
 package net.bondar;
 
+import net.bondar.interfaces.IPart;
 import net.bondar.interfaces.IStatisticBuilder;
 import net.bondar.interfaces.IStatisticHolder;
-import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  *
  */
-public class FileStatisticBuilder implements IStatisticBuilder{
+public class FileStatisticBuilder implements IStatisticBuilder {
 
     /**
      *
@@ -21,10 +21,9 @@ public class FileStatisticBuilder implements IStatisticBuilder{
     /**
      *
      */
-    private Map<String, Long> statInfo;
+    private Map<String, IPart> statInfo;
 
     /**
-     *
      * @param fileSize
      * @param statisticHolder
      */
@@ -39,42 +38,40 @@ public class FileStatisticBuilder implements IStatisticBuilder{
     }
 
     /**
-     *
      * @return
      */
     public String buildStatisticString() {
-        if(statInfo.isEmpty()){
+        if (statInfo.isEmpty()) {
             return null;
         }
         StringBuilder builder = new StringBuilder("Total progress : ");
-        long totalWriteSize = 1;
-        for (Long value : statInfo.values()) {
-            totalWriteSize += value;
+        long totalWrittenSize = 0;
+        for (IPart part : statInfo.values()) {
+            totalWrittenSize += part.getTotalWrittenSize();
         }
-        double totalProgress = totalWriteSize / fileSize * 100;
-        builder.append((int)totalProgress).append(" %, ");
+        double totalProgress = totalWrittenSize / fileSize * 100;
+        builder.append((int) totalProgress).append(" %, ");
         double threadProgress;
-        for (Map.Entry<String, Long> entry : statInfo.entrySet()) {
+        for (Map.Entry<String, IPart> entry : statInfo.entrySet()) {
             builder.append(entry.getKey()).append(" : ");
-            threadProgress = (double)entry.getValue() / fileSize * 100;
-            builder.append((int)threadProgress).append(" %, ");
+            long partSize = entry.getValue().getEndPosition() - entry.getValue().getStartPosition();
+            threadProgress = (double) entry.getValue().getWrittenSize() / partSize * 100;
+            builder.append((int) threadProgress).append(" %, ");
         }
-        double timeRemaining = fileSize / totalWriteSize;
-        builder.append("time remaining : ").append((int)timeRemaining).append(" c");
+        double timeRemaining = fileSize / totalWrittenSize;
+        builder.append("time remaining : ").append(String.format("%.1f", timeRemaining)).append(" c");
         return builder.toString();
     }
 
     /**
-     *
      * @param files
      * @return
      */
-    private double getFileSize(List<File> files){
-        double fileSize=0;
-        for (File f: files){
-            fileSize+=f.length();
+    private double getFileSize(List<File> files) {
+        double fileSize = 0;
+        for (File f : files) {
+            fileSize += f.length();
         }
         return fileSize;
     }
-
 }

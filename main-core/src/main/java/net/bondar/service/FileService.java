@@ -146,7 +146,7 @@ public class FileService implements IService {
                         .substring(inputCommand.getFirstParameter()
                                 .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
                 processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), 0, parameterHolder,
-                        iteratorFactory, threadFactory,runnableFactory, statisticFactory);
+                        iteratorFactory, threadFactory, runnableFactory, statisticFactory);
                 processor.process();
                 log.info("Finish merging file -> " + inputCommand.getFirstParameter()
                         .substring(inputCommand.getFirstParameter()

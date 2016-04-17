@@ -7,7 +7,7 @@ import java.util.Map;
  */
 public interface IStatisticHolder {
 
-    Map<String, Long> getStatistic();
+    Map<String, IPart> getStatistic();
 
-    void putInformation(String key, Long value);
+    void putInformation(String key, IPart filePart);
 }

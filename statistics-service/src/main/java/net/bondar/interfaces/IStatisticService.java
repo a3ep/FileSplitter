@@ -8,9 +8,9 @@ public interface IStatisticService {
     /**
      *
      * @param threadName
-     * @param value
+     * @param filePart
      */
-    void holdInformation(String threadName, long value);
+    void holdInformation(String threadName, IPart filePart);
 
     /**
      *

@@ -1,18 +1,12 @@
 package net.bondar.utils;
 
-import net.bondar.domain.FilePart;
+import net.bondar.FilePart;
 import net.bondar.interfaces.Iterable;
-import org.apache.log4j.Logger;
 
 /**
  *
  */
 public class SplitIterator implements Iterable {
-    /**
-     *
-     */
-    private final Logger log = Logger.getLogger("splitterLogger");
-
     /**
      *
      */

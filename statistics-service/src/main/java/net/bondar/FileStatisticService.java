@@ -23,8 +23,8 @@ public class FileStatisticService implements IStatisticService{
         this.timerTask = timerTask;
     }
 
-    public void holdInformation(String threadName, long value){
-        holder.putInformation(threadName, value);
+    public void holdInformation(String threadName, IPart filePart){
+        holder.putInformation(threadName, filePart);
     }
 
     public String buildStatisticString(){

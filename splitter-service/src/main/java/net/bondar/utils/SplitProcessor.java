@@ -1,14 +1,11 @@
 package net.bondar.utils;
 
-import net.bondar.domain.FilePart;
 import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.*;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;

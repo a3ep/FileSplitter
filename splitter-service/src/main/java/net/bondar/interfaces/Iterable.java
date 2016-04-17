@@ -1,6 +1,6 @@
 package net.bondar.interfaces;
 
-import net.bondar.domain.FilePart;
+import net.bondar.FilePart;
 
 /**
  *
