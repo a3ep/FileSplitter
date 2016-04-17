@@ -16,7 +16,7 @@ public class Main {
             AbstractProcessorFactory processorFactory = new SplitMergeProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
-            AbstractRunnableFactory runnableFactory = new FileRunnableFactory();
+            AbstractTaskFactory runnableFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
 
             IService service = new FileService(parameterHolder, parametersParser, processorFactory, iteratorFactory,

@@ -50,7 +50,7 @@ public class FileService implements IService {
     /**
      *
      */
-    private final AbstractRunnableFactory runnableFactory;
+    private final AbstractTaskFactory runnableFactory;
 
     /**
      *
@@ -75,7 +75,7 @@ public class FileService implements IService {
                        AbstractProcessorFactory processorFactory,
                        AbstractIteratorFactory iteratorFactory,
                        AbstractThreadFactory threadFactory,
-                       AbstractRunnableFactory runnableFactory,
+                       AbstractTaskFactory runnableFactory,
                        AbstractStatisticFactory statisticFactory) {
         this.parameterHolder = parameterHolder;
         this.parametersParser = parametersParser;

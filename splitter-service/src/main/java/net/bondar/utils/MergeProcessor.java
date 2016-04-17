@@ -1,6 +1,6 @@
 package net.bondar.utils;
 
-import net.bondar.domain.Task;
+import net.bondar.domain.FilePart;
 import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.*;
 import net.bondar.interfaces.Iterable;
@@ -56,7 +56,7 @@ public class MergeProcessor implements IProcessor {
     /**
      *
      */
-    private AbstractRunnableFactory runnableFactory;
+    private AbstractTaskFactory runnableFactory;
 
     /**
      *
@@ -76,14 +76,14 @@ public class MergeProcessor implements IProcessor {
                            IParameterHolder parameterHolder,
                            AbstractIteratorFactory iteratorFactory,
                            AbstractThreadFactory threadFactory,
-                           AbstractRunnableFactory runnableFactory,
+                           AbstractTaskFactory runnableFactory,
                            AbstractStatisticFactory statisticFactory){
         this.parameterHolder = parameterHolder;
         this.partFileDest = partFileDest;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
-        this.iterator = iteratorFactory.createIterator(getPartsList(partFileDest));
+        this.iterator = iteratorFactory.createIterator(Calculations.getPartsList(partFileDest));
         this.runnableFactory = runnableFactory;
-        this.statisticService = statisticFactory.createService(0, getPartsList(partFileDest));
+        this.statisticService = statisticFactory.createService(0, Calculations.getPartsList(partFileDest));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         threadFactory.setThreadName(parameterHolder.getValue("threadName"));
@@ -99,38 +99,6 @@ public class MergeProcessor implements IProcessor {
             }
         });
     }
-//    /**
-//     * @param partFileDest
-//     * @param iteratorFactory
-//     */
-//    public MergeProcessor(String partFileDest, AbstractIteratorFactory iteratorFactory) {
-//        IParameterHolder configLoader = new ApplicationParameterHolder();
-//        this.partFileDest = partFileDest;
-//        this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
-//        List<File> parts = getPartsList(partFileDest);
-//        this.iterator = iteratorFactory.createIterator(parts);
-//        IStatisticHolder statisticHolder = new FileStatisticHolder();
-//        IStatisticBuilder statisticBuilder = new FileStatisticBuilder(parts, statisticHolder);
-//        IStatisticViewer statisticViewer = new FileStatisticViewer(statisticBuilder);
-//        this.statisticService = new FileStatisticService(statisticHolder, statisticBuilder, new FileStatisticTimerTask(statisticViewer));
-//        final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
-//        pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
-//                Integer.parseInt(configLoader.getValue("threadsCount")),
-//                0L,
-//                TimeUnit.MILLISECONDS,
-//                workerQueue,
-//                new NamedThreadFactory(configLoader.getValue("threadName")),
-//                new RejectedExecutionHandler() {
-//                    public void rejectedExecution(Runnable r, ThreadPoolExecutor pool) {
-//                        try {
-//                            pool.getQueue().put(r);
-//                        } catch (InterruptedException e) {
-//                            log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
-//                            throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
-//                        }
-//                    }
-//                });
-//    }
 
     /**
      *
@@ -148,7 +116,7 @@ public class MergeProcessor implements IProcessor {
     public void process() {
         statisticService.show(0, 1000);
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
-            pool.execute(runnableFactory.createRunnable(this::processTask));
+            pool.execute(runnableFactory.createMergeTask(file, parameterHolder, iterator, statisticService));
         }
         pool.shutdown();
         try {
@@ -159,67 +127,5 @@ public class MergeProcessor implements IProcessor {
             throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
         }
         statisticService.hide();
-    }
-
-    /**
-     *
-     */
-    public void processTask() {
-        Task task = iterator.getNext();
-        while (!task.getStatus().equals("NULL")) {
-            log.info("Thread " + Thread.currentThread().getName() + " processed " + task.getName() + task.getCounter());
-            File part = task.getFile();
-            try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
-                 RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
-                log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
-                long start = task.getStartPosition();
-                long finish = start+part.length();
-                int bufferSize = Integer.parseInt(parameterHolder.getValue("bufferSize"));
-                //Set the file-pointer to the start position of partFile
-                outputFile.seek(start);
-                while (start < finish) {
-                    byte[] array = new byte[getAvaliableSize(finish, start, bufferSize)];
-                    //process of copying
-                    sourceFile.read(array);
-                    outputFile.write(array);
-                    start+=array.length;
-                    statisticService.holdInformation(Thread.currentThread().getName(), start-task.getStartPosition());
-                }
-                log.info("Finish to write " + part.getName() + " into " + file.getName());
-                task = iterator.getNext();
-            } catch (IOException e) {
-                log.warn("Catches IOException, during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());
-                return;
-            }
-        }
-    }
-
-    /**
-     * @param dest
-     * @return
-     */
-    private List<File> getPartsList(String dest) {
-        File partFile = new File(dest);
-        String partName = partFile.getName();
-        String destName = partName.substring(0, partName.indexOf("_part_"));
-        File file = partFile.getParentFile();
-        File[] files = file.listFiles((File dir, String name) -> name.matches(destName + ".+\\_\\d+"));
-        Arrays.sort(files);
-        List<File> parts = new LinkedList<>();
-        Collections.addAll(parts, files);
-        return parts;
-    }
-
-    /**
-     *
-     * @param finish
-     * @param start
-     * @param buffer
-     * @return
-     */
-    private int getAvaliableSize(long finish, long start, int buffer){
-        if(finish-start>buffer) return buffer;
-        else return (int) (finish-start);
-
     }
 }

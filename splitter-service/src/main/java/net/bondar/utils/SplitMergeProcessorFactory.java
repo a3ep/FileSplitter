@@ -23,7 +23,7 @@ public class SplitMergeProcessorFactory implements AbstractProcessorFactory {
                                       IParameterHolder parameterHolder,
                                       AbstractIteratorFactory iteratorFactory,
                                       AbstractThreadFactory threadFactory,
-                                      AbstractRunnableFactory runnableFactory,
+                                      AbstractTaskFactory runnableFactory,
                                       AbstractStatisticFactory statisticFactory) {
         if (partSize == 0) {
             return new MergeProcessor(fileDest, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);

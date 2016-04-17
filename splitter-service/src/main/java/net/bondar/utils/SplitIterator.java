@@ -1,6 +1,6 @@
 package net.bondar.utils;
 
-import net.bondar.domain.Task;
+import net.bondar.domain.FilePart;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
@@ -45,15 +45,15 @@ public class SplitIterator implements Iterable {
     /**
      * @return
      */
-    public synchronized Task getNext() {
-        if (currentPosition > fileLength) return new Task();
+    public synchronized FilePart getNext() {
+        if (currentPosition > fileLength) return new FilePart();
         long start = currentPosition;
         long end = currentPosition + partLength;
         if (end > fileLength) end = fileLength;
         String partName = "_part_" + String.format("%03d", partCounter++);
-        Task task = new Task(partName, start, end, partCounter - 1);
+        FilePart filePart = new FilePart(partName, start, end, partCounter - 1);
         currentPosition = end + 1;
-        return task;
+        return filePart;
     }
 
 }

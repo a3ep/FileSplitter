@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -39,7 +38,7 @@ public class TestFileSplitter {
             IParameterHolder parameterHolder = new ApplicationParameterHolder();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
-            AbstractRunnableFactory runnableFactory = new FileRunnableFactory();
+            AbstractTaskFactory runnableFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
             splitProcessor = new SplitProcessor(file.getAbsolutePath(), partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
             splitProcessor.process();

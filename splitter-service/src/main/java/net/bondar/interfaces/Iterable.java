@@ -1,6 +1,6 @@
 package net.bondar.interfaces;
 
-import net.bondar.domain.Task;
+import net.bondar.domain.FilePart;
 
 /**
  *
@@ -11,5 +11,5 @@ public interface Iterable {
      *
      * @return
      */
-    Task getNext();
+    FilePart getNext();
 }

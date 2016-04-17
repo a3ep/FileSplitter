@@ -1,6 +1,6 @@
 package net.bondar.utils;
 
-import net.bondar.domain.Task;
+import net.bondar.domain.FilePart;
 import net.bondar.interfaces.Iterable;
 import org.apache.log4j.Logger;
 
@@ -42,14 +42,14 @@ public class MergeIterator implements Iterable {
      * @return
      */
     @Override
-    public synchronized Task getNext() {
+    public synchronized FilePart getNext() {
         if (parts.isEmpty()) {
-            return new Task();
+            return new FilePart();
         }
         long start = currentPosition;
         File part = parts.remove(0);
-        Task task = new Task(part, start, counter++);
+        FilePart filePart = new FilePart(part, start, counter++);
         currentPosition += (int) part.length() + 1;
-        return task;
+        return filePart;
     }
 }

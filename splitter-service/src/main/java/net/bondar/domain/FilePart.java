@@ -1,11 +1,13 @@
 package net.bondar.domain;
 
+import net.bondar.interfaces.IPart;
+
 import java.io.File;
 
 /**
  *
  */
-public class Task {
+public class FilePart implements IPart{
 
     /**
      *
@@ -30,6 +32,11 @@ public class Task {
     /**
      *
      */
+    private long writtenSize;
+
+    /**
+     *
+     */
     private final int counter;
 
     /**
@@ -43,7 +50,7 @@ public class Task {
      * @param endPosition
      * @param counter
      */
-    public Task(String partFileName, long startPosition, long endPosition, int counter) {
+    public FilePart(String partFileName, long startPosition, long endPosition, int counter) {
         this.status = "OK";
         this.partFileName = partFileName;
         this.startPosition = startPosition;
@@ -57,7 +64,7 @@ public class Task {
      * @param startPosition
      * @param counter
      */
-    public Task(File file, long startPosition, int counter) {
+    public FilePart(File file, long startPosition, int counter) {
         this.status = "OK";
         this.partFileName = "";
         this.startPosition = startPosition;
@@ -69,7 +76,7 @@ public class Task {
     /**
      *
      */
-    public Task() {
+    public FilePart() {
         this.status = "NULL";
         this.partFileName = "";
         this.startPosition = -1;
@@ -107,6 +114,22 @@ public class Task {
     }
 
     /**
+     *
+     * @return
+     */
+    public long getWrittenSize() {
+        return writtenSize;
+    }
+
+    /**
+     *
+     * @param writtenSize
+     */
+    public void setWrittenSize(long writtenSize) {
+        this.writtenSize = writtenSize;
+    }
+
+    /**
      * @return
      */
     public int getCounter() {
@@ -124,6 +147,6 @@ public class Task {
      * @return
      */
     public String getName() {
-        return "Task #";
+        return "FilePart #";
     }
 }

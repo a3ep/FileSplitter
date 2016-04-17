@@ -20,6 +20,6 @@ public interface AbstractProcessorFactory {
                                IParameterHolder parameterHolder,
                                AbstractIteratorFactory iteratorFactory,
                                AbstractThreadFactory threadFactory,
-                               AbstractRunnableFactory runnableFactory,
+                               AbstractTaskFactory runnableFactory,
                                AbstractStatisticFactory statisticFactory);
 }
