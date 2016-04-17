@@ -1,4 +1,4 @@
-package net.bondar;
+package net.bondar.domain;
 
 import net.bondar.interfaces.IPart;
 

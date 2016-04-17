@@ -1,6 +1,6 @@
 package net.bondar.utils;
 
-import net.bondar.FilePart;
+import net.bondar.domain.FilePart;
 import net.bondar.interfaces.Iterable;
 
 /**

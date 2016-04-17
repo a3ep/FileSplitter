@@ -33,7 +33,7 @@ public class FileStatisticBuilder implements IStatisticBuilder {
     }
 
     public FileStatisticBuilder(List<File> files, IStatisticHolder statisticHolder) {
-        fileSize = getFileSize(files);
+        fileSize = Calculations.getFileSize(files);
         this.statInfo = statisticHolder.getStatistic();
     }
 
@@ -61,17 +61,5 @@ public class FileStatisticBuilder implements IStatisticBuilder {
         double timeRemaining = fileSize / totalWrittenSize;
         builder.append("time remaining : ").append(String.format("%.1f", timeRemaining)).append(" c");
         return builder.toString();
-    }
-
-    /**
-     * @param files
-     * @return
-     */
-    private double getFileSize(List<File> files) {
-        double fileSize = 0;
-        for (File f : files) {
-            fileSize += f.length();
-        }
-        return fileSize;
     }
 }

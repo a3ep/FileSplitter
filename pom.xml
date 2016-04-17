@@ -40,9 +40,10 @@
 
   <modules>
     <module>main-core</module>
-    <module>user-service</module>
+    <module>user-input-service</module>
     <module>splitter-service</module>
     <module>statistics-service</module>
+    <module>calculations-api</module>
   </modules>
 
   <build>

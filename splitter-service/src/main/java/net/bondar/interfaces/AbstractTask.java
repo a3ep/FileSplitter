@@ -1,6 +1,6 @@
 package net.bondar.interfaces;
 
-import net.bondar.utils.Calculations;
+import net.bondar.Calculations;
 import org.apache.log4j.Logger;
 
 import java.io.File;
