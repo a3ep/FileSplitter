@@ -1,7 +1,9 @@
 package net.bondar;
 
-import net.bondar.interfaces.*;
-import net.bondar.utils.*;
+import net.bondar.splitter.interfaces.*;
+import net.bondar.splitter.utils.*;
+import net.bondar.statistics.FileStatisticFactory;
+import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -37,6 +39,9 @@ public class TestFileSplitter {
      */
     private static IProcessor mergeProcessor;
 
+    /**
+     *
+     */
     private static IParameterHolder parameterHolder;
 
     /**
@@ -53,6 +58,9 @@ public class TestFileSplitter {
      */
     private static File resultFile;
 
+    /**
+     *
+     */
     @BeforeClass
     public static void setUp() {
         int partSize = 1024 * 1024;
@@ -115,6 +123,5 @@ public class TestFileSplitter {
             file.delete();
         }
         resultFile.delete();
-
     }
 }
