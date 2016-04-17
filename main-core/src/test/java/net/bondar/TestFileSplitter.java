@@ -37,6 +37,12 @@ public class TestFileSplitter {
      */
     private static IProcessor mergeProcessor;
 
+    private static IParameterHolder parameterHolder;
+
+    /**
+     *
+     */
+    private static String partName;
     /**
      *
      */
@@ -54,16 +60,17 @@ public class TestFileSplitter {
             firstFile = new File("test.txt");
             BufferedWriter bw = new BufferedWriter(new FileWriter(firstFile));
             while (firstFile.length() < 10 * partSize) {
-                bw.write("test");
+                bw.write("test ");
             }
             bw.close();
-            IParameterHolder parameterHolder = new ApplicationParameterHolder();
+            parameterHolder = new ApplicationParameterHolder();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
             AbstractTaskFactory runnableFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
+            partName = firstFile.getAbsolutePath() + parameterHolder.getValue("partSuffix")+"001";
             splitProcessor = new SplitProcessor(firstFile.getAbsolutePath(), partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
-            mergeProcessor = new MergeProcessor(firstFile.getAbsolutePath() + "_part_001", parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            mergeProcessor = new MergeProcessor(partName, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,8 +110,8 @@ public class TestFileSplitter {
     @AfterClass
     public static void destroy() {
         firstFile.delete();
-        List<File> files = Calculations.getPartsList(firstFile.getAbsolutePath() + "_part_001");
-        for (File file : files) {
+        List<File> files = Calculations.getPartsList(partName, parameterHolder.getValue("partSuffix"));
+        for(File file:files){
             file.delete();
         }
         resultFile.delete();

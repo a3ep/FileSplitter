@@ -67,7 +67,7 @@ public class SplitProcessor implements IProcessor {
                           AbstractStatisticFactory statisticFactory) {
         this.parameterHolder = parameterHolder;
         this.file = new File(fileDest);
-        this.iterator = iteratorFactory.createIterator(file.length(), partSize);
+        this.iterator = iteratorFactory.createIterator(parameterHolder, file.length(), partSize);
         this.runnableFactory = runnableFactory;
         this.statisticService = statisticFactory.createService(file.length(), null);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();

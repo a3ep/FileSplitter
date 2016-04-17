@@ -13,7 +13,7 @@ public interface AbstractIteratorFactory {
      * @param partLength
      * @return
      */
-    Iterable createIterator(long fileLength, long partLength);
+    Iterable createIterator(IParameterHolder parameterHolder, long fileLength, long partLength);
 
     Iterable createIterator(List<File> parts);
 

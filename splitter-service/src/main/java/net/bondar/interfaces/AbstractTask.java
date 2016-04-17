@@ -76,7 +76,7 @@ public abstract class AbstractTask implements Runnable {
     protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile, long finish, int bufferSize) throws IOException {
         while (start < finish) {
             //create buffer for copying
-            byte[] array = new byte[Calculations.getAvaliableSize(finish, start, bufferSize)];
+            byte[] array = new byte[Calculations.getAvailableSize(finish, start, bufferSize)];
             //process of copying
             sourceFile.read(array);
             outputFile.write(array);

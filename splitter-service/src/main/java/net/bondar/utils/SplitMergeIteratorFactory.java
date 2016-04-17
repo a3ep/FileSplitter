@@ -2,6 +2,7 @@ package net.bondar.utils;
 
 
 import net.bondar.interfaces.AbstractIteratorFactory;
+import net.bondar.interfaces.IParameterHolder;
 import net.bondar.interfaces.Iterable;
 
 import java.io.File;
@@ -18,8 +19,8 @@ public class SplitMergeIteratorFactory implements AbstractIteratorFactory {
      * @return
      */
     @Override
-    public Iterable createIterator(long fileLength, long partLength) {
-        return new SplitIterator(fileLength, partLength);
+    public Iterable createIterator(IParameterHolder parameterHolder, long fileLength, long partLength) {
+        return new SplitIterator(parameterHolder, fileLength, partLength);
     }
 
     /**

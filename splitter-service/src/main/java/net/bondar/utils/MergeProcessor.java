@@ -74,10 +74,10 @@ public class MergeProcessor implements IProcessor {
                            AbstractStatisticFactory statisticFactory){
         this.parameterHolder = parameterHolder;
         this.partFileDest = partFileDest;
-        this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
-        this.iterator = iteratorFactory.createIterator(Calculations.getPartsList(partFileDest));
+        this.file = new File(partFileDest.substring(0, partFileDest.indexOf(parameterHolder.getValue("partSuffix"))));
+        this.iterator = iteratorFactory.createIterator(Calculations.getPartsList(partFileDest, parameterHolder.getValue("partSuffix")));
         this.runnableFactory = runnableFactory;
-        this.statisticService = statisticFactory.createService(0, Calculations.getPartsList(partFileDest));
+        this.statisticService = statisticFactory.createService(0, Calculations.getPartsList(partFileDest, parameterHolder.getValue("partSuffix")));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         threadFactory.setThreadName(parameterHolder.getValue("threadName"));
