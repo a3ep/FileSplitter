@@ -11,7 +11,7 @@ public enum Command {
      * @param firstParameter
      * @param secondParameter
      */
-    Command(String firstParameter, int secondParameter) {
+    Command(String firstParameter, long secondParameter) {
         this.firstParameter = firstParameter;
         this.secondParameter = secondParameter;
     }
@@ -50,7 +50,7 @@ public enum Command {
      *
      * @return
      */
-    public int getSecondParameter() {
+    public long getSecondParameter() {
         return secondParameter;
     }
 
@@ -58,7 +58,7 @@ public enum Command {
      *
      * @param secondParameter
      */
-    public void setSecondParameter(int secondParameter) {
+    public void setSecondParameter(long secondParameter) {
         this.secondParameter = secondParameter;
     }
 
@@ -70,5 +70,5 @@ public enum Command {
     /**
      *
      */
-    private int secondParameter;
+    private long secondParameter;
 }

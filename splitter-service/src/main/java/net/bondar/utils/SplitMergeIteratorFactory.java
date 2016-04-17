@@ -18,7 +18,7 @@ public class SplitMergeIteratorFactory implements AbstractIteratorFactory {
      * @return
      */
     @Override
-    public Iterable createIterator(int fileLength, int partLength) {
+    public Iterable createIterator(long fileLength, long partLength) {
         return new SplitIterator(fileLength, partLength);
     }
 

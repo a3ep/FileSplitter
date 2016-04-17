@@ -26,6 +26,10 @@ public class FileService implements IService {
     /**
      *
      */
+    private final IParameterHolder parameterHolder;
+    /**
+     *
+     */
     private final IParametersParser parametersParser;
 
     /**
@@ -41,17 +45,45 @@ public class FileService implements IService {
     /**
      *
      */
+    private final AbstractThreadFactory threadFactory;
+
+    /**
+     *
+     */
+    private final AbstractRunnableFactory runnableFactory;
+
+    /**
+     *
+     */
+    private final AbstractStatisticFactory statisticFactory;
+    /**
+     *
+     */
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     /**
+     * @param parameterHolder
      * @param parametersParser
      * @param processorFactory
      * @param iteratorFactory
+     * @param threadFactory
+     * @param runnableFactory
+     * @param statisticFactory
      */
-    public FileService(IParametersParser parametersParser, AbstractProcessorFactory processorFactory, AbstractIteratorFactory iteratorFactory) {
+    public FileService(IParameterHolder parameterHolder,
+                       IParametersParser parametersParser,
+                       AbstractProcessorFactory processorFactory,
+                       AbstractIteratorFactory iteratorFactory,
+                       AbstractThreadFactory threadFactory,
+                       AbstractRunnableFactory runnableFactory,
+                       AbstractStatisticFactory statisticFactory) {
+        this.parameterHolder = parameterHolder;
         this.parametersParser = parametersParser;
         this.processorFactory = processorFactory;
         this.iteratorFactory = iteratorFactory;
+        this.threadFactory = threadFactory;
+        this.runnableFactory = runnableFactory;
+        this.statisticFactory = statisticFactory;
     }
 
     /**
@@ -103,7 +135,8 @@ public class FileService implements IService {
                 log.info("Start splitting file -> " + inputCommand.getFirstParameter()
                         .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
                 processor = processorFactory.createProcessor(inputCommand.getFirstParameter(),
-                        iteratorFactory, inputCommand.getSecondParameter());
+                        inputCommand.getSecondParameter(), parameterHolder, iteratorFactory, threadFactory,
+                        runnableFactory, statisticFactory);
                 processor.process();
                 log.info("Finish splitting file -> " + inputCommand.getFirstParameter()
                         .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
@@ -112,7 +145,8 @@ public class FileService implements IService {
                 log.info("Start merging file -> " + inputCommand.getFirstParameter()
                         .substring(inputCommand.getFirstParameter()
                                 .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
-                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), iteratorFactory, 0);
+                processor = processorFactory.createProcessor(inputCommand.getFirstParameter(), 0, parameterHolder,
+                        iteratorFactory, threadFactory,runnableFactory, statisticFactory);
                 processor.process();
                 log.info("Finish merging file -> " + inputCommand.getFirstParameter()
                         .substring(inputCommand.getFirstParameter()

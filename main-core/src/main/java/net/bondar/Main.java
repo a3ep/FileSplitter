@@ -1,13 +1,8 @@
 package net.bondar;
 
-import net.bondar.interfaces.AbstractIteratorFactory;
-import net.bondar.interfaces.AbstractProcessorFactory;
-import net.bondar.interfaces.IParametersParser;
-import net.bondar.interfaces.IService;
+import net.bondar.interfaces.*;
 import net.bondar.service.FileService;
-import net.bondar.utils.CliParameterParser;
-import net.bondar.utils.SplitMergeIteratorFactory;
-import net.bondar.utils.SplitMergeProcessorFactory;
+import net.bondar.utils.*;
 
 /**
  *
@@ -16,11 +11,16 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            IParametersParser parametersParser = new CliParameterParser();
+            IParameterHolder parameterHolder = new ApplicationParameterHolder();
+            IParametersParser parametersParser = new CliParameterParser(parameterHolder);
             AbstractProcessorFactory processorFactory = new SplitMergeProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
+            AbstractThreadFactory threadFactory = new NamedThreadFactory();
+            AbstractRunnableFactory runnableFactory = new FileRunnableFactory();
+            AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
 
-            IService service = new FileService(parametersParser, processorFactory, iteratorFactory);
+            IService service = new FileService(parameterHolder, parametersParser, processorFactory, iteratorFactory,
+                    threadFactory, runnableFactory, statisticFactory);
             service.run();
         } catch (Throwable t) {
             t.printStackTrace();

@@ -1,8 +1,6 @@
 package net.bondar.utils;
 
-import net.bondar.interfaces.AbstractIteratorFactory;
-import net.bondar.interfaces.AbstractProcessorFactory;
-import net.bondar.interfaces.IProcessor;
+import net.bondar.interfaces.*;
 
 /**
  *
@@ -10,17 +8,27 @@ import net.bondar.interfaces.IProcessor;
 public class SplitMergeProcessorFactory implements AbstractProcessorFactory {
 
     /**
+     *
      * @param fileDest
-     * @param iteratorFactory
      * @param partSize
+     * @param parameterHolder
+     * @param iteratorFactory
+     * @param threadFactory
+     * @param runnableFactory
+     * @param statisticFactory
      * @return
      */
     @Override
-    public IProcessor createProcessor(String fileDest, AbstractIteratorFactory iteratorFactory, int partSize) {
+    public IProcessor createProcessor(String fileDest, long partSize,
+                                      IParameterHolder parameterHolder,
+                                      AbstractIteratorFactory iteratorFactory,
+                                      AbstractThreadFactory threadFactory,
+                                      AbstractRunnableFactory runnableFactory,
+                                      AbstractStatisticFactory statisticFactory) {
         if (partSize == 0) {
-            return new MergeProcessor(fileDest, iteratorFactory);
+            return new MergeProcessor(fileDest, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         } else {
-            return new SplitProcessor(fileDest, partSize, iteratorFactory);
+            return new SplitProcessor(fileDest, partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         }
     }
 }

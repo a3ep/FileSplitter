@@ -3,7 +3,7 @@ package net.bondar.interfaces;
 /**
  *
  */
-public interface IConfigLoader {
+public interface IParameterHolder {
 
     /**
      * @param key

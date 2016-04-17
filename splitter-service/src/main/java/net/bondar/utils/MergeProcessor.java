@@ -1,6 +1,5 @@
 package net.bondar.utils;
 
-import net.bondar.*;
 import net.bondar.domain.Task;
 import net.bondar.exceptions.ApplicationException;
 import net.bondar.interfaces.*;
@@ -32,7 +31,17 @@ public class MergeProcessor implements IProcessor {
     /**
      *
      */
-    private final String partDest;
+    private final String partFileDest;
+
+    /**
+     *
+     */
+    private final File file;
+
+    /**
+     *
+     */
+    private final IParameterHolder parameterHolder;
 
     /**
      *
@@ -47,7 +56,7 @@ public class MergeProcessor implements IProcessor {
     /**
      *
      */
-    private final File file;
+    private AbstractRunnableFactory runnableFactory;
 
     /**
      *
@@ -55,37 +64,73 @@ public class MergeProcessor implements IProcessor {
     private IStatisticService statisticService;
 
     /**
+     *
      * @param partFileDest
+     * @param parameterHolder
      * @param iteratorFactory
+     * @param threadFactory
+     * @param runnableFactory
+     * @param statisticFactory
      */
-    public MergeProcessor(String partFileDest, AbstractIteratorFactory iteratorFactory) {
-        IConfigLoader configLoader = new ApplicationConfigLoader();
-        this.partDest = partFileDest;
+    public  MergeProcessor(String partFileDest,
+                           IParameterHolder parameterHolder,
+                           AbstractIteratorFactory iteratorFactory,
+                           AbstractThreadFactory threadFactory,
+                           AbstractRunnableFactory runnableFactory,
+                           AbstractStatisticFactory statisticFactory){
+        this.parameterHolder = parameterHolder;
+        this.partFileDest = partFileDest;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
-        List<File> parts = getPartsList(partFileDest);
-        this.iterator = iteratorFactory.createIterator(parts);
-        IStatisticHolder statisticHolder = new FileStatisticHolder();
-        IStatisticBuilder statisticBuilder = new FileStatisticBuilder(parts, statisticHolder);
-        IStatisticViewer statisticViewer = new FileStatisticViewer(statisticBuilder);
-        this.statisticService = new FileStatisticService(statisticHolder, statisticBuilder, new FileStatisticTimerTask(statisticViewer));
+        this.iterator = iteratorFactory.createIterator(getPartsList(partFileDest));
+        this.runnableFactory = runnableFactory;
+        this.statisticService = statisticFactory.createService(0, getPartsList(partFileDest));
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
-        pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
-                Integer.parseInt(configLoader.getValue("threadsCount")),
-                0L,
-                TimeUnit.MILLISECONDS,
-                workerQueue,
-                new NamedThreadFactory(configLoader.getValue("threadName")),
-                new RejectedExecutionHandler() {
-                    public void rejectedExecution(Runnable r, ThreadPoolExecutor pool) {
-                        try {
-                            pool.getQueue().put(r);
-                        } catch (InterruptedException e) {
-                            log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
-                            throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
-                        }
-                    }
-                });
+        int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
+        threadFactory.setThreadName(parameterHolder.getValue("threadName"));
+        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue, threadFactory, new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                try {
+                    pool.getQueue().put(r);
+                } catch (InterruptedException e) {
+                    log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
+                    throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
+                }
+            }
+        });
     }
+//    /**
+//     * @param partFileDest
+//     * @param iteratorFactory
+//     */
+//    public MergeProcessor(String partFileDest, AbstractIteratorFactory iteratorFactory) {
+//        IParameterHolder configLoader = new ApplicationParameterHolder();
+//        this.partFileDest = partFileDest;
+//        this.file = new File(partFileDest.substring(0, partFileDest.indexOf("_")));
+//        List<File> parts = getPartsList(partFileDest);
+//        this.iterator = iteratorFactory.createIterator(parts);
+//        IStatisticHolder statisticHolder = new FileStatisticHolder();
+//        IStatisticBuilder statisticBuilder = new FileStatisticBuilder(parts, statisticHolder);
+//        IStatisticViewer statisticViewer = new FileStatisticViewer(statisticBuilder);
+//        this.statisticService = new FileStatisticService(statisticHolder, statisticBuilder, new FileStatisticTimerTask(statisticViewer));
+//        final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
+//        pool = new ThreadPoolExecutor(Integer.parseInt(configLoader.getValue("threadsCount")),
+//                Integer.parseInt(configLoader.getValue("threadsCount")),
+//                0L,
+//                TimeUnit.MILLISECONDS,
+//                workerQueue,
+//                new NamedThreadFactory(configLoader.getValue("threadName")),
+//                new RejectedExecutionHandler() {
+//                    public void rejectedExecution(Runnable r, ThreadPoolExecutor pool) {
+//                        try {
+//                            pool.getQueue().put(r);
+//                        } catch (InterruptedException e) {
+//                            log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
+//                            throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
+//                        }
+//                    }
+//                });
+//    }
 
     /**
      *
@@ -103,7 +148,7 @@ public class MergeProcessor implements IProcessor {
     public void process() {
         statisticService.show(0, 1000);
         for (int i = 0; i < pool.getCorePoolSize(); i++) {
-            pool.execute(this::processTask);
+            pool.execute(runnableFactory.createRunnable(this::processTask));
         }
         pool.shutdown();
         try {
@@ -129,11 +174,11 @@ public class MergeProcessor implements IProcessor {
                 log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
                 long start = task.getStartPosition();
                 long finish = start+part.length();
-                int buffer = 1024 * 1024;
+                int bufferSize = Integer.parseInt(parameterHolder.getValue("bufferSize"));
                 //Set the file-pointer to the start position of partFile
                 outputFile.seek(start);
                 while (start < finish) {
-                    byte[] array = new byte[getAvaliableSize(finish, start, buffer)];
+                    byte[] array = new byte[getAvaliableSize(finish, start, bufferSize)];
                     //process of copying
                     sourceFile.read(array);
                     outputFile.write(array);

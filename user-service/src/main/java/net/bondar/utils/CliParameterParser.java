@@ -3,6 +3,7 @@ package net.bondar.utils;
 
 import net.bondar.domain.Command;
 import net.bondar.exceptions.ApplicationException;
+import net.bondar.interfaces.IParameterHolder;
 import net.bondar.interfaces.IParametersParser;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
@@ -22,12 +23,17 @@ public class CliParameterParser implements IParametersParser {
     /**
      *
      */
+    private final IParameterHolder parameterHolder;
+    /**
+     *
+     */
     private Options options = new Options();
 
     /**
      *
      */
-    public CliParameterParser() {
+    public CliParameterParser(IParameterHolder parameterHolder) {
+        this.parameterHolder = parameterHolder;
         options.addOption("p", true, "Path to the file you want to split.");
         options.addOption("s", true, "Size of the parts (in Mb).");
     }
@@ -53,8 +59,8 @@ public class CliParameterParser implements IParametersParser {
                     log.info("Input command -> SPLIT");
                     Command.SPLIT.setFirstParameter(cmd.getOptionValue("p"));
                     String sizeToString = cmd.getOptionValue("s");
-                    int size = Integer.parseInt(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", "")) * 1024 * 1024;
-                    Command.SPLIT.setSecondParameter(size);
+                    long size = Long.parseLong(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", ""));
+                    Command.SPLIT.setSecondParameter(size * Integer.parseInt(parameterHolder.getValue("mbValue")));
                     currentCommand = Command.SPLIT;
                 } else {
                     log.info("Input command -> MERGE");
@@ -82,6 +88,4 @@ public class CliParameterParser implements IParametersParser {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("FileSplitter options.", options);
     }
-
-
 }

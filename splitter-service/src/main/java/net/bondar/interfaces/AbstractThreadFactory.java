@@ -12,4 +12,6 @@ public abstract class AbstractThreadFactory implements ThreadFactory {
      * @return
      */
     public abstract Thread newThread(Runnable r);
+
+    public  abstract void setThreadName(String name);
 }

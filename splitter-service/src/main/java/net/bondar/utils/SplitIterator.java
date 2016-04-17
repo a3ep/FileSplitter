@@ -37,7 +37,7 @@ public class SplitIterator implements Iterable {
      * @param fileLength
      * @param partLength
      */
-    public SplitIterator(int fileLength, int partLength) {
+    public SplitIterator(long fileLength, long partLength) {
         this.fileLength = fileLength;
         this.partLength = partLength;
     }

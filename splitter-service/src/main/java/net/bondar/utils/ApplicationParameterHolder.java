@@ -1,7 +1,7 @@
 package net.bondar.utils;
 
 import net.bondar.exceptions.ApplicationException;
-import net.bondar.interfaces.IConfigLoader;
+import net.bondar.interfaces.IParameterHolder;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.Properties;
 /**
  *
  */
-public class ApplicationConfigLoader implements IConfigLoader {
+public class ApplicationParameterHolder implements IParameterHolder {
 
     /**
      *
@@ -26,7 +26,7 @@ public class ApplicationConfigLoader implements IConfigLoader {
     /**
      *
      */
-    public ApplicationConfigLoader() {
+    public ApplicationParameterHolder() {
         properties = new Properties();
         String propertiesFile = "config.properties";
         try {

@@ -17,12 +17,6 @@ public class NamedThreadFactory extends AbstractThreadFactory {
      */
     private String prefix;
 
-    /**
-     * @param prefix
-     */
-    public NamedThreadFactory(String prefix) {
-        this.prefix = prefix;
-    }
 
     /**
      * @param r
@@ -31,5 +25,14 @@ public class NamedThreadFactory extends AbstractThreadFactory {
     @Override
     public Thread newThread(Runnable r) {
         return new Thread(r, prefix + "-" + counter++);
+    }
+
+    /**
+     *
+     * @param name
+     */
+    @Override
+    public void setThreadName(String name) {
+        prefix=name;
     }
 }
