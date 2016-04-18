@@ -10,6 +10,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Provides parsing user input arguments.
@@ -66,7 +68,15 @@ public class CliParameterParser implements IParametersParser {
                 log.info("Input command -> EXIT");
                 currentCommand = Command.EXIT;
             } else if (cmd.hasOption("p")) {
+                String destString = cmd.getOptionValue("p");
                 if (cmd.hasOption("s")) {
+                    String sizeString = cmd.getOptionValue("s");
+                    Pattern p = Pattern.compile("^[0-9]+");
+                    Matcher m = p.matcher(sizeString.substring(0, sizeString.length()-1));
+                    if(!sizeString.contains("M") || !m.matches()){
+                        log.error("Wrong part size ->" + sizeString);
+                        throw new ApplicationException("Wrong part size. Please check your input.");
+                    }
                     log.info("Input command -> SPLIT");
                     Command.SPLIT.setFileDestination(cmd.getOptionValue("p"));
                     String sizeToString = cmd.getOptionValue("s");
@@ -74,6 +84,10 @@ public class CliParameterParser implements IParametersParser {
                     Command.SPLIT.setPartSize(size * Integer.parseInt(paramHolder.getValue("mbValue")));
                     currentCommand = Command.SPLIT;
                 } else {
+                    if(!destString.contains(paramHolder.getValue("partSuffix"))){
+                        log.error("Wrong file destination ->" + destString);
+                        throw new ApplicationException("Wrong file destination. Please check your input.");
+                    }
                     log.info("Input command -> MERGE");
                     Command.MERGE.setFileDestination(cmd.getOptionValue("p"));
                     currentCommand = Command.MERGE;
@@ -83,7 +97,7 @@ public class CliParameterParser implements IParametersParser {
                 help();
                 return null;
             }
-        } catch (NumberFormatException | ParseException e) {
+        } catch (NumberFormatException | ParseException | ApplicationException e) {
             log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
             throw new ApplicationException("Error during parsing " + Arrays.toString(args) + ". Exception:" + e.getMessage());
         }

@@ -32,6 +32,11 @@ public class FileProcessor implements IProcessor {
     private final File file;
 
     /**
+     * Name of file operation, should be "split" or "merge"
+     */
+    private final String fileOperation;
+
+    /**
      * Parameter holder.
      */
     private final IParameterHolder paramHolder;
@@ -74,6 +79,7 @@ public class FileProcessor implements IProcessor {
                          AbstractTaskFactory taskFactory,
                          AbstractStatisticFactory statFactory) {
         this.paramHolder = paramHolder;
+        this.fileOperation = "merge";
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(paramHolder.getValue("partSuffix"))));
         List<File> parts = Calculations.getPartsList(partFileDest, paramHolder.getValue("partSuffix"));
         this.iterator = iFactory.createMergeIterator(parts);
@@ -114,6 +120,7 @@ public class FileProcessor implements IProcessor {
                          AbstractTaskFactory taskFactory,
                          AbstractStatisticFactory statFactory) {
         this.paramHolder = paramHolder;
+        this.fileOperation = "split";
         this.file = new File(fileDest);
         this.iterator = iFactory.createSplitIterator(paramHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
@@ -143,7 +150,11 @@ public class FileProcessor implements IProcessor {
         try {
             statService.show(0, 1000);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                pool.execute(taskFactory.createSplitTask(file, paramHolder, iterator, statService));
+                if(fileOperation.equals("split")){
+                    pool.execute(taskFactory.createSplitTask(file, paramHolder, iterator, statService));
+                }else{
+                    pool.execute(taskFactory.createMergeTask(file, paramHolder, iterator, statService));
+                }
             }
             pool.shutdown();
             try {

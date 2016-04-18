@@ -120,20 +120,20 @@ public class FileService implements IService {
                     throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
                 }
             } catch (ApplicationException | CalculationsException e) {
-                log.warn("File Splitter Application error. Message: " + e.getMessage()+"\n");
+                log.warn("File Splitter Application error. Message: " + e.getMessage() + "\n");
             }
         }
     }
 
-        /**
-         * Checks the user input command and performs required action.
-         * <br>
-         * Depending on the user input line shows help, starts split or merge processing.
-         *
-         * @param inputCommand the user input command
-         * @throws CalculationsException if part-files not found
-         * @throws ApplicationException  if exceptions occurring while <code>IProcessor</code> works
-         */
+    /**
+     * Checks the user input command and performs required action.
+     * <br>
+     * Depending on the user input line shows help, starts split or merge processing.
+     *
+     * @param inputCommand the user input command
+     * @throws CalculationsException if part-files not found
+     * @throws ApplicationException  if exceptions occurring while <code>IProcessor</code> works
+     */
 
     private void switchForCommand(Command inputCommand) throws CalculationsException, ApplicationException {
         FileProcessor processor;
@@ -164,15 +164,11 @@ public class FileService implements IService {
                         .substring(inputCommand.getFileDestination().lastIndexOf("/") + 1) + "\n");
                 break;
             case MERGE:
-                log.info("Start merging file -> " + inputCommand.getFileDestination()
-                        .substring(inputCommand.getFileDestination()
-                                .lastIndexOf("/") + 1, inputCommand.getFileDestination().indexOf(paramHolder.getValue("partSuffix"))));
+                log.info("Start merging file -> " + inputCommand.getFileDestination());
                 processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
                         iFactory, tFactory, taskFactory, statFactory);
                 processor.process();
-                log.info("Finish merging file -> " + inputCommand.getFileDestination()
-                        .substring(inputCommand.getFileDestination()
-                                .lastIndexOf("/") + 1, inputCommand.getFileDestination().indexOf(paramHolder.getValue("partSuffix"))) + "\n");
+                log.info("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
                 break;
         }
     }
