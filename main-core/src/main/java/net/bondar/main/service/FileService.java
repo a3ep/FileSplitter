@@ -150,8 +150,7 @@ public class FileService implements IService {
                 log.info("Closing application...");
                 System.exit(0);
             case SPLIT:
-                log.info("Start splitting file -> " + inputCommand.getFileDestination()
-                        .substring(inputCommand.getFileDestination().lastIndexOf("/") + 1));
+                log.info("Start splitting file -> " + inputCommand.getFileDestination());
                 processor = pFactory.createProcessor(inputCommand.getFileDestination(),
                         inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
                         taskFactory, statFactory);
@@ -160,8 +159,7 @@ public class FileService implements IService {
                 } catch (ApplicationException e) {
                     break;
                 }
-                log.info("Finish splitting file -> " + inputCommand.getFileDestination()
-                        .substring(inputCommand.getFileDestination().lastIndexOf("/") + 1) + "\n");
+                log.info("Finish splitting file -> " + inputCommand.getFileDestination()+ "\n");
                 break;
             case MERGE:
                 log.info("Start merging file -> " + inputCommand.getFileDestination());

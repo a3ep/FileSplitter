@@ -17,16 +17,16 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            IParameterHolder parameterHolder = new ApplicationParameterHolder();
-            IParametersParser parametersParser = new CliParameterParser(parameterHolder);
+            IParameterHolder paramHolder = new ApplicationParameterHolder();
+            IParametersParser paramParser = new CliParameterParser(paramHolder);
             AbstractProcessorFactory processorFactory = new FileProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
-            AbstractTaskFactory runnableFactory = new FileTaskFactory();
-            AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
+            AbstractTaskFactory taskFactory = new FileTaskFactory();
+            AbstractStatisticFactory statFactory = new FileStatisticFactory();
 
-            IService service = new FileService(parameterHolder, parametersParser, processorFactory, iteratorFactory,
-                    threadFactory, runnableFactory, statisticFactory);
+            IService service = new FileService(paramHolder, paramParser, processorFactory, iteratorFactory,
+                    threadFactory, taskFactory, statFactory);
             service.run();
         } catch (Throwable t) {
             t.printStackTrace();
