@@ -6,9 +6,11 @@ import net.bondar.splitter.interfaces.*;
 import net.bondar.splitter.interfaces.Iterable;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.statistics.interfaces.IStatisticService;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -22,7 +24,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Logger.
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Complete file.
@@ -73,9 +75,10 @@ public class FileProcessor implements IProcessor {
                          AbstractStatisticFactory statFactory) {
         this.paramHolder = paramHolder;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(paramHolder.getValue("partSuffix"))));
-        this.iterator = iFactory.createMergeIterator(Calculations.getPartsList(partFileDest, paramHolder.getValue("partSuffix")));
+        List<File> parts = Calculations.getPartsList(partFileDest, paramHolder.getValue("partSuffix"));
+        this.iterator = iFactory.createMergeIterator(parts);
         this.taskFactory = taskFactory;
-        this.statService = statFactory.createService(0, Calculations.getPartsList(partFileDest, paramHolder.getValue("partSuffix")));
+        this.statService = statFactory.createService(0, parts);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         int threadsCount = Integer.parseInt(paramHolder.getValue("threadsCount"));
         tFactory.setThreadName(paramHolder.getValue("threadName"));

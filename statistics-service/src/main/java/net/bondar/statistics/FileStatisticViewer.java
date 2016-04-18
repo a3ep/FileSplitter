@@ -2,6 +2,7 @@ package net.bondar.statistics;
 
 import net.bondar.statistics.interfaces.IStatisticBuilder;
 import net.bondar.statistics.interfaces.IStatisticViewer;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -12,7 +13,7 @@ class FileStatisticViewer implements IStatisticViewer {
     /**
      * Logger.
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Statistic builder.

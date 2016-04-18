@@ -1,8 +1,8 @@
 package net.bondar.calculations;
 
 import net.bondar.calculations.exceptions.CalculationsException;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
 
 import java.io.File;
 import java.util.Arrays;
@@ -11,14 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Conatins methods for performing coperations with files.
+ * Contains methods for performing operations with files.
  */
 public class Calculations {
 
     /**
      * Logger.
      */
-    private static final Logger log = Logger.getLogger(Calculations.class);
+    private static final Logger log = LogManager.getLogger(Calculations.class);
 
     /**
      * Gets size of complete file.
@@ -65,13 +65,13 @@ public class Calculations {
         String partName = partFile.getName();
         String destName = partName.substring(0, partName.indexOf(partNameSuffix));
         File file = partFile.getParentFile();
-        File[] files = file.listFiles((File dir, String name) -> name.matches(destName + ".+\\d+"));
+        File[] files = file.listFiles((File dir, String name) -> name.matches(destName + partNameSuffix + ".+\\d+"));
         Arrays.sort(files);
         List<File> parts = new LinkedList<>();
         Collections.addAll(parts, files);
-        if(parts.isEmpty()){
+        if (parts.isEmpty()) {
             log.warn("Part-file not found. Please check your input");
-            throw new CalculationsException("Error during collecting part-files. Exception: file "+partName+ " not found. Please check your input");
+            throw new CalculationsException("Error during collecting part-files. Exception: file " + partName + " not found. Please check your input");
         }
         log.info("Part-files list -> " + parts.toString());
         return parts;

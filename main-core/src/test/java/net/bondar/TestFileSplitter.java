@@ -1,10 +1,8 @@
 package net.bondar;
 
 import net.bondar.calculations.Calculations;
-import net.bondar.splitter.interfaces.AbstractIteratorFactory;
-import net.bondar.splitter.interfaces.AbstractTaskFactory;
-import net.bondar.splitter.interfaces.AbstractThreadFactory;
-import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.interfaces.*;
+import net.bondar.splitter.interfaces.Iterable;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
@@ -78,24 +76,17 @@ public class TestFileSplitter {
             // initializing processor's components
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
-            AbstractTaskFactory runnableFactory = new FileTaskFactory();
+            AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
             partName = specifiedFile.getAbsolutePath() + paramHolder.getValue("partSuffix") + "001";
             //creating processors
-            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
-            mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
+            splitProcessor.process();
+            mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
+            mergeProcessor.process();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Starts split and merge processes.
-     */
-    @Before
-    public void init() {
-        splitProcessor.process();
-        mergeProcessor.process();
     }
 
     /**

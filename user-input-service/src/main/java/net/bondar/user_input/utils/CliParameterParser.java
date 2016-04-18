@@ -6,6 +6,7 @@ import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParametersParser;
 import org.apache.commons.cli.*;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -18,7 +19,7 @@ public class CliParameterParser implements IParametersParser {
     /**
      * Logger.
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Parameter holder.

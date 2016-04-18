@@ -2,6 +2,7 @@ package net.bondar.splitter.utils;
 
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.IParameterHolder;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class ApplicationParameterHolder implements IParameterHolder {
     /**
      * Logger.
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Application properties.

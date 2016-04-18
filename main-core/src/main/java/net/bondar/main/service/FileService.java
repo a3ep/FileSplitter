@@ -8,6 +8,7 @@ import net.bondar.splitter.utils.FileProcessor;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParametersParser;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -27,7 +28,7 @@ public class FileService implements IService {
     /**
      * Logger.
      */
-    private final Logger log = Logger.getLogger(getClass());
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Parameter holder.
