@@ -30,11 +30,6 @@ import static junit.framework.TestCase.assertEquals;
 public class TestFileSplitter {
 
     /**
-     * Logger.
-     */
-    private static final Logger log = Logger.getLogger(TestFileSplitter.class);
-
-    /**
      * Processor for splitting file.
      */
     private static FileProcessor splitProcessor;
@@ -90,7 +85,7 @@ public class TestFileSplitter {
             splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
             mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         } catch (IOException e) {
-            log.error("Catches IOException, during creating file for testing. Message " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -119,7 +114,7 @@ public class TestFileSplitter {
             //comparing contents of files
             equals = FileUtils.contentEquals(specifiedFile, resultFile);
         } catch (IOException e) {
-            log.error("Catches IOException, during comparing contents of files. Message " + e.getMessage());
+            e.printStackTrace();
         }
         assertEquals(true, equals);
     }
