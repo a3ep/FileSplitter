@@ -1,6 +1,8 @@
 package net.bondar.calculations;
 
+import net.bondar.calculations.exceptions.CalculationsException;
 import org.apache.log4j.Logger;
+
 
 import java.io.File;
 import java.util.Arrays;
@@ -43,12 +45,9 @@ public class Calculations {
      * @return required byte array size
      */
     public static int getAvailableSize(long finish, long start, int bufferSize) {
-        log.info("Getting available bytes array size");
         if (finish - start > bufferSize) {
-            log.info("Available bytes array size = " + bufferSize);
             return bufferSize;
         } else {
-            log.info("Available bytes array size = " + (int) (finish - start));
             return (int) (finish - start);
         }
     }
@@ -70,6 +69,10 @@ public class Calculations {
         Arrays.sort(files);
         List<File> parts = new LinkedList<>();
         Collections.addAll(parts, files);
+        if(parts.isEmpty()){
+            log.warn("Part-file not found. Please check your input");
+            throw new CalculationsException("Error during collecting part-files. Exception: file "+partName+ " not found. Please check your input");
+        }
         log.info("Part-files list -> " + parts.toString());
         return parts;
     }

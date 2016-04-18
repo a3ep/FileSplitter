@@ -147,7 +147,7 @@ public class FileProcessor implements IProcessor {
                 pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             } catch (InterruptedException e) {
                 log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
-                throw new ApplicationException("Error during main thread sleeping. Exception:" + e.getMessage());
+                throw new ApplicationException("Error during main thread waiting. Exception:" + e.getMessage());
             }
             statService.hide();
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {

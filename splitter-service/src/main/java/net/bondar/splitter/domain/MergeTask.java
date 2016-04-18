@@ -1,5 +1,6 @@
 package net.bondar.splitter.domain;
 
+import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.AbstractTask;
 import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.splitter.interfaces.Iterable;
