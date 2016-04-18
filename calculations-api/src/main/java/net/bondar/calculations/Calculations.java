@@ -1,14 +1,15 @@
 package net.bondar.calculations;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
- *
+ * Conatins methods for performing coperations with files.
  */
 public class Calculations {
 
@@ -18,47 +19,50 @@ public class Calculations {
     private static final Logger log = Logger.getLogger(Calculations.class);
 
     /**
+     * Gets size of complete file.
      *
-     * @param files
-     * @return
+     * @param files list of part-files
+     * @return complete file size
      */
-    public static double getFileSize(List<File> files){
+    public static double getFileSize(List<File> files) {
         log.info("Calculating file size...");
-        double fileSize=0;
-        for(File f: files){
-            fileSize+=f.length();
+        double fileSize = 0;
+        for (File f : files) {
+            fileSize += f.length();
         }
-        log.info("File size = "+fileSize);
+        log.info("File size = " + fileSize);
         return fileSize;
     }
 
     /**
+     * Gets the required size of the byte array to write into the file.
      *
-     * @param finish
-     * @param start
-     * @param bufferSize
-     * @return
+     * @param finish     index of the end position in a file.
+     * @param start      index of the start position in a file.
+     * @param bufferSize default buffer size
+     * @return required byte array size
      */
-    public static int getAvailableSize(long finish, long start, int bufferSize){
+    public static int getAvailableSize(long finish, long start, int bufferSize) {
         log.info("Getting available bytes array size");
-        if(finish-start>bufferSize) {
+        if (finish - start > bufferSize) {
             log.info("Available bytes array size = " + bufferSize);
             return bufferSize;
         } else {
-            log.info("Available bytes array size = " + (int)(finish-start));
-            return (int) (finish-start);
+            log.info("Available bytes array size = " + (int) (finish - start));
+            return (int) (finish - start);
         }
     }
 
     /**
+     * Gets the list of part-files.
      *
-     * @param fileDest
-     * @param partNameSuffix
-     * @return
+     * @param partFileDest   destination of the part-file
+     * @param partNameSuffix name suffix of thw part-file
+     * @return list of part-files
      */
-    public static List<File> getPartsList(String fileDest, String partNameSuffix){
+    public static List<File> getPartsList(String partFileDest, String partNameSuffix) {
         log.info("Getting list of part-files");
-        File partFile = new File(fileDest);
+        File partFile = new File(partFileDest);
         String partName = partFile.getName();
         String destName = partName.substring(0, partName.indexOf(partNameSuffix));
         File file = partFile.getParentFile();

@@ -10,50 +10,60 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Provides building statistic information about file.
  */
 public class FileStatisticBuilder implements IStatisticBuilder {
 
     /**
-     *
+     * Size of the specified file.
      */
     private final double fileSize;
 
     /**
+     * Map contains information from threads.
+     */
+    private Map<String, IPartObject> infoMap;
+
+    /**
+     * Creates <code>FileStatisticBuilder</code> instance.
      *
+     * @param fileSize   size of the specified file
+     * @param statHolder statistic holder
      */
-    private Map<String, IPartObject> statInfo;
-
-    /**
-     * @param fileSize
-     * @param statisticHolder
-     */
-    public FileStatisticBuilder(double fileSize, IStatisticHolder statisticHolder) {
+    public FileStatisticBuilder(double fileSize, IStatisticHolder statHolder) {
         this.fileSize = fileSize;
-        this.statInfo = statisticHolder.getStatistic();
-    }
-
-    public FileStatisticBuilder(List<File> files, IStatisticHolder statisticHolder) {
-        fileSize = Calculations.getFileSize(files);
-        this.statInfo = statisticHolder.getStatistic();
+        this.infoMap = statHolder.getStatistic();
     }
 
     /**
-     * @return
+     * Creates <code>FileStatisticBuilder</code> instance.
+     *
+     * @param files      list of part-files
+     * @param statHolder statistic holder
+     */
+    public FileStatisticBuilder(List<File> files, IStatisticHolder statHolder) {
+        fileSize = Calculations.getFileSize(files);
+        this.infoMap = statHolder.getStatistic();
+    }
+
+    /**
+     * Builds statistic information about file.
+     *
+     * @return string with statistic information about file
      */
     public String buildStatisticString() {
-        if (statInfo.isEmpty()) {
+        if (infoMap.isEmpty()) {
             return null;
         }
         StringBuilder builder = new StringBuilder("Total progress : ");
         long totalWrittenSize = 0;
-        for (IPartObject part : statInfo.values()) {
+        for (IPartObject part : infoMap.values()) {
             totalWrittenSize += part.getTotalWrittenSize();
         }
         double totalProgress = totalWrittenSize / fileSize * 100;
         builder.append((int) totalProgress).append(" %, ");
         double threadProgress;
-        for (Map.Entry<String, IPartObject> entry : statInfo.entrySet()) {
+        for (Map.Entry<String, IPartObject> entry : infoMap.entrySet()) {
             builder.append(entry.getKey()).append(" : ");
             long partSize = entry.getValue().getEndPosition() - entry.getValue().getStartPosition();
             threadProgress = (double) entry.getValue().getWrittenSize() / partSize * 100;

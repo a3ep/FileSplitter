@@ -12,7 +12,7 @@
 
     <artifactId>user-input-service</artifactId>
     <packaging>jar</packaging>
-    <name>${project.modulesName} console</name>
+    <name>${project.modulesName} user-input</name>
 
     <dependencies>
         <dependency>

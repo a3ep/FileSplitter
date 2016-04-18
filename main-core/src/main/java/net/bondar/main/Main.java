@@ -19,7 +19,7 @@ public class Main {
         try {
             IParameterHolder parameterHolder = new ApplicationParameterHolder();
             IParametersParser parametersParser = new CliParameterParser(parameterHolder);
-            AbstractProcessorFactory processorFactory = new SplitMergeProcessorFactory();
+            AbstractProcessorFactory processorFactory = new FileProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
             AbstractTaskFactory runnableFactory = new FileTaskFactory();

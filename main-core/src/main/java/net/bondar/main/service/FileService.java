@@ -1,5 +1,6 @@
 package net.bondar.main.service;
 
+import net.bondar.splitter.utils.FileProcessor;
 import net.bondar.user_input.domain.Command;
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.main.interfaces.*;
@@ -128,7 +129,7 @@ public class FileService implements IService {
      * @param inputCommand the user input command
      */
     private void switchForCommand(Command inputCommand) {
-        IProcessor processor;
+        FileProcessor processor;
         if (inputCommand == null) return;
         switch (inputCommand) {
             case EXIT:

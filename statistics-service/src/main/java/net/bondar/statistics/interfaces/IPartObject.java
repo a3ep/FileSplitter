@@ -3,7 +3,7 @@ package net.bondar.statistics.interfaces;
 import java.io.File;
 
 /**
- *
+ * Interface for part objects.
  */
 public interface IPartObject {
 
@@ -59,7 +59,7 @@ public interface IPartObject {
     /**
      * Sets size of bytes, written by one thread during processing all part-files.
      *
-     * @param totalWrittenSize
+     * @param totalWrittenSize size of bytes, written by one thread during processing all part-files
      */
     public void setTotalWrittenSize(long totalWrittenSize);
 

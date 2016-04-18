@@ -1,5 +1,6 @@
 package net.bondar.splitter.interfaces;
 
+import net.bondar.splitter.utils.FileProcessor;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 
 /**
@@ -19,10 +20,10 @@ public interface AbstractProcessorFactory {
      * @param statFactory statistic factory
      * @return concrete iterator instance
      */
-    IProcessor createProcessor(String fileDest, long partSize,
-                               IParameterHolder paramHolder,
-                               AbstractIteratorFactory iFactory,
-                               AbstractThreadFactory tFactory,
-                               AbstractTaskFactory taskFactory,
-                               AbstractStatisticFactory statFactory);
+    FileProcessor createProcessor(String fileDest, long partSize,
+                                  IParameterHolder paramHolder,
+                                  AbstractIteratorFactory iFactory,
+                                  AbstractThreadFactory tFactory,
+                                  AbstractTaskFactory taskFactory,
+                                  AbstractStatisticFactory statFactory);
 }

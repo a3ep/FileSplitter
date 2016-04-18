@@ -34,11 +34,11 @@ public class TestFileSplitter {
     /**
      *
      */
-    private static IProcessor splitProcessor;
+    private static FileProcessor splitProcessor;
     /**
      *
      */
-    private static IProcessor mergeProcessor;
+    private static FileProcessor mergeProcessor;
 
     /**
      *
@@ -78,8 +78,8 @@ public class TestFileSplitter {
             AbstractTaskFactory runnableFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
             partName = firstFile.getAbsolutePath() + parameterHolder.getValue("partSuffix")+"001";
-            splitProcessor = new SplitProcessor(firstFile.getAbsolutePath(), partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
-            mergeProcessor = new MergeProcessor(partName, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            splitProcessor = new FileProcessor(firstFile.getAbsolutePath(), partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            mergeProcessor = new FileProcessor(partName, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         } catch (IOException e) {
             e.printStackTrace();
         }
