@@ -1,6 +1,6 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.Calculations;
+import net.bondar.calculations.Calculations;
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.*;
 import net.bondar.splitter.interfaces.Iterable;

@@ -1,5 +1,6 @@
 package net.bondar;
 
+import net.bondar.calculations.Calculations;
 import net.bondar.splitter.interfaces.*;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;

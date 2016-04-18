@@ -1,6 +1,6 @@
 package net.bondar.splitter.interfaces;
 
-import net.bondar.Calculations;
+import net.bondar.calculations.Calculations;
 import net.bondar.statistics.interfaces.IPartObject;
 import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.Logger;
