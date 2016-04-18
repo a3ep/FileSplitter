@@ -23,9 +23,9 @@ import static junit.framework.TestCase.assertEquals;
 
 
 /**
- * Provides application testing.
+ * Starts difference files testing.
  */
-public class TestFileSplitter {
+public class TestFileEquals {
 
     /**
      * Processor for splitting file.
