@@ -16,6 +16,7 @@ public class FileStatisticFactory extends AbstractStatisticFactory {
      * @param fileSize size of specified file
      * @param files    list of part-files
      * @return <code>FileStatisticService</code> instance
+     * @see {@link AbstractStatisticFactory}
      */
     @Override
     public IStatisticService createService(double fileSize, List<File> files) {

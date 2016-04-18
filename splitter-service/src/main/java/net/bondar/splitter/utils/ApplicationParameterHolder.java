@@ -25,6 +25,8 @@ public class ApplicationParameterHolder implements IParameterHolder {
 
     /**
      * Creates <code>ApplicationParameterHolder</code> instance.
+     *
+     * @see {@link IParameterHolder}
      */
     public ApplicationParameterHolder() {
         properties = new Properties();

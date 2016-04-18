@@ -63,6 +63,7 @@ public class FileProcessor implements IProcessor {
      * @param tFactory     thread factory
      * @param taskFactory  thread's task factory
      * @param statFactory  statistic factory
+     * @see {@link IProcessor}
      */
     public FileProcessor(String partFileDest,
                          IParameterHolder paramHolder,
@@ -101,6 +102,7 @@ public class FileProcessor implements IProcessor {
      * @param tFactory    thread factory
      * @param taskFactory thread's task factory
      * @param statFactory statistic factory
+     * @see {@link IProcessor}
      */
     public FileProcessor(String fileDest, long partSize,
                          IParameterHolder paramHolder,
@@ -131,6 +133,8 @@ public class FileProcessor implements IProcessor {
 
     /**
      * Processes file.
+     *
+     * @see {@link IProcessor}
      */
     public void process() {
         try {
@@ -156,6 +160,7 @@ public class FileProcessor implements IProcessor {
      * Gets the complete file.
      *
      * @return complete file
+     * @see {@link IProcessor}
      */
     public File getFile() {
         return file;

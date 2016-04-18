@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Provides iteration for part-files during merging process.
  */
-public class MergeIterator implements Iterable {
+class MergeIterator implements Iterable {
 
     /**
      * File part counter.
@@ -30,8 +30,9 @@ public class MergeIterator implements Iterable {
      * Creates <code>MergeIterator</code> instance.
      *
      * @param parts list of part-files.
+     * @see {@link Iterable}
      */
-    public MergeIterator(List<File> parts) {
+    MergeIterator(List<File> parts) {
         this.parts = parts;
     }
 
@@ -39,6 +40,7 @@ public class MergeIterator implements Iterable {
      * Gets the next <code>FilePartObject</code> object.
      *
      * @return <code>FilePartObject</code> object with necessary parameters
+     * @see {@link Iterable}
      */
     @Override
     public synchronized FilePartObject getNext() {

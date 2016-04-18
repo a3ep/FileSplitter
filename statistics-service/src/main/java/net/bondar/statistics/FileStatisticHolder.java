@@ -9,7 +9,7 @@ import java.util.TreeMap;
 /**
  * Provides holding statistic information about file.
  */
-public class FileStatisticHolder implements IStatisticHolder {
+class FileStatisticHolder implements IStatisticHolder {
 
     /**
      * Map contains information about file from threads.
@@ -20,6 +20,7 @@ public class FileStatisticHolder implements IStatisticHolder {
      * Gets map with information about file from threads.
      *
      * @return map with information about file
+     * @see {@link IStatisticHolder}
      */
     public Map<String, IPartObject> getStatistic() {
         return statistic;
@@ -30,6 +31,7 @@ public class FileStatisticHolder implements IStatisticHolder {
      *
      * @param threadName name of the thread
      * @param filePart   <code>IPartObject</code> with parameters for calculating statistic
+     * @see {@link IStatisticHolder}
      */
     @Override
     public synchronized void putInformation(String threadName, IPartObject filePart) {

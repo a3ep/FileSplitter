@@ -17,7 +17,6 @@ public class NamedThreadFactory extends AbstractThreadFactory {
      */
     private String prefix;
 
-
     /**
      * Creates new <code>Thread</code> with custom name.
      *
@@ -33,7 +32,7 @@ public class NamedThreadFactory extends AbstractThreadFactory {
     /**
      * Sets name to <code>Thread</code>.
      *
-     * @param name
+     * @param name name of the thread
      * @see {@link AbstractThreadFactory}
      */
     @Override

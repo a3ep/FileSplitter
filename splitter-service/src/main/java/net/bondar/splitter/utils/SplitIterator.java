@@ -7,7 +7,7 @@ import net.bondar.statistics.domain.FilePartObject;
 /**
  * Provides iteration for part-files during splitting process.
  */
-public class SplitIterator implements Iterable {
+class SplitIterator implements Iterable {
 
     /**
      * Part-file counter.
@@ -39,8 +39,9 @@ public class SplitIterator implements Iterable {
      *
      * @param fileLength the specified file length
      * @param partLength the specified part-file length
+     * @see {@link Iterable}
      */
-    public SplitIterator(IParameterHolder paramHolder, long fileLength, long partLength) {
+    SplitIterator(IParameterHolder paramHolder, long fileLength, long partLength) {
         this.paramHolder = paramHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;
@@ -50,6 +51,7 @@ public class SplitIterator implements Iterable {
      * Gets the next <code>FilePartObject</code> object.
      *
      * @return <code>FilePartObject</code> object with necessary parameters
+     * @see {@link Iterable}
      */
     public synchronized FilePartObject getNext() {
         if (currentPosition > fileLength) return new FilePartObject();
@@ -61,5 +63,4 @@ public class SplitIterator implements Iterable {
         currentPosition = end + 1;
         return filePart;
     }
-
 }

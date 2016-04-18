@@ -1,11 +1,11 @@
 package net.bondar.main.service;
 
-import net.bondar.splitter.utils.FileProcessor;
-import net.bondar.user_input.domain.Command;
+import net.bondar.main.interfaces.IService;
 import net.bondar.splitter.exceptions.ApplicationException;
-import net.bondar.main.interfaces.*;
 import net.bondar.splitter.interfaces.*;
+import net.bondar.splitter.utils.FileProcessor;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
+import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParametersParser;
 import org.apache.log4j.Logger;
 
@@ -13,14 +13,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+//split -p /home/vsevolod/test/Howfast.ogg -s 1M
+//merge -p /home/vsevolod/test/Howfast.ogg_part_001
+
 /**
  * Provides communication with user.
  */
 public class FileService implements IService {
-    //split -p /home/vsevolod/test/Howfast.ogg -s 1M
-    //split -p /home/vsevolod/Загрузки/111/Modern.Family.S07E18.rus.LostFilm.TV.avi -s 20M
-    //merge -p /home/vsevolod/test/Howfast.ogg_part_001
-    //merge -p /home/vsevolod/Загрузки/111/Modern.Family.S07E18.rus.LostFilm.TV.avi_part_001
+
     /**
      * Logger.
      */
@@ -101,7 +101,7 @@ public class FileService implements IService {
         try {
             log.info("Start application.");
             String input;
-            String[] args = {"help"};
+            String[] args;
             while (true) {
                 try {
                     log.info("Input your parameters:");
@@ -143,25 +143,25 @@ public class FileService implements IService {
                 log.info("Closing application...");
                 System.exit(0);
             case SPLIT:
-                log.info("Start splitting file -> " + inputCommand.getFirstParameter()
-                        .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
-                processor = pFactory.createProcessor(inputCommand.getFirstParameter(),
-                        inputCommand.getSecondParameter(), paramHolder, iFactory, tFactory,
+                log.info("Start splitting file -> " + inputCommand.getFileDestination()
+                        .substring(inputCommand.getFileDestination().lastIndexOf("/") + 1));
+                processor = pFactory.createProcessor(inputCommand.getFileDestination(),
+                        inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
                         taskFactory, statFactory);
                 processor.process();
-                log.info("Finish splitting file -> " + inputCommand.getFirstParameter()
-                        .substring(inputCommand.getFirstParameter().lastIndexOf("/") + 1));
+                log.info("Finish splitting file -> " + inputCommand.getFileDestination()
+                        .substring(inputCommand.getFileDestination().lastIndexOf("/") + 1));
                 break;
             case MERGE:
-                log.info("Start merging file -> " + inputCommand.getFirstParameter()
-                        .substring(inputCommand.getFirstParameter()
-                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
-                processor = pFactory.createProcessor(inputCommand.getFirstParameter(), 0, paramHolder,
+                log.info("Start merging file -> " + inputCommand.getFileDestination()
+                        .substring(inputCommand.getFileDestination()
+                                .lastIndexOf("/") + 1, inputCommand.getFileDestination().indexOf(paramHolder.getValue("partSuffix"))));
+                processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
                         iFactory, tFactory, taskFactory, statFactory);
                 processor.process();
-                log.info("Finish merging file -> " + inputCommand.getFirstParameter()
-                        .substring(inputCommand.getFirstParameter()
-                                .lastIndexOf("/") + 1, inputCommand.getFirstParameter().indexOf("_")));
+                log.info("Finish merging file -> " + inputCommand.getFileDestination()
+                        .substring(inputCommand.getFileDestination()
+                                .lastIndexOf("/") + 1, inputCommand.getFileDestination().indexOf(paramHolder.getValue("partSuffix"))));
                 break;
         }
     }

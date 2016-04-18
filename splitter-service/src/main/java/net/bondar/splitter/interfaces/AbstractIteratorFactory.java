@@ -19,6 +19,7 @@ public interface AbstractIteratorFactory {
 
     /**
      * Creates concrete iterator on the basis of the list of part-files.
+     *
      * @param parts list of part-files
      * @return concrete iterator instance
      */

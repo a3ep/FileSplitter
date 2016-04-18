@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Provides building statistic information about file.
  */
-public class FileStatisticBuilder implements IStatisticBuilder {
+class FileStatisticBuilder implements IStatisticBuilder {
 
     /**
      * Size of the specified file.
@@ -30,7 +30,7 @@ public class FileStatisticBuilder implements IStatisticBuilder {
      * @param fileSize   size of the specified file
      * @param statHolder statistic holder
      */
-    public FileStatisticBuilder(double fileSize, IStatisticHolder statHolder) {
+    FileStatisticBuilder(double fileSize, IStatisticHolder statHolder) {
         this.fileSize = fileSize;
         this.infoMap = statHolder.getStatistic();
     }
@@ -40,8 +40,9 @@ public class FileStatisticBuilder implements IStatisticBuilder {
      *
      * @param files      list of part-files
      * @param statHolder statistic holder
+     * @see {@link IStatisticBuilder}
      */
-    public FileStatisticBuilder(List<File> files, IStatisticHolder statHolder) {
+    FileStatisticBuilder(List<File> files, IStatisticHolder statHolder) {
         fileSize = Calculations.getFileSize(files);
         this.infoMap = statHolder.getStatistic();
     }
@@ -50,6 +51,7 @@ public class FileStatisticBuilder implements IStatisticBuilder {
      * Builds statistic information about file.
      *
      * @return string with statistic information about file
+     * @see {@link IStatisticBuilder}
      */
     public String buildStatisticString() {
         if (infoMap.isEmpty()) {

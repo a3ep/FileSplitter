@@ -1,7 +1,10 @@
 package net.bondar;
 
 import net.bondar.calculations.Calculations;
-import net.bondar.splitter.interfaces.*;
+import net.bondar.splitter.interfaces.AbstractIteratorFactory;
+import net.bondar.splitter.interfaces.AbstractTaskFactory;
+import net.bondar.splitter.interfaces.AbstractThreadFactory;
+import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
@@ -22,71 +25,77 @@ import static junit.framework.TestCase.assertEquals;
 
 
 /**
- *
+ * Provides application testing.
  */
 public class TestFileSplitter {
 
     /**
-     *
+     * Logger.
      */
-    private final Logger log = Logger.getLogger("userLogger");
+    private static final Logger log = Logger.getLogger(TestFileSplitter.class);
 
     /**
-     *
+     * Processor for splitting file.
      */
     private static FileProcessor splitProcessor;
+
     /**
-     *
+     * Processor for merging files.
      */
     private static FileProcessor mergeProcessor;
 
     /**
-     *
+     * Parameter holder.
      */
-    private static IParameterHolder parameterHolder;
+    private static IParameterHolder paramHolder;
 
     /**
-     *
+     * Name of the part-file.
      */
     private static String partName;
-    /**
-     *
-     */
-    private static File firstFile;
 
     /**
-     *
+     * File specified by user.
+     */
+    private static File specifiedFile;
+
+    /**
+     * File received as a result of the merging process.
      */
     private static File resultFile;
 
     /**
-     *
+     * Runs preparation for testing.
      */
     @BeforeClass
     public static void setUp() {
+        // size of the part-file
         int partSize = 1024 * 1024;
         try {
-            firstFile = new File("test.txt");
-            BufferedWriter bw = new BufferedWriter(new FileWriter(firstFile));
-            while (firstFile.length() < 10 * partSize) {
+            // creating a new file with data
+            specifiedFile = new File("test.txt");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(specifiedFile));
+            while (specifiedFile.length() < 10 * partSize) {
                 bw.write("test ");
             }
             bw.close();
-            parameterHolder = new ApplicationParameterHolder();
+            paramHolder = new ApplicationParameterHolder();
+            // initializing processor's components
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
             AbstractTaskFactory runnableFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
-            partName = firstFile.getAbsolutePath() + parameterHolder.getValue("partSuffix")+"001";
-            splitProcessor = new FileProcessor(firstFile.getAbsolutePath(), partSize, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
-            mergeProcessor = new FileProcessor(partName, parameterHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            partName = specifiedFile.getAbsolutePath() + paramHolder.getValue("partSuffix") + "001";
+            //creating processors
+            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
+            mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, runnableFactory, statisticFactory);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Catches IOException, during creating file for testing. Message " + e.getMessage());
         }
     }
 
     /**
-     *
+     * Starts split and merge processes.
      */
     @Before
     public void init() {
@@ -95,32 +104,34 @@ public class TestFileSplitter {
     }
 
     /**
-     *
+     * Tests equals between specified and result files.
      */
     @Test
-    public void testFileSplitter() {
-        firstFile = splitProcessor.getFile();
+    public void testFilesEquals() {
+        specifiedFile = splitProcessor.getFile();
         resultFile = mergeProcessor.getFile();
         boolean equals = false;
-        if (firstFile.length() != resultFile.length()) {
+        //check different file length
+        if (specifiedFile.length() != resultFile.length()) {
             equals = false;
         }
         try {
-            equals = FileUtils.contentEquals(firstFile, resultFile);
+            //comparing contents of files
+            equals = FileUtils.contentEquals(specifiedFile, resultFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Catches IOException, during comparing contents of files. Message " + e.getMessage());
         }
         assertEquals(true, equals);
     }
 
     /**
-     *
+     * Deletes files created during testing.
      */
     @AfterClass
     public static void destroy() {
-        firstFile.delete();
-        List<File> files = Calculations.getPartsList(partName, parameterHolder.getValue("partSuffix"));
-        for(File file:files){
+        specifiedFile.delete();
+        List<File> files = Calculations.getPartsList(partName, paramHolder.getValue("partSuffix"));
+        for (File file : files) {
             file.delete();
         }
         resultFile.delete();

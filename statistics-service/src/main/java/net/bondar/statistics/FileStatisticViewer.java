@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 /**
  * Provides showing statistical information about file processing.
  */
-public class FileStatisticViewer implements IStatisticViewer {
+class FileStatisticViewer implements IStatisticViewer {
 
     /**
      * Logger.
@@ -23,13 +23,16 @@ public class FileStatisticViewer implements IStatisticViewer {
      * Creates <code>FileStatisticViewer</code> instance.
      *
      * @param builder statistic builder
+     * @see {@link IStatisticViewer}
      */
-    public FileStatisticViewer(IStatisticBuilder builder) {
+    FileStatisticViewer(IStatisticBuilder builder) {
         this.builder = builder;
     }
 
     /**
      * Shows statistical information about file processing in logs.
+     *
+     * @see {@link IStatisticViewer}
      */
     public void showStatistic() {
         String info = builder.buildStatisticString();

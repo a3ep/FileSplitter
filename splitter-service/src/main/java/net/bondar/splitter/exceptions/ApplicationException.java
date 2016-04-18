@@ -8,7 +8,7 @@ public class ApplicationException extends RuntimeException {
     /**
      * Creates <code>CalculatorApplicationException</code> instance.
      *
-     * @param message
+     * @param message exception message
      */
     public ApplicationException(String message) {
         super(message);

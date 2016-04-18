@@ -1,74 +1,96 @@
 package net.bondar.user_input.domain;
 
+import net.bondar.user_input.interfaces.ICommand;
 
-public enum Command {
+/**
+ * Contains user input commands.
+ */
+public enum Command implements ICommand {
+
+    /**
+     * Exit command.
+     */
     EXIT,
+
+    /**
+     * Split file command.
+     */
     SPLIT("", 0),
+
+    /**
+     * Merge files command.
+     */
     MERGE("");
 
     /**
+     * Creates <code>Command</code> instance.
      *
-     * @param firstParameter
-     * @param secondParameter
+     * @param fileDestination destination of the specified file
+     * @param partSize        size of the part-file
      */
-    Command(String firstParameter, long secondParameter) {
-        this.firstParameter = firstParameter;
-        this.secondParameter = secondParameter;
+    Command(String fileDestination, long partSize) {
+        this.fileDestination = fileDestination;
+        this.partSize = partSize;
     }
 
     /**
+     * Creates <code>Command</code> instance.
      *
-     * @param firstParameter
+     * @param fileDestination destination of the specified file
      */
-    Command(String firstParameter) {
-        this.firstParameter = firstParameter;
+    Command(String fileDestination) {
+        this.fileDestination = fileDestination;
     }
 
     /**
-     *
+     * Creates <code>Command</code> instance.
      */
     Command() {
     }
 
     /**
+     * Gets destination of the specified file.
      *
-     * @return
+     * @return string with file destination
      */
-    public String getFirstParameter() {
-        return firstParameter;
+    public String getFileDestination() {
+        return fileDestination;
     }
 
     /**
+     * Sets destination of the specified file.
      *
-     * @param firstParameter
+     * @param fileDestination destination of the specified file
      */
-    public void setFirstParameter(String firstParameter) {
-        this.firstParameter = firstParameter;
+    public void setFileDestination(String fileDestination) {
+        this.fileDestination = fileDestination;
     }
 
     /**
+     * Gets size of the part-file.
      *
-     * @return
+     * @return part-file size
      */
-    public long getSecondParameter() {
-        return secondParameter;
+    public long getPartSize() {
+        return partSize;
     }
 
     /**
+     * Sets size of the part-file.
      *
-     * @param secondParameter
+     * @param partSize size of the part-file
      */
-    public void setSecondParameter(long secondParameter) {
-        this.secondParameter = secondParameter;
+    public void setPartSize(long partSize) {
+        this.partSize = partSize;
     }
 
     /**
-     *
+     * Destination of the specified file
      */
-    private String firstParameter;
+    private String fileDestination;
 
     /**
-     *
+     * Size of the part-file
      */
-    private long secondParameter;
+    private long partSize;
 }

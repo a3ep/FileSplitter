@@ -1,9 +1,9 @@
 package net.bondar.user_input.utils;
 
 
-import net.bondar.user_input.domain.Command;
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParametersParser;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 
 /**
- *
+ * Provides parsing user input arguments.
  */
 public class CliParameterParser implements IParametersParser {
 
@@ -21,26 +21,36 @@ public class CliParameterParser implements IParametersParser {
     private final Logger log = Logger.getLogger(getClass());
 
     /**
-     *
+     * Parameter holder.
      */
-    private final IParameterHolder parameterHolder;
+    private final IParameterHolder paramHolder;
+
     /**
-     *
+     * Cli options.
      */
     private Options options = new Options();
 
     /**
+     * Creates <code>CliParameterParser</code> instance.
      *
+     * @param paramHolder parameter holder
+     * @see {@link IParameterHolder}
      */
-    public CliParameterParser(IParameterHolder parameterHolder) {
-        this.parameterHolder = parameterHolder;
+    public CliParameterParser(IParameterHolder paramHolder) {
+        this.paramHolder = paramHolder;
         options.addOption("p", true, "Path to the file you want to split.");
         options.addOption("s", true, "Size of the parts (in Mb).");
     }
 
     /**
-     * @param args
-     * @return
+     * Parses user input arguments.
+     * <br>
+     * Input arguments should contains command name and command parameters.
+     * If input arguments is empty - shows help message with possible input application parameters.
+     *
+     * @param args user input parameters
+     * @return input command constructed on the basis of input parameters
+     * @see {@link IParameterHolder}
      */
     public Command parse(String[] args) {
         log.info("Start parsing input: " + Arrays.toString(args));
@@ -57,20 +67,20 @@ public class CliParameterParser implements IParametersParser {
             } else if (cmd.hasOption("p")) {
                 if (cmd.hasOption("s")) {
                     log.info("Input command -> SPLIT");
-                    Command.SPLIT.setFirstParameter(cmd.getOptionValue("p"));
+                    Command.SPLIT.setFileDestination(cmd.getOptionValue("p"));
                     String sizeToString = cmd.getOptionValue("s");
                     long size = Long.parseLong(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", ""));
-                    Command.SPLIT.setSecondParameter(size * Integer.parseInt(parameterHolder.getValue("mbValue")));
+                    Command.SPLIT.setPartSize(size * Integer.parseInt(paramHolder.getValue("mbValue")));
                     currentCommand = Command.SPLIT;
                 } else {
                     log.info("Input command -> MERGE");
-                    Command.MERGE.setFirstParameter(cmd.getOptionValue("p"));
+                    Command.MERGE.setFileDestination(cmd.getOptionValue("p"));
                     currentCommand = Command.MERGE;
                 }
             } else {
                 log.error("Wrong input command ->" + Arrays.toString(args));
                 help();
-                return currentCommand;
+                return null;
             }
         } catch (NumberFormatException | ParseException e) {
             log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
@@ -81,7 +91,7 @@ public class CliParameterParser implements IParametersParser {
     }
 
     /**
-     *
+     * Shows help message with possible input application parameters.
      */
     private void help() {
         log.info("Input \"help\" to show help, \"split -p <args> -s <args>\" to split or \"merge -p <args>\" to merge.\"");

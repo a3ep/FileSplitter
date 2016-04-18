@@ -7,7 +7,7 @@ import java.util.Timer;
 /**
  * Provides file statistical information management.
  */
-public class FileStatisticService implements IStatisticService {
+class FileStatisticService implements IStatisticService {
 
     /**
      * Statistic holder.
@@ -35,8 +35,9 @@ public class FileStatisticService implements IStatisticService {
      * @param holder    statistic holder
      * @param builder   statistic builder
      * @param timerTask statistic timer task
+     * @see {@link IStatisticService}
      */
-    public FileStatisticService(IStatisticHolder holder, IStatisticBuilder builder, AbstractStatisticTimerTask timerTask) {
+    FileStatisticService(IStatisticHolder holder, IStatisticBuilder builder, AbstractStatisticTimerTask timerTask) {
         this.holder = holder;
         this.builder = builder;
         this.timerTask = timerTask;
@@ -47,6 +48,7 @@ public class FileStatisticService implements IStatisticService {
      *
      * @param threadName name of the thread
      * @param filePart   <code>IPartObject</code> with parameters for calculating statistic
+     * @see {@link IStatisticService}
      */
     public void holdInformation(String threadName, IPartObject filePart) {
         holder.putInformation(threadName, filePart);
@@ -56,6 +58,7 @@ public class FileStatisticService implements IStatisticService {
      * Builds string with statistical information about file processing.
      *
      * @return string with statistical information
+     * @see {@link IStatisticService}
      */
     public String buildStatisticString() {
         return builder.buildStatisticString();
@@ -80,6 +83,8 @@ public class FileStatisticService implements IStatisticService {
 
     /**
      * Ends showing statistical information about file processing to user.
+     *
+     * @see {@link IStatisticService}
      */
     public void hide() {
         timer.cancel();
