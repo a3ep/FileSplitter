@@ -5,7 +5,7 @@ import net.bondar.user_input.domain.Command;
 /**
  * Interface for class that provides parsing user input.
  */
-public interface IParametersParser {
+public interface IParameterParser {
 
     /**
      * Parses user input arguments.

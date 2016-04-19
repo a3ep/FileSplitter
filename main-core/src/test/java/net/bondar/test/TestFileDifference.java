@@ -1,4 +1,4 @@
-package net.bondar;
+package net.bondar.test;
 
 import net.bondar.calculations.Calculations;
 import net.bondar.splitter.interfaces.AbstractIteratorFactory;

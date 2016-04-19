@@ -7,7 +7,7 @@ import net.bondar.splitter.interfaces.*;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
-import net.bondar.user_input.interfaces.IParametersParser;
+import net.bondar.user_input.interfaces.IParameterParser;
 import net.bondar.user_input.utils.CliParameterParser;
 
 /**
@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             IParameterHolder paramHolder = new ApplicationParameterHolder();
-            IParametersParser paramParser = new CliParameterParser(paramHolder);
+            IParameterParser paramParser = new CliParameterParser(paramHolder);
             AbstractProcessorFactory processorFactory = new FileProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();

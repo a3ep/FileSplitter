@@ -4,19 +4,21 @@ package net.bondar.user_input.utils;
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.user_input.domain.Command;
-import net.bondar.user_input.interfaces.IParametersParser;
+import net.bondar.user_input.interfaces.IParameterParser;
 import org.apache.commons.cli.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Provides parsing user input arguments.
  */
-public class CliParameterParser implements IParametersParser {
+public class CliParameterParser implements IParameterParser {
 
     /**
      * Logger.
@@ -29,9 +31,19 @@ public class CliParameterParser implements IParametersParser {
     private final IParameterHolder paramHolder;
 
     /**
+     * Command line parser.
+     */
+    private final CommandLineParser parser;
+
+    /**
      * Cli options.
      */
     private Options options = new Options();
+
+    /**
+     * List of command's names.
+     */
+    private List<String> commandNames = new ArrayList<>();
 
     /**
      * Creates <code>CliParameterParser</code> instance.
@@ -41,6 +53,10 @@ public class CliParameterParser implements IParametersParser {
      */
     public CliParameterParser(IParameterHolder paramHolder) {
         this.paramHolder = paramHolder;
+        parser = new BasicParser();
+        for (Command c:Command.values()){
+            commandNames.add(c.name().toLowerCase());
+        }
         options.addOption("p", true, "Path to the file you want to split.");
         options.addOption("s", true, "Size of the parts (in Mb).");
     }
@@ -58,15 +74,22 @@ public class CliParameterParser implements IParametersParser {
     public Command parse(String[] args) {
         log.info("Start parsing input: " + Arrays.toString(args));
         Command currentCommand = null;
-        CommandLineParser parser = new BasicParser();
         try {
             CommandLine cmd = parser.parse(options, args);
+            if(cmd.getArgList().isEmpty()){
+                log.error("Wrong input command ->" + Arrays.toString(args));
+                help();
+                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args)+". Please check your input.");
+            }
             String arg = (String) cmd.getArgList().get(0);
             if (arg.equals("help")) {
                 help();
             } else if (arg.equals("exit")) {
                 log.info("Input command -> EXIT");
-                currentCommand = Command.EXIT;
+                return Command.EXIT;
+            }else if(!commandNames.contains(arg)){
+                log.error("Wrong command ->" + arg);
+                throw new ApplicationException("Wrong command. Please check your input.");
             } else if (cmd.hasOption("p")) {
                 String destString = cmd.getOptionValue("p");
                 if (cmd.hasOption("s")) {
@@ -95,7 +118,7 @@ public class CliParameterParser implements IParametersParser {
             } else {
                 log.error("Wrong input command ->" + Arrays.toString(args));
                 help();
-                return null;
+                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args)+". Please check your input.");
             }
         } catch (NumberFormatException | ParseException | ApplicationException e) {
             log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());

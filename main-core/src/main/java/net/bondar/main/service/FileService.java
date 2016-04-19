@@ -7,7 +7,7 @@ import net.bondar.splitter.interfaces.*;
 import net.bondar.splitter.utils.FileProcessor;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.user_input.domain.Command;
-import net.bondar.user_input.interfaces.IParametersParser;
+import net.bondar.user_input.interfaces.IParameterParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -38,7 +38,7 @@ public class FileService implements IService {
     /**
      * Parameter parser.
      */
-    private final IParametersParser paramParser;
+    private final IParameterParser paramParser;
 
     /**
      * Processor factory.
@@ -82,7 +82,7 @@ public class FileService implements IService {
      * @param statFactory      statistic factory
      */
     public FileService(IParameterHolder paramHolder,
-                       IParametersParser parametersParser,
+                       IParameterParser parametersParser,
                        AbstractProcessorFactory pFactory,
                        AbstractIteratorFactory iFactory,
                        AbstractThreadFactory tFactory,
