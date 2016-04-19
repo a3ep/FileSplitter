@@ -40,9 +40,9 @@ public class CleanTask extends AbstractTask {
             return;
         }
         statService.hide();
-        log.info("Interruption threads work...");
+        log.debug("Interruption threads work...");
         processor.setInterrupt(true);
-        log.info("Cleaning temporary files...");
+        log.debug("Cleaning temporary files...");
         if (processor.getFileOperation().equals("split")) {
             for (File f : Calculations.getPartsList(file.getAbsolutePath(), paramHolder.getValue("partSuffix")))
                 f.delete();

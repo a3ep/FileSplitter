@@ -44,7 +44,7 @@ public class SplitTask extends AbstractTask {
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
-                log.info("Start to write: " + partFile.getName());
+                log.debug("Start to write: " + partFile.getName());
                 // /Set the file-pointer to the start position of partFile
                 sourceFile.seek(filePart.getStartPosition());
                 start = filePart.getStartPosition();
@@ -52,7 +52,7 @@ public class SplitTask extends AbstractTask {
                 int bufferSize = Integer.parseInt(paramHolder.getValue("bufferSize"));
                 // write data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
-                log.info("Finish to write: " + partFile.getName());
+                log.debug("Finish to write: " + partFile.getName());
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());

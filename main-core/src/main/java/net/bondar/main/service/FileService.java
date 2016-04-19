@@ -102,7 +102,7 @@ public class FileService implements IService {
      */
     @Override
     public void run() {
-        log.info("Start application.");
+        log.debug("Start application.");
         String input;
         String[] args;
         while (true) {
@@ -111,7 +111,7 @@ public class FileService implements IService {
                     log.info("Input your parameters:");
                     input = br.readLine();
                     args = input.split(" ");
-                    log.info("Introduced string -> " + input);
+                    log.debug("Introduced string -> " + input);
                     Command inputCommand = paramParser.parse(args);
                     //checks input command
                     switchForCommand(inputCommand);
@@ -141,30 +141,26 @@ public class FileService implements IService {
             if (inputCommand == null) return;
             switch (inputCommand) {
                 case EXIT:
-                    log.info("Closing resources...");
+                    log.debug("Closing resources...");
                     br.close();
-                    Thread.sleep(1000);
                     log.info("Application closed.");
                     System.exit(0);
                 case SPLIT:
-                    log.info("Start splitting file -> " + inputCommand.getFileDestination());
+                    log.debug("Start splitting file -> " + inputCommand.getFileDestination());
                     processor = pFactory.createProcessor(inputCommand.getFileDestination(),
                             inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
                             taskFactory, statFactory);
                     processor.process();
-                    log.info("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
+                    log.debug("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
                     break;
                 case MERGE:
-                    log.info("Start merging file -> " + inputCommand.getFileDestination());
+                    log.debug("Start merging file -> " + inputCommand.getFileDestination());
                     processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
                             iFactory, tFactory, taskFactory, statFactory);
                     processor.process();
-                    log.info("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
+                    log.debug("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
                     break;
             }
-        } catch (InterruptedException e) {
-            log.warn("Catches InterruptedException, during waiting for closing application. Message " + e.getMessage());
-            throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
         } catch (IOException e) {
             log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
             throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());

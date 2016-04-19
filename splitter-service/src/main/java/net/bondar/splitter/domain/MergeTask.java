@@ -45,7 +45,7 @@ public class MergeTask extends AbstractTask {
             File part = filePart.getPartFile();
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
-                log.info("Start to write " + part.getName() + " into Complete file : " + file.getName());
+                log.debug("Start to write " + part.getName() + " into Complete file : " + file.getName());
                 start = filePart.getStartPosition();
                 long finish = filePart.getEndPosition();
                 int bufferSize = Integer.parseInt(paramHolder.getValue("bufferSize"));
@@ -53,7 +53,7 @@ public class MergeTask extends AbstractTask {
                 outputFile.seek(start);
                 // write data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
-                log.info("Finish to write " + part.getName() + " into " + file.getName());
+                log.debug("Finish to write " + part.getName() + " into " + file.getName());
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());
