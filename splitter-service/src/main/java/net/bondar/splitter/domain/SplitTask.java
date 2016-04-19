@@ -2,6 +2,7 @@ package net.bondar.splitter.domain;
 
 import net.bondar.splitter.interfaces.AbstractTask;
 import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.interfaces.IProcessor;
 import net.bondar.splitter.interfaces.Iterable;
 import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.Logger;
@@ -29,8 +30,8 @@ public class SplitTask extends AbstractTask {
      * @param statService statistic service
      * @see {@link AbstractTask}
      */
-    public SplitTask(File file, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
-        super(file, paramHolder, iterator, statService);
+    public SplitTask(File file, IProcessor processor, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
+        super(file, processor, paramHolder, iterator, statService);
     }
 
     /**
@@ -39,7 +40,7 @@ public class SplitTask extends AbstractTask {
     @Override
     public void run() {
         filePart = iterator.getNext();
-        while (!filePart.getStatus().equals("NULL")) {
+        while (!filePart.getStatus().equals("NULL") && !processor.getInterrupt()) {
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {

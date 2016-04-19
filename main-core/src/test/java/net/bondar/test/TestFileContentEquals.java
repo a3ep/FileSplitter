@@ -116,7 +116,7 @@ public class TestFileContentEquals {
     @AfterClass
     public static void destroy() {
         specifiedFile.delete();
-        List<File> files = Calculations.getPartsList(partName, paramHolder.getValue("partSuffix"));
+        List<File> files = Calculations.getPartsList(partName.substring(0, partName.indexOf(paramHolder.getValue("partSuffix"))), paramHolder.getValue("partSuffix"));
         for (File file : files) {
             file.delete();
         }

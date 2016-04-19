@@ -57,9 +57,24 @@ public class FileProcessor implements IProcessor {
     private final IStatisticService statService;
 
     /**
+     * Flag for interrupting working threads.
+     */
+    private volatile boolean interrupt = false;
+
+    /**
+     * Process status
+     */
+    private String processStatus = "";
+
+    /**
      * Complete file.
      */
     private File file;
+
+    /**
+     *
+     */
+    private Thread cleaner;
 
     /**
      * Creates <code>FileProcessor</code> instance.
@@ -81,7 +96,7 @@ public class FileProcessor implements IProcessor {
         this.paramHolder = paramHolder;
         this.fileOperation = "merge";
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(paramHolder.getValue("partSuffix"))));
-        List<File> parts = Calculations.getPartsList(partFileDest, paramHolder.getValue("partSuffix"));
+        List<File> parts = Calculations.getPartsList(file.getAbsolutePath(), paramHolder.getValue("partSuffix"));
         this.iterator = iFactory.createMergeIterator(parts);
         this.taskFactory = taskFactory;
         this.statService = statFactory.createService(0, parts);
@@ -99,6 +114,7 @@ public class FileProcessor implements IProcessor {
                 }
             }
         });
+        cleaner = new Thread(taskFactory.createCleanTask(file, this, paramHolder, statService));
     }
 
     /**
@@ -139,6 +155,7 @@ public class FileProcessor implements IProcessor {
                 }
             }
         });
+        cleaner = new Thread(taskFactory.createCleanTask(file, this, paramHolder, statService));
     }
 
     /**
@@ -149,33 +166,57 @@ public class FileProcessor implements IProcessor {
     public void process() {
         try {
             statService.show(0, 1000);
+            Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 if (fileOperation.equals("split")) {
-                    pool.execute(taskFactory.createSplitTask(file, paramHolder, iterator, statService));
+                    pool.execute(taskFactory.createSplitTask(file, this, paramHolder, iterator, statService));
                 } else {
-                    pool.execute(taskFactory.createMergeTask(file, paramHolder, iterator, statService));
+                    pool.execute(taskFactory.createMergeTask(file, this, paramHolder, iterator, statService));
                 }
             }
             pool.shutdown();
-            try {
-                pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            } catch (InterruptedException e) {
-                log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
-                throw new ApplicationException("Error during main thread waiting. Exception:" + e.getMessage());
-            }
+            pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             statService.hide();
+            if (interrupt) {
+                cleaner.join();
+                System.exit(0);
+            }
+            processStatus = "OK";
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
-            log.warn("Catches exception, during sowing statistical information. Message " + e.getMessage());
+            log.warn("Catches exception, during showing statistical information. Message " + e.getMessage());
             throw new ApplicationException("Error during showing statistical information. Exception:" + e.getMessage());
+        } catch (InterruptedException e) {
+            log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
+            throw new ApplicationException("Error during main thread waiting. Exception:" + e.getMessage());
         }
     }
 
-    /**
-     * Gets the complete file.
-     *
-     * @return complete file
-     * @see {@link IProcessor}
-     */
+    @Override
+    public boolean getInterrupt() {
+        return interrupt;
+    }
+
+    @Override
+    public void setInterrupt(boolean interrupt) {
+        this.interrupt = interrupt;
+    }
+
+    @Override
+    public String getProcessStatus() {
+        return processStatus;
+    }
+
+    @Override
+    public void setProcessStatus(String processStatus) {
+        this.processStatus = processStatus;
+    }
+
+    @Override
+    public String getFileOperation() {
+        return fileOperation;
+    }
+
+    @Override
     public File getFile() {
         return file;
     }

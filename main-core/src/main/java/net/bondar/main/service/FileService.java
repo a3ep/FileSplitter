@@ -136,38 +136,38 @@ public class FileService implements IService {
      */
 
     private void switchForCommand(Command inputCommand) throws CalculationsException, ApplicationException {
-        FileProcessor processor;
-        if (inputCommand == null) return;
-        switch (inputCommand) {
-            case EXIT:
-                log.info("Closing resources...");
-                try {
+        try {
+            FileProcessor processor;
+            if (inputCommand == null) return;
+            switch (inputCommand) {
+                case EXIT:
+                    log.info("Closing resources...");
                     br.close();
-                } catch (IOException e) {
-                    log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
-                    throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
-                }
-                log.info("Closing application...");
-                System.exit(0);
-            case SPLIT:
-                log.info("Start splitting file -> " + inputCommand.getFileDestination());
-                processor = pFactory.createProcessor(inputCommand.getFileDestination(),
-                        inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
-                        taskFactory, statFactory);
-                try {
+                    Thread.sleep(1000);
+                    log.info("Application closed.");
+                    System.exit(0);
+                case SPLIT:
+                    log.info("Start splitting file -> " + inputCommand.getFileDestination());
+                    processor = pFactory.createProcessor(inputCommand.getFileDestination(),
+                            inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
+                            taskFactory, statFactory);
                     processor.process();
-                } catch (ApplicationException e) {
+                    log.info("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
                     break;
-                }
-                log.info("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
-                break;
-            case MERGE:
-                log.info("Start merging file -> " + inputCommand.getFileDestination());
-                processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
-                        iFactory, tFactory, taskFactory, statFactory);
-                processor.process();
-                log.info("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
-                break;
+                case MERGE:
+                    log.info("Start merging file -> " + inputCommand.getFileDestination());
+                    processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
+                            iFactory, tFactory, taskFactory, statFactory);
+                    processor.process();
+                    log.info("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
+                    break;
+            }
+        } catch (InterruptedException e) {
+            log.warn("Catches InterruptedException, during waiting for closing application. Message " + e.getMessage());
+            throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
+        } catch (IOException e) {
+            log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
+            throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
         }
     }
 }

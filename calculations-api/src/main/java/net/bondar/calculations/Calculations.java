@@ -53,15 +53,13 @@ public class Calculations {
     /**
      * Gets the list of part-files.
      *
-     * @param partFileDest   destination of the part-file
-     * @param partNameSuffix name suffix of thw part-file
+     * @param destination    path to processing file
+     * @param partNameSuffix name suffix of the part-file
      * @return list of part-files
      */
-    public static List<File> getPartsList(String partFileDest, String partNameSuffix) {
-        log.info("Getting list of part-files");
-        File partFile = new File(partFileDest);
-        String partName = partFile.getName();
-        String destName = partName.substring(0, partName.indexOf(partNameSuffix));
+    public static List<File> getPartsList(String destination, String partNameSuffix) {
+        File partFile = new File(destination);
+        String destName = partFile.getName();
         File file = partFile.getParentFile();
         File[] files = file.listFiles((File dir, String name) -> name.matches(destName + partNameSuffix + ".+\\d+"));
         Arrays.sort(files);
@@ -69,9 +67,8 @@ public class Calculations {
         Collections.addAll(parts, files);
         if (parts.isEmpty()) {
             log.warn("Part-file not found. Please check your input");
-            throw new CalculationsException("Error during collecting part-files. Exception: file " + partName + " not found. Please check your input");
+            throw new CalculationsException("Error during collecting part-files. Exception: file not found. Please check your input");
         }
-        log.info("Part-files list -> " + parts.toString());
         return parts;
     }
 }

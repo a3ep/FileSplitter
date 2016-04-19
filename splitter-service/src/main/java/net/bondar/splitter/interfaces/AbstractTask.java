@@ -3,7 +3,6 @@ package net.bondar.splitter.interfaces;
 import net.bondar.calculations.Calculations;
 import net.bondar.statistics.interfaces.IPartObject;
 import net.bondar.statistics.interfaces.IStatisticService;
-import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,29 +14,14 @@ import java.io.RandomAccessFile;
 public abstract class AbstractTask implements Runnable {
 
     /**
-     * Logger.
-     */
-    protected final Logger log = Logger.getLogger("splitterLogger");
-
-    /**
-     * Total written size.
-     */
-    protected long totalWritten = 0;
-
-    /**
-     * Start position index.
-     */
-    protected long start = 0;
-
-    /**
-     * Object contains part-file parameters.
-     */
-    protected IPartObject filePart;
-
-    /**
      * Specified file.
      */
     protected final File file;
+
+    /**
+     * Current processor.
+     */
+    protected final IProcessor processor;
 
     /**
      * Parameter holder
@@ -55,15 +39,32 @@ public abstract class AbstractTask implements Runnable {
     protected final IStatisticService statService;
 
     /**
+     * Total written size.
+     */
+    private long totalWritten = 0;
+
+    /**
+     * Start position index.
+     */
+    protected long start = 0;
+
+    /**
+     * Object contains part-file parameters.
+     */
+    protected IPartObject filePart;
+
+    /**
      * Initialises <code>AbstractTask</code> fields.
      *
      * @param file        specified file
+     * @param processor   current processor
      * @param paramHolder parameter holder
      * @param iterator    iterator
      * @param statService statistic service
      */
-    public AbstractTask(File file, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
+    public AbstractTask(File file, IProcessor processor, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
         this.file = file;
+        this.processor = processor;
         this.paramHolder = paramHolder;
         this.iterator = iterator;
         this.statService = statService;

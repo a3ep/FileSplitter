@@ -2,6 +2,7 @@ package net.bondar.splitter.domain;
 
 import net.bondar.splitter.interfaces.AbstractTask;
 import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.interfaces.IProcessor;
 import net.bondar.splitter.interfaces.Iterable;
 import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.Logger;
@@ -29,8 +30,8 @@ public class MergeTask extends AbstractTask {
      * @param statService statistic service
      * @see {@link AbstractTask}
      */
-    public MergeTask(File file, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
-        super(file, paramHolder, iterator, statService);
+    public MergeTask(File file, IProcessor processor, IParameterHolder paramHolder, Iterable iterator, IStatisticService statService) {
+        super(file, processor, paramHolder, iterator, statService);
 
     }
 
@@ -40,7 +41,7 @@ public class MergeTask extends AbstractTask {
     @Override
     public void run() {
         filePart = iterator.getNext();
-        while (!filePart.getStatus().equals("NULL")) {
+        while (!filePart.getStatus().equals("NULL") && !processor.getInterrupt()) {
             File part = filePart.getPartFile();
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
