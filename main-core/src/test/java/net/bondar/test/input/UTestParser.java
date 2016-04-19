@@ -1,4 +1,4 @@
-package net.bondar.test;
+package net.bondar.test.input;
 
 import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.IParameterHolder;
@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 /**
  * Test parameter parser.
  */
-public class TestParser {
+public class UTestParser {
 
     /**
      * Parameter parser.

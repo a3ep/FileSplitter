@@ -1,4 +1,4 @@
-package net.bondar.test;
+package net.bondar.test.processor;
 
 import net.bondar.calculations.Calculations;
 import net.bondar.splitter.interfaces.AbstractIteratorFactory;
@@ -24,7 +24,7 @@ import static junit.framework.TestCase.assertEquals;
 /**
  *
  */
-public class TestFileContentDifference {
+public class ITestFileContentDifference {
 
     /**
      * Processor for merging files.
