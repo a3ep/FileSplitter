@@ -5,6 +5,5 @@ import java.util.TimerTask;
 /**
  * Interface for creating statistic timer tasks.
  */
-public abstract class AbstractStatisticTimerTask extends TimerTask{
-
+public abstract class AbstractStatisticTimerTask extends TimerTask {
 }

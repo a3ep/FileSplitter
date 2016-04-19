@@ -27,12 +27,10 @@ public class Calculations {
      * @return complete file size
      */
     public static double getFileSize(List<File> files) {
-        log.info("Calculating file size...");
         double fileSize = 0;
         for (File f : files) {
             fileSize += f.length();
         }
-        log.info("File size = " + fileSize);
         return fileSize;
     }
 

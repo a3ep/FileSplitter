@@ -1,15 +1,15 @@
 package net.bondar.test;
 
 import net.bondar.calculations.Calculations;
-import net.bondar.splitter.interfaces.*;
-import net.bondar.splitter.interfaces.Iterable;
+import net.bondar.splitter.interfaces.AbstractIteratorFactory;
+import net.bondar.splitter.interfaces.AbstractTaskFactory;
+import net.bondar.splitter.interfaces.AbstractThreadFactory;
+import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

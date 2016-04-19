@@ -27,11 +27,6 @@ public class FileProcessor implements IProcessor {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Complete file.
-     */
-    private final File file;
-
-    /**
      * Name of file operation, should be "split" or "merge"
      */
     private final String fileOperation;
@@ -54,12 +49,17 @@ public class FileProcessor implements IProcessor {
     /**
      * Thread's task factory.
      */
-    private AbstractTaskFactory taskFactory;
+    private final AbstractTaskFactory taskFactory;
 
     /**
      * Statistic service.
      */
-    private IStatisticService statService;
+    private final IStatisticService statService;
+
+    /**
+     * Complete file.
+     */
+    private File file;
 
     /**
      * Creates <code>FileProcessor</code> instance.
@@ -150,9 +150,9 @@ public class FileProcessor implements IProcessor {
         try {
             statService.show(0, 1000);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                if(fileOperation.equals("split")){
+                if (fileOperation.equals("split")) {
                     pool.execute(taskFactory.createSplitTask(file, paramHolder, iterator, statService));
-                }else{
+                } else {
                     pool.execute(taskFactory.createMergeTask(file, paramHolder, iterator, statService));
                 }
             }

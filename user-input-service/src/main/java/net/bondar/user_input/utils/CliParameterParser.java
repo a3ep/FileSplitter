@@ -54,7 +54,7 @@ public class CliParameterParser implements IParameterParser {
     public CliParameterParser(IParameterHolder paramHolder) {
         this.paramHolder = paramHolder;
         parser = new BasicParser();
-        for (Command c:Command.values()){
+        for (Command c : Command.values()) {
             commandNames.add(c.name().toLowerCase());
         }
         options.addOption("p", true, "Path to the file you want to split.");
@@ -76,10 +76,10 @@ public class CliParameterParser implements IParameterParser {
         Command currentCommand = null;
         try {
             CommandLine cmd = parser.parse(options, args);
-            if(cmd.getArgList().isEmpty()){
+            if (cmd.getArgList().isEmpty()) {
                 log.error("Wrong input command ->" + Arrays.toString(args));
                 help();
-                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args)+". Please check your input.");
+                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args) + ". Please check your input.");
             }
             String arg = (String) cmd.getArgList().get(0);
             if (arg.equals("help")) {
@@ -87,7 +87,7 @@ public class CliParameterParser implements IParameterParser {
             } else if (arg.equals("exit")) {
                 log.info("Input command -> EXIT");
                 return Command.EXIT;
-            }else if(!commandNames.contains(arg)){
+            } else if (!commandNames.contains(arg)) {
                 log.error("Wrong command ->" + arg);
                 throw new ApplicationException("Wrong command. Please check your input.");
             } else if (cmd.hasOption("p")) {
@@ -95,8 +95,8 @@ public class CliParameterParser implements IParameterParser {
                 if (cmd.hasOption("s")) {
                     String sizeString = cmd.getOptionValue("s");
                     Pattern p = Pattern.compile("^[0-9]+");
-                    Matcher m = p.matcher(sizeString.substring(0, sizeString.length()-1));
-                    if(!sizeString.contains("M") || !m.matches()){
+                    Matcher m = p.matcher(sizeString.substring(0, sizeString.length() - 1));
+                    if (!sizeString.contains("M") || !m.matches()) {
                         log.error("Wrong part size ->" + sizeString);
                         throw new ApplicationException("Wrong part size. Please check your input.");
                     }
@@ -107,7 +107,7 @@ public class CliParameterParser implements IParameterParser {
                     Command.SPLIT.setPartSize(size * Integer.parseInt(paramHolder.getValue("mbValue")));
                     currentCommand = Command.SPLIT;
                 } else {
-                    if(!destString.contains(paramHolder.getValue("partSuffix"))){
+                    if (!destString.contains(paramHolder.getValue("partSuffix"))) {
                         log.error("Wrong file destination ->" + destString);
                         throw new ApplicationException("Wrong file destination. Please check your input.");
                     }
@@ -118,7 +118,7 @@ public class CliParameterParser implements IParameterParser {
             } else {
                 log.error("Wrong input command ->" + Arrays.toString(args));
                 help();
-                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args)+". Please check your input.");
+                throw new ApplicationException("Wrong input command ->" + Arrays.toString(args) + ". Please check your input.");
             }
         } catch (NumberFormatException | ParseException | ApplicationException e) {
             log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());

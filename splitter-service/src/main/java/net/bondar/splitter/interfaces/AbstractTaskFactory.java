@@ -5,7 +5,7 @@ import net.bondar.statistics.interfaces.IStatisticService;
 import java.io.File;
 
 /**
- * Interface for creating split or merge tasks.
+ * Interface for creating tasks.
  */
 public abstract class AbstractTaskFactory {
 

@@ -22,13 +22,9 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 
 /**
- * Starts equals files testing.
+ *
  */
-public class TestFileDifference {
-    /**
-     * Processor for splitting file.
-     */
-    private static FileProcessor splitProcessor;
+public class TestFileContentDifference {
 
     /**
      * Processor for merging files.
@@ -55,48 +51,53 @@ public class TestFileDifference {
      */
     private static File resultFile;
 
+    @BeforeClass
+
     /**
      * Runs preparation for testing.
      */
-    @BeforeClass
     public static void setUp() {
         // size of the part-file
         int partSize = 1024 * 1024;
         try {
             // creating a new file with data
-            paramHolder = new ApplicationParameterHolder();
             specifiedFile = new File("test.txt");
             BufferedWriter bw = new BufferedWriter(new FileWriter(specifiedFile));
             while (specifiedFile.length() < 10 * partSize) {
-                bw.write("test1 ");
+                bw.write("test-specified ");
             }
+            paramHolder = new ApplicationParameterHolder();
+            File part1 = new File("incorrect.txt" + paramHolder.getValue("partSuffix") + "001");
+            bw = new BufferedWriter(new FileWriter(part1));
+            while (part1.length() < 5 * partSize) {
+                bw.write("test-part1 ");
+            }
+            File part2 = new File("incorrect.txt" + paramHolder.getValue("partSuffix") + "002");
+            bw = new BufferedWriter(new FileWriter(part2));
+            while (part2.length() < 5 * partSize) {
+                bw.write("test-part2 ");
+            }
+            bw.close();
             // initializing processor's components
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractThreadFactory threadFactory = new NamedThreadFactory();
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
-            partName = specifiedFile.getAbsolutePath()+paramHolder.getValue("partSuffix")+"001";
+            partName = part1.getAbsolutePath();
             //creating processors
-            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
-            splitProcessor.process();
             mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
             mergeProcessor.process();
-            resultFile = mergeProcessor.getFile();
-            bw = new BufferedWriter(new FileWriter(resultFile));
-            bw.write("test500");
-            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Tests equals between specified and result files.
+     * Tests difference between specified and result files.
      */
     @Test
     public void testFileDifference() {
-        specifiedFile = splitProcessor.getFile();
-        resultFile = new File("test");
+        resultFile = mergeProcessor.getFile();
         boolean equals = false;
         //check different file length
         if (specifiedFile.length() != resultFile.length()) {
@@ -105,6 +106,7 @@ public class TestFileDifference {
         try {
             //comparing contents of files
             equals = FileUtils.contentEquals(specifiedFile, resultFile);
+//            equals = Calculations.compareFiles(specifiedFile, resultFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

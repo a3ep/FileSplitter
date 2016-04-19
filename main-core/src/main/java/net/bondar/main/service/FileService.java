@@ -159,7 +159,7 @@ public class FileService implements IService {
                 } catch (ApplicationException e) {
                     break;
                 }
-                log.info("Finish splitting file -> " + inputCommand.getFileDestination()+ "\n");
+                log.info("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
                 break;
             case MERGE:
                 log.info("Start merging file -> " + inputCommand.getFileDestination());
