@@ -39,9 +39,9 @@
   </dependencyManagement>
 
   <modules>
-    <module>main-core</module>
+    <module>splitter</module>
     <module>user-input-service</module>
-    <module>splitter-service</module>
+    <module>core</module>
     <module>statistics-service</module>
     <module>calculations-api</module>
   </modules>
