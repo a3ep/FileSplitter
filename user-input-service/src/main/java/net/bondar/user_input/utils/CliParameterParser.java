@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
  */
 public class CliParameterParser implements IParameterParser {
 
+    private static final int MEGABYTE_VALUE = 1048576;
     /**
      * Logger.
      */
@@ -72,9 +73,8 @@ public class CliParameterParser implements IParameterParser {
      * @throws ApplicationException when occurred error during parsing parameters
      * @see {@link IParameterHolder}
      */
-    public Command parse(String[] args) throws ApplicationException{
+    public Command parse(String[] args) throws ApplicationException {
         log.debug("Start parsing input: " + Arrays.toString(args));
-        Command currentCommand = null;
         try {
             CommandLine cmd = parser.parse(options, args);
             if (cmd.getArgList().isEmpty()) {
@@ -105,8 +105,8 @@ public class CliParameterParser implements IParameterParser {
                     Command.SPLIT.setFileDestination(cmd.getOptionValue("p"));
                     String sizeToString = cmd.getOptionValue("s");
                     long size = Long.parseLong(sizeToString.substring(0, sizeToString.indexOf("M")).replace(" ", ""));
-                    Command.SPLIT.setPartSize(size * Integer.parseInt(paramHolder.getValue("mbValue")));
-                    currentCommand = Command.SPLIT;
+                    Command.SPLIT.setPartSize(size * MEGABYTE_VALUE);
+                    return Command.SPLIT;
                 } else {
                     if (!destString.contains(paramHolder.getValue("partSuffix"))) {
                         log.error("Wrong file destination ->" + destString);
@@ -114,7 +114,7 @@ public class CliParameterParser implements IParameterParser {
                     }
                     log.debug("Input command -> MERGE");
                     Command.MERGE.setFileDestination(cmd.getOptionValue("p"));
-                    currentCommand = Command.MERGE;
+                    return Command.MERGE;
                 }
             } else {
                 log.error("Wrong input command ->" + Arrays.toString(args));
@@ -122,11 +122,11 @@ public class CliParameterParser implements IParameterParser {
                 throw new ApplicationException("Wrong input command ->" + Arrays.toString(args) + ". Please check your input.");
             }
         } catch (NumberFormatException | ParseException | ApplicationException e) {
-            log.warn("Catches " + e.getClass() + ", during parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
-            throw new ApplicationException("Error during parsing " + Arrays.toString(args) + ". Exception:" + e.getMessage());
+            log.warn("Error while parsing " + Arrays.toString(args) + ". Message " + e.getMessage());
+            throw new ApplicationException("Error while parsing " + Arrays.toString(args) + ".", e);
         }
         log.debug("Finish parsing input: " + Arrays.toString(args));
-        return currentCommand;
+        return Command.EMPTY;
     }
 
     /**

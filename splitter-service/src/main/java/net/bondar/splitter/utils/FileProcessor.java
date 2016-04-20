@@ -11,10 +11,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Provides process of splitting or merging file.
@@ -34,7 +31,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Parameter holder.
      */
-    private final IParameterHolder paramHolder;
+    private final IParameterHolder parameterHolder;
 
     /**
      * Merge iterator.
@@ -46,6 +43,7 @@ public class FileProcessor implements IProcessor {
      */
     private final ThreadPoolExecutor pool;
 
+
     /**
      * Thread's task factory.
      */
@@ -54,7 +52,12 @@ public class FileProcessor implements IProcessor {
     /**
      * Statistic service.
      */
-    private final IStatisticService statService;
+    private final IStatisticService statisticService;
+
+    /**
+     * Cleaner thread.
+     */
+    private final Thread cleaner;
 
     /**
      * Flag for interrupting working threads.
@@ -64,7 +67,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Process status
      */
-    private String processStatus = "";
+    private String processStatus;
 
     /**
      * Complete file.
@@ -72,49 +75,39 @@ public class FileProcessor implements IProcessor {
     private File file;
 
     /**
-     * Cleaner thread.
-     */
-    private Thread cleaner;
-
-    /**
      * Creates <code>FileProcessor</code> instance.
      *
      * @param partFileDest destination of the part-file
-     * @param paramHolder  parameter holder
+     * @param parameterHolder  parameter holder
      * @param iFactory     iterator factory
-     * @param tFactory     thread factory
      * @param taskFactory  thread's task factory
      * @param statFactory  statistic factory
      * @see {@link IProcessor}
      */
     public FileProcessor(String partFileDest,
-                         IParameterHolder paramHolder,
+                         IParameterHolder parameterHolder,
                          AbstractIteratorFactory iFactory,
-                         AbstractThreadFactory tFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractStatisticFactory statFactory) {
-        this.paramHolder = paramHolder;
+        this.parameterHolder = parameterHolder;
         this.fileOperation = "merge";
-        this.file = new File(partFileDest.substring(0, partFileDest.indexOf(paramHolder.getValue("partSuffix"))));
-        List<File> parts = Calculations.getPartsList(file.getAbsolutePath(), paramHolder.getValue("partSuffix"));
+        this.file = new File(partFileDest.substring(0, partFileDest.indexOf(parameterHolder.getValue("partSuffix"))));
+        List<File> parts = Calculations.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix"));
         this.iterator = iFactory.createMergeIterator(parts);
         this.taskFactory = taskFactory;
-        this.statService = statFactory.createService(0, parts);
+        this.statisticService = statFactory.createService(0, parts);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
-        int threadsCount = Integer.parseInt(paramHolder.getValue("threadsCount"));
-        tFactory.setThreadName(paramHolder.getValue("threadName"));
-        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue, tFactory, new RejectedExecutionHandler() {
-            @Override
-            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                try {
-                    pool.getQueue().put(r);
-                } catch (InterruptedException e) {
-                    log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
-                    throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
-                }
-            }
-        });
-        cleaner = new Thread(taskFactory.createCleanTask(file, this, paramHolder, statService));
+        int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
+        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue,
+                new ThreadFactory() {
+                    int count=1;
+                    @Override
+                    public Thread newThread(Runnable r) {
+
+                        return new Thread(r, "Thread-"+count++);
+                    }
+                });
+        cleaner = new Thread(taskFactory.createCleanTask(file, this, parameterHolder, statisticService));
     }
 
     /**
@@ -122,40 +115,35 @@ public class FileProcessor implements IProcessor {
      *
      * @param fileDest    the specified file destination
      * @param partSize    the specified size of the part-file
-     * @param paramHolder parameter holder
+     * @param parameterHolder parameter holder
      * @param iFactory    iterator factory
-     * @param tFactory    thread factory
      * @param taskFactory thread's task factory
      * @param statFactory statistic factory
      * @see {@link IProcessor}
      */
     public FileProcessor(String fileDest, long partSize,
-                         IParameterHolder paramHolder,
+                         IParameterHolder parameterHolder,
                          AbstractIteratorFactory iFactory,
-                         AbstractThreadFactory tFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractStatisticFactory statFactory) {
-        this.paramHolder = paramHolder;
+        this.parameterHolder = parameterHolder;
         this.fileOperation = "split";
         this.file = new File(fileDest);
-        this.iterator = iFactory.createSplitIterator(paramHolder, file.length(), partSize);
+        this.iterator = iFactory.createSplitIterator(parameterHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
-        this.statService = statFactory.createService(file.length(), null);
+        this.statisticService = statFactory.createService(file.length(), null);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
-        int threadsCount = Integer.parseInt(paramHolder.getValue("threadsCount"));
-        tFactory.setThreadName(paramHolder.getValue("threadName"));
-        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue, tFactory, new RejectedExecutionHandler() {
-            @Override
-            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                try {
-                    pool.getQueue().put(r);
-                } catch (InterruptedException e) {
-                    log.warn("Catches InterruptedException, during putting tasks into queue. Message " + e.getMessage());
-                    throw new ApplicationException("Error during putting tasks into queue. Exception:" + e.getMessage());
-                }
-            }
-        });
-        cleaner = new Thread(taskFactory.createCleanTask(file, this, paramHolder, statService));
+        int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
+        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue,
+                new ThreadFactory() {
+                    int count=1;
+                    @Override
+                    public Thread newThread(Runnable r) {
+
+                        return new Thread(r, "Thread-"+count++);
+                    }
+                });
+        cleaner = new Thread(taskFactory.createCleanTask(file, this, parameterHolder, statisticService));
     }
 
     /**
@@ -164,31 +152,30 @@ public class FileProcessor implements IProcessor {
      * @throws ApplicationException when occurred exception during showing statistical information or main thread waiting for pool
      * @see {@link IProcessor}
      */
-    public void process() throws ApplicationException{
+    public void process() throws ApplicationException {
         try {
-            statService.show(0, 1000);
+            statisticService.show(0, 1000);
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 if (fileOperation.equals("split")) {
-                    pool.execute(taskFactory.createSplitTask(file, this, paramHolder, iterator, statService));
+                    pool.execute(taskFactory.createSplitTask(file, this, parameterHolder, iterator, statisticService));
                 } else {
-                    pool.execute(taskFactory.createMergeTask(file, this, paramHolder, iterator, statService));
+                    pool.execute(taskFactory.createMergeTask(file, this, parameterHolder, iterator, statisticService));
                 }
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            statService.hide();
+            statisticService.hide();
             if (interrupt) {
                 cleaner.join();
-                System.exit(0);
             }
             processStatus = "OK";
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
-            log.warn("Catches exception, during showing statistical information. Message " + e.getMessage());
-            throw new ApplicationException("Error during showing statistical information. Exception:" + e.getMessage());
+            log.warn("Error while showing statistical information. Message " + e.getMessage());
+            throw new ApplicationException("Error while showing statistical information.",e);
         } catch (InterruptedException e) {
-            log.warn("Catches InterruptedException, during main thread waiting for pool. Message " + e.getMessage());
-            throw new ApplicationException("Error during main thread waiting. Exception:" + e.getMessage());
+            log.warn("Error while waiting for closing threads. Message " + e.getMessage());
+            throw new ApplicationException("Error while waiting for closing threads.", e);
         }
     }
 

@@ -13,25 +13,23 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
      *
      * @param fileDest    specified file destination
      * @param partSize    part-file size
-     * @param paramHolder parameter holder
-     * @param iFactory    iterator factory
-     * @param tFactory    threadFactory
+     * @param parameterHolder parameter holder
+     * @param iteratorFactory    iterator factory
      * @param taskFactory task factory
-     * @param statFactory statistic factory
+     * @param statisticFactory statistic factory
      * @return <code>FileProcessor</code> instance
      * @see {@link AbstractProcessorFactory}
      */
     @Override
     public FileProcessor createProcessor(String fileDest, long partSize,
-                                         IParameterHolder paramHolder,
-                                         AbstractIteratorFactory iFactory,
-                                         AbstractThreadFactory tFactory,
+                                         IParameterHolder parameterHolder,
+                                         AbstractIteratorFactory iteratorFactory,
                                          AbstractTaskFactory taskFactory,
-                                         AbstractStatisticFactory statFactory) {
+                                         AbstractStatisticFactory statisticFactory) {
         if (partSize == 0) {
-            return new FileProcessor(fileDest, paramHolder, iFactory, tFactory, taskFactory, statFactory);
+            return new FileProcessor(fileDest, parameterHolder, iteratorFactory, taskFactory, statisticFactory);
         } else {
-            return new FileProcessor(fileDest, partSize, paramHolder, iFactory, tFactory, taskFactory, statFactory);
+            return new FileProcessor(fileDest, partSize, parameterHolder, iteratorFactory, taskFactory, statisticFactory);
         }
     }
 }

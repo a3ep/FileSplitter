@@ -1,9 +1,9 @@
 package net.bondar.test.processor;
 
 import net.bondar.calculations.Calculations;
+import net.bondar.splitter.utils.ApplicationParameterHolder;
 import net.bondar.splitter.interfaces.AbstractIteratorFactory;
 import net.bondar.splitter.interfaces.AbstractTaskFactory;
-import net.bondar.splitter.interfaces.AbstractThreadFactory;
 import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
@@ -75,14 +75,13 @@ public class ITestFileContentEquals {
             paramHolder = new ApplicationParameterHolder();
             // initializing processor's components
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
-            AbstractThreadFactory threadFactory = new NamedThreadFactory();
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractStatisticFactory statisticFactory = new FileStatisticFactory();
             partName = specifiedFile.getAbsolutePath() + paramHolder.getValue("partSuffix") + "001";
             //creating processors
-            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
+            splitProcessor = new FileProcessor(specifiedFile.getAbsolutePath(), partSize, paramHolder, iteratorFactory, taskFactory, statisticFactory);
             splitProcessor.process();
-            mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, threadFactory, taskFactory, statisticFactory);
+            mergeProcessor = new FileProcessor(partName, paramHolder, iteratorFactory, taskFactory, statisticFactory);
             mergeProcessor.process();
         } catch (IOException e) {
             e.printStackTrace();

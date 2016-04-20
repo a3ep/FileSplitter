@@ -13,6 +13,11 @@ public enum Command implements ICommand {
     EXIT,
 
     /**
+     * Empty command
+     */
+    EMPTY,
+
+    /**
      * Split file command.
      */
     SPLIT("", 0),

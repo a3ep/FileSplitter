@@ -1,10 +1,12 @@
 package net.bondar.main.service;
 
 import net.bondar.calculations.exceptions.CalculationsException;
+import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.main.interfaces.IService;
 import net.bondar.splitter.exceptions.ApplicationException;
-import net.bondar.splitter.interfaces.*;
-import net.bondar.splitter.utils.FileProcessor;
+import net.bondar.splitter.interfaces.AbstractIteratorFactory;
+import net.bondar.splitter.interfaces.AbstractProcessorFactory;
+import net.bondar.splitter.interfaces.AbstractTaskFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParameterParser;
@@ -33,27 +35,22 @@ public class FileService implements IService {
     /**
      * Parameter holder.
      */
-    private final IParameterHolder paramHolder;
+    private final IParameterHolder parameterHolder;
 
     /**
      * Parameter parser.
      */
-    private final IParameterParser paramParser;
+    private final IParameterParser parameterParser;
 
     /**
      * Processor factory.
      */
-    private final AbstractProcessorFactory pFactory;
+    private final AbstractProcessorFactory processorFactory;
 
     /**
      * Iterator factory.
      */
-    private final AbstractIteratorFactory iFactory;
-
-    /**
-     * Thread factory.
-     */
-    private final AbstractThreadFactory tFactory;
+    private final AbstractIteratorFactory iteratorFactory;
 
     /**
      * Task factory
@@ -63,7 +60,7 @@ public class FileService implements IService {
     /**
      * Statistic factory.
      */
-    private final AbstractStatisticFactory statFactory;
+    private final AbstractStatisticFactory statisticFactory;
 
     /**
      * Reader of the user commands.
@@ -73,28 +70,25 @@ public class FileService implements IService {
     /**
      * Creates <code>FileService</code> instance.
      *
-     * @param paramHolder      parameter holder
+     * @param parameterHolder  parameter holder
      * @param parametersParser parameter parser
-     * @param pFactory         processor factory
-     * @param iFactory         iterator factory
-     * @param tFactory         thread factory
+     * @param processorFactory processor factory
+     * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
-     * @param statFactory      statistic factory
+     * @param statisticFactory statistic factory
      */
-    public FileService(IParameterHolder paramHolder,
+    public FileService(IParameterHolder parameterHolder,
                        IParameterParser parametersParser,
-                       AbstractProcessorFactory pFactory,
-                       AbstractIteratorFactory iFactory,
-                       AbstractThreadFactory tFactory,
+                       AbstractProcessorFactory processorFactory,
+                       AbstractIteratorFactory iteratorFactory,
                        AbstractTaskFactory taskFactory,
-                       AbstractStatisticFactory statFactory) {
-        this.paramHolder = paramHolder;
-        this.paramParser = parametersParser;
-        this.pFactory = pFactory;
-        this.iFactory = iFactory;
-        this.tFactory = tFactory;
+                       AbstractStatisticFactory statisticFactory) {
+        this.parameterHolder = parameterHolder;
+        this.parameterParser = parametersParser;
+        this.processorFactory = processorFactory;
+        this.iteratorFactory = iteratorFactory;
         this.taskFactory = taskFactory;
-        this.statFactory = statFactory;
+        this.statisticFactory = statisticFactory;
     }
 
     /**
@@ -104,66 +98,40 @@ public class FileService implements IService {
     public void run() {
         log.debug("Start application.");
         String input;
-        String[] args;
         while (true) {
             try {
-                try {
-                    log.info("Input your parameters:");
-                    input = br.readLine();
-                    args = input.split(" ");
-                    log.debug("Introduced string -> " + input);
-                    Command inputCommand = paramParser.parse(args);
-                    //checks input command
-                    switchForCommand(inputCommand);
-                } catch (IOException e) {
-                    log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
-                    throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
+                log.info("Input your parameters:");
+                input = br.readLine();
+                log.debug("Introduced string -> " + input);
+                Command inputCommand = parameterParser.parse(input.split(" "));
+                switch (inputCommand) {
+                    case EMPTY:
+                        break;
+                    case EXIT:
+                        log.debug("Closing resources...");
+                        br.close();
+                        System.exit(0);
+                        log.info("Application closed.");
+                        break;
+                    case SPLIT:
+                        log.debug("Start splitting file -> " + inputCommand.getFileDestination());
+                        processorFactory.createProcessor(inputCommand.getFileDestination(),
+                                inputCommand.getPartSize(), parameterHolder, iteratorFactory, taskFactory,
+                                statisticFactory).process();
+                        log.debug("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
+                        break;
+                    case MERGE:
+                        log.debug("Start merging file -> " + inputCommand.getFileDestination());
+                        processorFactory.createProcessor(inputCommand.getFileDestination(), 0, parameterHolder,
+                                iteratorFactory, taskFactory, statisticFactory).process();
+                        log.debug("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
+                        break;
                 }
             } catch (ApplicationException | CalculationsException e) {
                 log.warn("File Splitter Application error. Message: " + e.getMessage() + "\n");
+            } catch (IOException e) {
+                log.warn("Error while processing input. Message " + e.getMessage());
             }
-        }
-    }
-
-    /**
-     * Checks the user input command and performs required action.
-     * <br>
-     * Depending on the user input line shows help, starts split or merge processing.
-     *
-     * @param inputCommand the user input command
-     * @throws CalculationsException if part-files not found
-     * @throws ApplicationException  if exceptions occurring while <code>IProcessor</code> works
-     */
-
-    private void switchForCommand(Command inputCommand) throws CalculationsException, ApplicationException {
-        try {
-            FileProcessor processor;
-            if (inputCommand == null) return;
-            switch (inputCommand) {
-                case EXIT:
-                    log.debug("Closing resources...");
-                    br.close();
-                    log.info("Application closed.");
-                    System.exit(0);
-                case SPLIT:
-                    log.debug("Start splitting file -> " + inputCommand.getFileDestination());
-                    processor = pFactory.createProcessor(inputCommand.getFileDestination(),
-                            inputCommand.getPartSize(), paramHolder, iFactory, tFactory,
-                            taskFactory, statFactory);
-                    processor.process();
-                    log.debug("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
-                    break;
-                case MERGE:
-                    log.debug("Start merging file -> " + inputCommand.getFileDestination());
-                    processor = pFactory.createProcessor(inputCommand.getFileDestination(), 0, paramHolder,
-                            iFactory, tFactory, taskFactory, statFactory);
-                    processor.process();
-                    log.debug("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
-                    break;
-            }
-        } catch (IOException e) {
-            log.warn("Catches IOException, during processing user input. Message " + e.getMessage());
-            throw new ApplicationException("Error during processing user input. Exception:" + e.getMessage());
         }
     }
 }

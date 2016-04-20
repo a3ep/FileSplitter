@@ -1,7 +1,7 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.splitter.exceptions.ApplicationException;
 import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.exceptions.ApplicationException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

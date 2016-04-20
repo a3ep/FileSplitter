@@ -34,10 +34,10 @@ public class UTestParser {
      */
     private List<String[]> args = new ArrayList<>();
 
-    @BeforeClass
     /**
      * Initializes parser instance.
      */
+    @BeforeClass
     public static void start() {
         paramHolder = new ApplicationParameterHolder();
         paramParser = new CliParameterParser(paramHolder);

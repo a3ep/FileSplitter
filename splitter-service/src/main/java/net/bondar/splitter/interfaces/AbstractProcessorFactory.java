@@ -15,15 +15,13 @@ public interface AbstractProcessorFactory {
      * @param partSize    part-file size
      * @param paramHolder parameter holder
      * @param iFactory    iterator factory
-     * @param tFactory    threadFactory
      * @param taskFactory task factory
      * @param statFactory statistic factory
-     * @return concrete iterator instance
+     * @return concrete processor instance
      */
     FileProcessor createProcessor(String fileDest, long partSize,
                                   IParameterHolder paramHolder,
                                   AbstractIteratorFactory iFactory,
-                                  AbstractThreadFactory tFactory,
                                   AbstractTaskFactory taskFactory,
                                   AbstractStatisticFactory statFactory);
 }
