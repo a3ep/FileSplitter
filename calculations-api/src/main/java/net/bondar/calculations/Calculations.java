@@ -56,8 +56,9 @@ public class Calculations {
      * @param destination    path to processing file
      * @param partNameSuffix name suffix of the part-file
      * @return list of part-files
+     * @throws CalculationsException when occurred exception during collecting part-files
      */
-    public static List<File> getPartsList(String destination, String partNameSuffix) {
+    public static List<File> getPartsList(String destination, String partNameSuffix) throws CalculationsException{
         File partFile = new File(destination);
         String destName = partFile.getName();
         File file = partFile.getParentFile();

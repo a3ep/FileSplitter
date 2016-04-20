@@ -27,9 +27,10 @@ public class ApplicationParameterHolder implements IParameterHolder {
     /**
      * Creates <code>ApplicationParameterHolder</code> instance.
      *
+     * @throws ApplicationException when occurred exception during loading properties
      * @see {@link IParameterHolder}
      */
-    public ApplicationParameterHolder() {
+    public ApplicationParameterHolder() throws ApplicationException{
         properties = new Properties();
         String propertiesFile = "config.properties";
         try {

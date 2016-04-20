@@ -72,7 +72,7 @@ public class FileProcessor implements IProcessor {
     private File file;
 
     /**
-     *
+     * Cleaner thread.
      */
     private Thread cleaner;
 
@@ -161,9 +161,10 @@ public class FileProcessor implements IProcessor {
     /**
      * Processes file.
      *
+     * @throws ApplicationException when occurred exception during showing statistical information or main thread waiting for pool
      * @see {@link IProcessor}
      */
-    public void process() {
+    public void process() throws ApplicationException{
         try {
             statService.show(0, 1000);
             Runtime.getRuntime().addShutdownHook(cleaner);

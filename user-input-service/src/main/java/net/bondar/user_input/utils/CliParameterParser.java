@@ -69,9 +69,10 @@ public class CliParameterParser implements IParameterParser {
      *
      * @param args user input parameters
      * @return input command constructed on the basis of input parameters
+     * @throws ApplicationException when occurred error during parsing parameters
      * @see {@link IParameterHolder}
      */
-    public Command parse(String[] args) {
+    public Command parse(String[] args) throws ApplicationException{
         log.debug("Start parsing input: " + Arrays.toString(args));
         Command currentCommand = null;
         try {
