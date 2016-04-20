@@ -172,7 +172,6 @@ public class FileProcessor implements IProcessor {
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             statisticService.hide();
-
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             log.warn("Error while showing statistical information. Message " + e.getMessage());
             throw new ApplicationException("Error while showing statistical information.", e);

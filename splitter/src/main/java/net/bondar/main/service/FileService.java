@@ -66,7 +66,7 @@ public class FileService implements IService {
     /**
      * Interrupt flag.
      */
-    private AtomicBoolean interrupt = new AtomicBoolean();
+    private AtomicBoolean interrupt = new AtomicBoolean(false);
 
     /**
      * Cleaner thread.
