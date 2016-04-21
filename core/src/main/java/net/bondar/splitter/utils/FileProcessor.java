@@ -28,7 +28,7 @@ public class FileProcessor implements IProcessor {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Name of file operation, should be "split" or "merge"
+     * Name of file operation.
      */
     private final String fileOperation;
 
@@ -65,7 +65,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Process status
      */
-    private String processStatus;
+    private String processStatus="";
 
     /**
      * Complete file.
@@ -97,15 +97,7 @@ public class FileProcessor implements IProcessor {
         this.statisticService = statisticFactory.createService(0, parts);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
-        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue,
-                new ThreadFactory() {
-                    int count = 1;
-
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "Thread-" + count++);
-                    }
-                });
+        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue);
     }
 
     /**
@@ -133,15 +125,7 @@ public class FileProcessor implements IProcessor {
         this.statisticService = statisticFactory.createService(file.length(), null);
         final SynchronousQueue<Runnable> workerQueue = new SynchronousQueue<>();
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
-        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue,
-                new ThreadFactory() {
-                    int count = 1;
-
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "Thread-" + count++);
-                    }
-                });
+        pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, workerQueue);
     }
 
     /**
@@ -153,7 +137,7 @@ public class FileProcessor implements IProcessor {
     public void process() throws ApplicationException {
         try {
             statisticService.show(0, 1000);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Thread cleaner = new Thread(() -> {
                 if (processStatus.equals("OK")) return;
                 statisticService.hide();
                 log.debug("Interrupting threads...");
@@ -165,7 +149,8 @@ public class FileProcessor implements IProcessor {
                     file.delete();
                 }
                 log.info("Application closed.");
-            }));
+            });
+            Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 if (fileOperation.equals("split")) {
                     pool.execute(taskFactory.createSplitTask(file, interrupt, parameterHolder, iterator, statisticService));
@@ -176,6 +161,10 @@ public class FileProcessor implements IProcessor {
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             statisticService.hide();
+            if(interrupt.get()){
+                cleaner.join();
+                System.exit(0);
+            }
             processStatus = "OK";
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             log.warn("Error while showing statistical information. Message " + e.getMessage());

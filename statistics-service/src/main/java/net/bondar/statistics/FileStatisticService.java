@@ -77,7 +77,7 @@ class FileStatisticService implements IStatisticService {
      * @throws NullPointerException     if {@code task} is null
      * @see {@link IStatisticService}, {@link Timer}
      */
-    public void show(int delay, int period) {
+    public void show(int delay, int period) throws IllegalArgumentException, IllegalStateException, NullPointerException{
         timer.schedule(timerTask, delay, period);
     }
 

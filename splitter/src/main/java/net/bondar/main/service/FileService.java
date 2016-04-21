@@ -95,6 +95,7 @@ public class FileService implements IService {
             interrupt.set(true);
             log.info("Application closed.");
         });
+
     }
 
     /**
@@ -129,8 +130,8 @@ public class FileService implements IService {
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getFileDestination());
-                        processorFactory.createProcessor(inputCommand.getFileDestination(), 0, interrupt, parameterHolder,
-                                iteratorFactory, taskFactory, statisticFactory).process();
+                        processorFactory.createProcessor(inputCommand.getFileDestination(), 0, interrupt,
+                                parameterHolder, iteratorFactory, taskFactory, statisticFactory).process();
                         log.debug("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
                         break;
                 }
