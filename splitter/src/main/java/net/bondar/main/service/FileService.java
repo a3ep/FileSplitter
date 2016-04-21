@@ -20,8 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 //split -p /home/vsevolod/test/200MB.zip -s 5M
 //merge -p /home/vsevolod/test/200MB.zip_part_001
-//split -p /home/vsevolod/test/200MB.zip -s 5M
-//merge -p /home/vsevolod/test/200MB.zip_part_001
 
 /**
  * Provides communication with user.
