@@ -1,6 +1,9 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.splitter.interfaces.*;
+import net.bondar.splitter.interfaces.AbstractIteratorFactory;
+import net.bondar.splitter.interfaces.AbstractProcessorFactory;
+import net.bondar.splitter.interfaces.AbstractTaskFactory;
+import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,11 +16,11 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
     /**
      * Creates <code>FileProcessor</code> depending on the received parameters.
      *
-     * @param fileDest    specified file destination
-     * @param partSize    part-file size
-     * @param parameterHolder parameter holder
-     * @param iteratorFactory    iterator factory
-     * @param taskFactory task factory
+     * @param fileDest         specified file destination
+     * @param partSize         part-file size
+     * @param parameterHolder  parameter holder
+     * @param iteratorFactory  iterator factory
+     * @param taskFactory      task factory
      * @param statisticFactory statistic factory
      * @return <code>FileProcessor</code> instance
      * @see {@link AbstractProcessorFactory}

@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Provides tasks for thread pool.
  */
-public abstract class AbstractTask implements Runnable {
+public abstract class AbstractTask implements ITask {
 
     /**
      * Specified file.

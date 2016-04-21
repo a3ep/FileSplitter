@@ -55,12 +55,9 @@ public class SplitTask extends AbstractTask {
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
                 filePart = iterator.getNext();
-                Thread.sleep(5000);
             } catch (IOException e) {
                 log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
                 return;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }

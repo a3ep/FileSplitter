@@ -58,11 +58,6 @@ public class FileProcessor implements IProcessor {
     private final IStatisticService statisticService;
 
     /**
-     * Cleaner thread.
-     */
-    private final Thread cleaner;
-
-    /**
      * Flag for interrupting working threads.
      */
     private AtomicBoolean interrupt;
@@ -108,11 +103,9 @@ public class FileProcessor implements IProcessor {
 
                     @Override
                     public Thread newThread(Runnable r) {
-
                         return new Thread(r, "Thread-" + count++);
                     }
                 });
-        cleaner = new Thread(taskFactory.createCleanTask(file, interrupt, fileOperation, parameterHolder, statisticService));
     }
 
     /**
@@ -149,7 +142,6 @@ public class FileProcessor implements IProcessor {
                         return new Thread(r, "Thread-" + count++);
                     }
                 });
-        cleaner = new Thread(taskFactory.createCleanTask(file, interrupt, fileOperation, parameterHolder, statisticService), "Cleaner");
     }
 
     /**
@@ -161,7 +153,19 @@ public class FileProcessor implements IProcessor {
     public void process() throws ApplicationException {
         try {
             statisticService.show(0, 1000);
-            Runtime.getRuntime().addShutdownHook(cleaner);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (processStatus.equals("OK")) return;
+                statisticService.hide();
+                log.debug("Interrupting threads...");
+                interrupt.set(true);
+                log.debug("Cleaning temporary files...");
+                if (fileOperation.equals("split")) {
+                    Calculations.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix")).forEach(File::delete);
+                } else {
+                    file.delete();
+                }
+                log.info("Application closed.");
+            }));
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 if (fileOperation.equals("split")) {
                     pool.execute(taskFactory.createSplitTask(file, interrupt, parameterHolder, iterator, statisticService));
@@ -172,7 +176,7 @@ public class FileProcessor implements IProcessor {
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             statisticService.hide();
-
+            processStatus = "OK";
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             log.warn("Error while showing statistical information. Message " + e.getMessage());
             throw new ApplicationException("Error while showing statistical information.", e);

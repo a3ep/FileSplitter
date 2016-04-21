@@ -80,6 +80,8 @@ public class ITestProcessor {
      */
     private static File specifiedFile;
 
+
+    private static File specifiedPartsFolder;
     /**
      * Part-files specified by user.
      */
@@ -116,8 +118,8 @@ public class ITestProcessor {
     /**
      * Tests splitting.
      */
-    @Test/*(dataProvider = "testProcess")*/
-    public void testProcessSplit(/*File specifiedFile, List<File> specifiedParts*/) {
+    @Test
+    public void testProcessSplit() {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory, taskFactory, statisticFactory).process();
             List<File> resultParts = Calculations.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
@@ -133,8 +135,8 @@ public class ITestProcessor {
     /**
      * Tests merging.
      */
-    @Test/*(dataProvider = "testProcess")*/
-    public void testProcessMerge(/*File specifiedFile, List<File> specifiedParts*/) {
+    @Test
+    public void testProcessMerge() {
         try {
             FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(), interrupt, paramHolder, iteratorFactory, taskFactory, statisticFactory);
             mergeProcessor.process();
@@ -145,7 +147,6 @@ public class ITestProcessor {
             log.error("Error while checking parts content equals. Message: " + e.getMessage());
         }
     }
-
 
     /**
      * Deletes temporary files.

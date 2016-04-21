@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-//split -p /home/vsevolod/test/200MB.zip -s 5M
-//merge -p /home/vsevolod/test/200MB.zip_part_001
-
 /**
  * Provides communication with user.
  */
@@ -93,13 +90,10 @@ public class FileService implements IService {
         this.iteratorFactory = iteratorFactory;
         this.taskFactory = taskFactory;
         this.statisticFactory = statisticFactory;
-        cleaner = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                log.debug("Interrupting threads...");
-                interrupt.set(true);
-                log.info("Application closed.");
-            }
+        cleaner = new Thread(() -> {
+            log.debug("Interrupting threads...");
+            interrupt.set(true);
+            log.info("Application closed.");
         });
     }
 

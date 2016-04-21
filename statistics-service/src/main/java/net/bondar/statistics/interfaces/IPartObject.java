@@ -76,11 +76,4 @@ public interface IPartObject {
      * @return part-file
      */
     public File getPartFile();
-
-    /**
-     * Gets <code>IPartObject</code> name.
-     *
-     * @return name
-     */
-    public String getName();
 }

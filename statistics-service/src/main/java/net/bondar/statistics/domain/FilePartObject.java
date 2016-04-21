@@ -144,9 +144,4 @@ public class FilePartObject implements IPartObject {
     public File getPartFile() {
         return partFile;
     }
-
-    @Override
-    public String getName() {
-        return "FilePart #";
-    }
 }

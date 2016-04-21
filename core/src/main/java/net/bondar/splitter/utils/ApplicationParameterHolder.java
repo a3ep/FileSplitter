@@ -1,7 +1,7 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.splitter.interfaces.IParameterHolder;
 import net.bondar.splitter.exceptions.ApplicationException;
+import net.bondar.splitter.interfaces.IParameterHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class ApplicationParameterHolder implements IParameterHolder {
      * @throws ApplicationException when occurred exception during loading properties
      * @see {@link IParameterHolder}
      */
-    public ApplicationParameterHolder() throws ApplicationException{
+    public ApplicationParameterHolder() throws ApplicationException {
         properties = new Properties();
         String propertiesFile = "config.properties";
         try {
