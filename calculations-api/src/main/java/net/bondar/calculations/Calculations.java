@@ -43,7 +43,7 @@ public class Calculations {
      * @return required byte array size
      */
     public static int getAvailableSize(long finish, long start, int bufferSize) {
-        if (finish - start > bufferSize) {
+        if ((finish - start) >= bufferSize) {
             return bufferSize;
         } else {
             return (int) (finish - start);
@@ -59,9 +59,9 @@ public class Calculations {
      * @throws CalculationsException when occurred exception during collecting part-files
      */
     public static List<File> getPartsList(String destination, String partNameSuffix) throws CalculationsException{
-        File partFile = new File(destination);
-        String destName = partFile.getName();
-        File file = partFile.getParentFile();
+        File specifiedFile = new File(destination);
+        String destName = specifiedFile.getName();
+        File file = specifiedFile.getParentFile();
         File[] files = file.listFiles((File dir, String name) -> name.matches(destName + partNameSuffix + ".+\\d+"));
         Arrays.sort(files);
         List<File> parts = new LinkedList<>();
