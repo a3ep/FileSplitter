@@ -18,4 +18,18 @@ public interface IProcessor {
      * @return complete file
      */
     File getFile();
+
+    /**
+     * Gets process operation.
+     *
+     * @return current process operation
+     */
+    String getProcessOperation();
+
+    /**
+     * Gets process status.
+     *
+     * @return current process status
+     */
+    String getProcessStatus();
 }

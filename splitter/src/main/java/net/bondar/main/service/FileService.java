@@ -3,10 +3,7 @@ package net.bondar.main.service;
 import net.bondar.calculations.exceptions.CalculationsException;
 import net.bondar.main.interfaces.IService;
 import net.bondar.splitter.exceptions.ApplicationException;
-import net.bondar.splitter.interfaces.AbstractIteratorFactory;
-import net.bondar.splitter.interfaces.AbstractProcessorFactory;
-import net.bondar.splitter.interfaces.AbstractTaskFactory;
-import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.interfaces.*;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.user_input.domain.Command;
 import net.bondar.user_input.interfaces.IParameterParser;
@@ -54,6 +51,11 @@ public class FileService implements IService {
     private final AbstractTaskFactory taskFactory;
 
     /**
+     * Closing task factory.
+     */
+    private final AbstractCloseTaskFactory closeTaskFactory;
+
+    /**
      * Statistic factory.
      */
     private final AbstractStatisticFactory statisticFactory;
@@ -66,7 +68,7 @@ public class FileService implements IService {
     /**
      * Cleaner thread.
      */
-    private final Thread cleaner;
+    private final Thread closer;
 
     /**
      * Creates <code>FileService</code> instance.
@@ -76,6 +78,7 @@ public class FileService implements IService {
      * @param processorFactory processor factory
      * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
+     * @param closeTaskFactory closing task factory
      * @param statisticFactory statistic factory
      */
     public FileService(IParameterHolder parameterHolder,
@@ -83,18 +86,16 @@ public class FileService implements IService {
                        AbstractProcessorFactory processorFactory,
                        AbstractIteratorFactory iteratorFactory,
                        AbstractTaskFactory taskFactory,
+                       AbstractCloseTaskFactory closeTaskFactory,
                        AbstractStatisticFactory statisticFactory) {
         this.parameterHolder = parameterHolder;
         this.parameterParser = parametersParser;
         this.processorFactory = processorFactory;
         this.iteratorFactory = iteratorFactory;
         this.taskFactory = taskFactory;
+        this.closeTaskFactory = closeTaskFactory;
         this.statisticFactory = statisticFactory;
-        cleaner = new Thread(() -> {
-            log.debug("Interrupting threads...");
-            interrupt.set(true);
-            log.info("Application closed.");
-        });
+        closer = new Thread(closeTaskFactory.createClosable(interrupt));
 
     }
 
@@ -118,20 +119,20 @@ public class FileService implements IService {
                     case EXIT:
                         log.debug("Closing resources...");
                         br.close();
-                        Runtime.getRuntime().addShutdownHook(cleaner);
+                        Runtime.getRuntime().addShutdownHook(closer);
                         System.exit(0);
                         break;
                     case SPLIT:
                         log.debug("Start splitting file -> " + inputCommand.getFileDestination());
                         processorFactory.createProcessor(inputCommand.getFileDestination(),
                                 inputCommand.getPartSize(), interrupt, parameterHolder, iteratorFactory, taskFactory,
-                                statisticFactory).process();
+                                closeTaskFactory, statisticFactory).process();
                         log.debug("Finish splitting file -> " + inputCommand.getFileDestination() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getFileDestination());
-                        processorFactory.createProcessor(inputCommand.getFileDestination(), 0, interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, statisticFactory).process();
+                        processorFactory.createProcessor(inputCommand.getFileDestination(), 0, interrupt, parameterHolder,
+                                iteratorFactory, taskFactory, closeTaskFactory, statisticFactory).process();
                         log.debug("Finish merging file -> " + inputCommand.getFileDestination() + "\n");
                         break;
                 }

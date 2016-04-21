@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Interface for creating split or merge iterators.
+ * Interface for creating iterators.
  */
 public interface AbstractIteratorFactory {
 

@@ -13,12 +13,13 @@ public interface AbstractProcessorFactory {
     /**
      * Creates concrete processor on the basis of received parameters.
      *
-     * @param fileDest    specified file destination
-     * @param partSize    part-file size
-     * @param interrupt   interrupt flag
-     * @param parameterHolder parameter holder
-     * @param iteratorFactory    iterator factory
-     * @param taskFactory task factory
+     * @param fileDest         specified file destination
+     * @param partSize         part-file size
+     * @param interrupt        interrupt flag
+     * @param parameterHolder  parameter holder
+     * @param iteratorFactory  iterator factory
+     * @param taskFactory      task factory
+     * @param closeTaskFactory close task factory
      * @param statisticFactory statistic factory
      * @return concrete processor instance
      */
@@ -26,5 +27,6 @@ public interface AbstractProcessorFactory {
                                   IParameterHolder parameterHolder,
                                   AbstractIteratorFactory iteratorFactory,
                                   AbstractTaskFactory taskFactory,
+                                  AbstractCloseTaskFactory closeTaskFactory,
                                   AbstractStatisticFactory statisticFactory);
 }

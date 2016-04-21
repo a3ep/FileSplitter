@@ -1,13 +1,11 @@
 package net.bondar.test;
 
 import net.bondar.calculations.Calculations;
+import net.bondar.splitter.interfaces.AbstractCloseTaskFactory;
 import net.bondar.splitter.interfaces.AbstractIteratorFactory;
 import net.bondar.splitter.interfaces.AbstractTaskFactory;
 import net.bondar.splitter.interfaces.IParameterHolder;
-import net.bondar.splitter.utils.ApplicationParameterHolder;
-import net.bondar.splitter.utils.FileProcessor;
-import net.bondar.splitter.utils.FileTaskFactory;
-import net.bondar.splitter.utils.SplitMergeIteratorFactory;
+import net.bondar.splitter.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import org.apache.commons.io.FileUtils;
@@ -71,6 +69,11 @@ public class ITestProcessor {
     private static AbstractTaskFactory taskFactory;
 
     /**
+     * Closing task factory.
+     */
+    private static AbstractCloseTaskFactory closeTaskFactory;
+
+    /**
      * Statistic factory.
      */
     private static AbstractStatisticFactory statisticFactory;
@@ -102,6 +105,7 @@ public class ITestProcessor {
         interrupt = new AtomicBoolean(false);
         iteratorFactory = new SplitMergeIteratorFactory();
         taskFactory = new FileTaskFactory();
+        closeTaskFactory = new ApplicationCloseTaskFactory();
         statisticFactory = new FileStatisticFactory();
     }
 
@@ -112,7 +116,8 @@ public class ITestProcessor {
     public void createTestingData() {
         specifiedFile = createFile(System.getProperty("java.io.tmpdir") + "/test.txt", 3);
         new File(System.getProperty("java.io.tmpdir") + "/pattern").mkdir();
-        specifiedParts = new ArrayList<>(createParts(System.getProperty("java.io.tmpdir") + "/pattern/test.txt" + partSuffix + "00", specifiedFile.length()));
+        specifiedParts = new ArrayList<>(createParts(System.getProperty("java.io.tmpdir") +
+                "/pattern/test.txt" + partSuffix + "00", specifiedFile.length()));
     }
 
     /**
@@ -121,7 +126,8 @@ public class ITestProcessor {
     @Test
     public void testProcessSplit() {
         try {
-            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory, taskFactory, statisticFactory).process();
+            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory,
+                    taskFactory, closeTaskFactory, statisticFactory).process();
             List<File> resultParts = Calculations.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
@@ -138,7 +144,8 @@ public class ITestProcessor {
     @Test
     public void testProcessMerge() {
         try {
-            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(), interrupt, paramHolder, iteratorFactory, taskFactory, statisticFactory);
+            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(), interrupt,
+                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
             assertEquals(specifiedFile.length(), resultFile.length());

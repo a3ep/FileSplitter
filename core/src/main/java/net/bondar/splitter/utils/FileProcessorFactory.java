@@ -1,9 +1,6 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.splitter.interfaces.AbstractIteratorFactory;
-import net.bondar.splitter.interfaces.AbstractProcessorFactory;
-import net.bondar.splitter.interfaces.AbstractTaskFactory;
-import net.bondar.splitter.interfaces.IParameterHolder;
+import net.bondar.splitter.interfaces.*;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,6 +18,7 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
      * @param parameterHolder  parameter holder
      * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
+     * @param closeTaskFactory closing task factory
      * @param statisticFactory statistic factory
      * @return <code>FileProcessor</code> instance
      * @see {@link AbstractProcessorFactory}
@@ -30,11 +28,12 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
                                          IParameterHolder parameterHolder,
                                          AbstractIteratorFactory iteratorFactory,
                                          AbstractTaskFactory taskFactory,
+                                         AbstractCloseTaskFactory closeTaskFactory,
                                          AbstractStatisticFactory statisticFactory) {
         if (partSize == 0) {
-            return new FileProcessor(fileDest, interrupt, parameterHolder, iteratorFactory, taskFactory, statisticFactory);
+            return new FileProcessor(fileDest, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory);
         } else {
-            return new FileProcessor(fileDest, partSize, interrupt, parameterHolder, iteratorFactory, taskFactory, statisticFactory);
+            return new FileProcessor(fileDest, partSize, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory);
         }
     }
 }
