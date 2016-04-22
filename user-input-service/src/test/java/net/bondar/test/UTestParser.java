@@ -1,10 +1,12 @@
 package net.bondar.test;
 
-import net.bondar.splitter.exceptions.ApplicationException;
-import net.bondar.splitter.interfaces.IParameterHolder;
-import net.bondar.splitter.utils.ApplicationParameterHolder;
-import net.bondar.user_input.interfaces.IParameterParser;
-import net.bondar.user_input.utils.CliParameterParser;
+import net.bondar.core.exceptions.ApplicationException;
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.utils.ApplicationConfigHolder;
+import net.bondar.input.exceptions.ParsingException;
+import net.bondar.input.interfaces.*;
+import net.bondar.input.service.InputParserService;
+import net.bondar.input.utils.*;
 import org.easymock.EasyMock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -22,7 +24,7 @@ public class UTestParser {
     /**
      * Parameter parser.
      */
-    private static IParameterParser paramParser;
+    private static IInputParserService inputParserService;
 
     /**
      * Part-file suffix.
@@ -34,11 +36,18 @@ public class UTestParser {
      */
     @BeforeClass
     public static void setUp() {
-        IParameterHolder paramHolder = EasyMock.createMock(ApplicationParameterHolder.class);
-        paramParser = new CliParameterParser(paramHolder);
-        expect(paramHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
-        EasyMock.replay(paramHolder);
-        partSuffix = paramHolder.getValue("partSuffix");
+        IConfigHolder configHolder = EasyMock.createMock(ApplicationConfigHolder.class);
+        expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
+        EasyMock.replay(configHolder);
+        partSuffix = configHolder.getValue("partSuffix");
+        ICommandHolder commandHolder = new CommandHolder();
+        ICommandFinder commandFinder = new FileCommandFinder(commandHolder);
+        IParameterHolder parameterHolder = new ParameterHolder();
+        IParameterFinder parameterFinder = new FileParameterFinder(parameterHolder);
+        AbstractConverterFactory converterFactory = new ConverterFactory();
+        IParameterParser parameterParser = new ParameterParser(converterFactory);
+        ICommandVerifier commandVerifier = new FileCommandVerifier(configHolder);
+        inputParserService = new InputParserService(commandFinder, parameterFinder, parameterParser, commandVerifier);
     }
 
     /**
@@ -48,11 +57,8 @@ public class UTestParser {
     public Object[][] createData1() {
         return new Object[][]{
                 {"abc"},
-                {"split, -p, asdffsa",},
                 {"split, -p, /home/test/test.txt, -s, asdasdas"},
                 {"merge"},
-                {"merge, -p, 1231231",},
-                {"merge, -p, 1231231",},
                 {"-p, /home/test/test.test, -s, 5M"}
         };
     }
@@ -63,7 +69,7 @@ public class UTestParser {
     @DataProvider(name = "testParseCorrect")
     public Object[][] createData2() {
         return new Object[][]{
-                {"split, -p, /test.txt, -s, 5M"},
+                {"split, -p, /test.txt, -s, 5MB"},
                 {"merge, -p, /test/test.txt" + partSuffix + "001"},
                 {"help"},
                 {"exit"}
@@ -76,10 +82,10 @@ public class UTestParser {
     @Test(dataProvider = "testParseIncorrect")
     public void testParseIncorrect(String arg) {
         try {
-            paramParser.parse(arg.split(", "));
+            inputParserService.parse(arg.split(", "));
             fail("Expected incorrect arguments. Arguments: " + arg);
         } catch (ApplicationException e) {
-            assertEquals(ApplicationException.class, e.getClass());
+            assertEquals(ParsingException.class, e.getClass());
         }
     }
 
@@ -88,6 +94,6 @@ public class UTestParser {
      */
     @Test(dataProvider = "testParseCorrect")
     public void testCorrectArguments(String arg) {
-        paramParser.parse(arg.split(", "));
+        inputParserService.parse(arg.split(", "));
     }
 }

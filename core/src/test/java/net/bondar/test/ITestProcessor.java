@@ -1,11 +1,11 @@
 package net.bondar.test;
 
-import net.bondar.calculations.Calculations;
-import net.bondar.splitter.interfaces.AbstractCloseTaskFactory;
-import net.bondar.splitter.interfaces.AbstractIteratorFactory;
-import net.bondar.splitter.interfaces.AbstractTaskFactory;
-import net.bondar.splitter.interfaces.IParameterHolder;
-import net.bondar.splitter.utils.*;
+import net.bondar.calculations.FileCalculationUtils;
+import net.bondar.core.interfaces.AbstractCloseTaskFactory;
+import net.bondar.core.interfaces.AbstractIteratorFactory;
+import net.bondar.core.interfaces.AbstractTaskFactory;
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.utils.*;
 import net.bondar.statistics.FileStatisticFactory;
 import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import org.apache.commons.io.FileUtils;
@@ -51,7 +51,7 @@ public class ITestProcessor {
     /**
      * Parameter holder.
      */
-    private static IParameterHolder paramHolder;
+    private static IConfigHolder paramHolder;
 
     /**
      * Interrupt flag.
@@ -96,7 +96,7 @@ public class ITestProcessor {
     @BeforeTest
     public static void setUp() {
         // initializing processor's components
-        paramHolder = EasyMock.createMock(ApplicationParameterHolder.class);
+        paramHolder = EasyMock.createMock(ApplicationConfigHolder.class);
         expect(paramHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
         expect(paramHolder.getValue("threadsCount")).andReturn("3").times(0, Integer.MAX_VALUE);
         expect(paramHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
@@ -128,7 +128,7 @@ public class ITestProcessor {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticFactory).process();
-            List<File> resultParts = Calculations.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
+            List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
                 assertTrue(FileUtils.contentEquals(specifiedParts.get(i), resultParts.get(i)));

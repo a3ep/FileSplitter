@@ -1,6 +1,6 @@
 package net.bondar.statistics;
 
-import net.bondar.calculations.Calculations;
+import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.statistics.interfaces.IPartObject;
 import net.bondar.statistics.interfaces.IStatisticBuilder;
 import net.bondar.statistics.interfaces.IStatisticHolder;
@@ -43,7 +43,7 @@ class FileStatisticBuilder implements IStatisticBuilder {
      * @see {@link IStatisticBuilder}
      */
     FileStatisticBuilder(List<File> files, IStatisticHolder statHolder) {
-        fileSize = Calculations.getFileSize(files);
+        fileSize = FileCalculationUtils.getFileSize(files);
         this.infoMap = statHolder.getStatistic();
     }
 
