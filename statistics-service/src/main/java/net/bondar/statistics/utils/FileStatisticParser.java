@@ -31,11 +31,12 @@ public class FileStatisticParser implements IStatisticParser {
     @Override
     public Map<String, List<IParameterObject>> parseStatisticalInfo(Map<String, String[]> statisticMap) {
         log.debug("Start parsing statistical information list.");
+        Map<String, String[]> map = new TreeMap<>(statisticMap);
         Map<String, List<IParameterObject>> statParametersMap = new TreeMap<>();
         if (statisticMap.isEmpty()) {
             return statParametersMap;
         }
-        for (Map.Entry<String, String[]> entry : statisticMap.entrySet()) {
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
             List<IParameterObject> parameterList = new ArrayList<>();
             IParameterObject start = new ParameterObject("start", entry.getValue()[1]);
             IParameterObject end = new ParameterObject("end", entry.getValue()[2]);

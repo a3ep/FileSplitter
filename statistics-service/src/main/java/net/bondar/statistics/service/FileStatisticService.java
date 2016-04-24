@@ -46,7 +46,7 @@ public class FileStatisticService implements IStatisticService {
     /**
      * Timer.
      */
-    private final Timer timer = new Timer();
+    private Timer timer;
 
     /**
      * Creates <code>FileStatisticService</code> instance.
@@ -84,6 +84,7 @@ public class FileStatisticService implements IStatisticService {
      */
     @Override
     public void showStatisticalInfo(int delay, int period) throws IllegalArgumentException, IllegalStateException, NullPointerException {
+        timer = new Timer();
         try {
             timer.schedule(new TimerTask() {
                 @Override
@@ -105,6 +106,7 @@ public class FileStatisticService implements IStatisticService {
     @Override
     public void hideStatisticalInfo() {
         timer.cancel();
+        holder.getStatisticalInfo().clear();
     }
 
     /**

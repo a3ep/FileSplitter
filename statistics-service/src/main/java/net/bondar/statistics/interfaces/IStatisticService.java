@@ -1,5 +1,7 @@
 package net.bondar.statistics.interfaces;
 
+import java.util.Timer;
+
 /**
  * Interface for class that provides working with statistical information.
  */
@@ -15,6 +17,7 @@ public interface IStatisticService {
 
     /**
      * Ends showing statistical information to user.
+     *
      */
     void hideStatisticalInfo();
 
