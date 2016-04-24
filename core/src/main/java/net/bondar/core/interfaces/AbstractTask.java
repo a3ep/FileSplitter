@@ -1,7 +1,6 @@
 package net.bondar.core.interfaces;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.statistics.interfaces.IPartObject;
 import net.bondar.statistics.interfaces.IStatisticService;
 
 import java.io.File;
@@ -38,6 +37,7 @@ public abstract class AbstractTask implements ITask {
      * Interrupt flag.
      */
     protected AtomicBoolean interrupt;
+
     /**
      * Total written size.
      */
@@ -91,7 +91,9 @@ public abstract class AbstractTask implements ITask {
             totalWritten += writtenSize;
             filePart.setWrittenSize(start - filePart.getStartPosition());
             filePart.setTotalWrittenSize(totalWritten);
-            statService.holdInformation(Thread.currentThread().getName(), filePart);
+            statService.holdInformation(FileCalculationUtils.buildStatisticData(Thread.currentThread().getName(),
+                    filePart.getStartPosition(), filePart.getEndPosition(), filePart.getWrittenSize(),
+                    filePart.getTotalWrittenSize(), filePart.getFileSize()));
         }
     }
 }

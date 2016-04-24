@@ -1,7 +1,7 @@
-package net.bondar.new_statistic.service;
+package net.bondar.statistics.service;
 
-import net.bondar.new_statistic.exceptions.StatisticException;
-import net.bondar.new_statistic.interfaces.*;
+import net.bondar.statistics.exceptions.StatisticException;
+import net.bondar.statistics.interfaces.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -46,7 +46,7 @@ public class FileStatisticService implements IStatisticService {
     /**
      * Timer.
      */
-    private final Timer timer;
+    private final Timer timer = new Timer();
 
     /**
      * Creates <code>FileStatisticService</code> instance.
@@ -56,20 +56,17 @@ public class FileStatisticService implements IStatisticService {
      * @param converter statistic converter
      * @param builder   statistic builder
      * @param viewer    statistic viewer
-     * @param timer     timer
      */
     public FileStatisticService(IStatisticHolder holder,
                                 IStatisticParser parser,
                                 IStatisticConverter converter,
                                 IStatisticBuilder builder,
-                                IStatisticViewer viewer,
-                                Timer timer) {
+                                IStatisticViewer viewer) {
         this.holder = holder;
         this.parser = parser;
         this.converter = converter;
         this.builder = builder;
         this.viewer = viewer;
-        this.timer = timer;
     }
 
     /**
@@ -86,7 +83,7 @@ public class FileStatisticService implements IStatisticService {
      * @see {@link IStatisticService}, {@link Timer}
      */
     @Override
-    public void showStatisticalInfo(int delay, int period) throws IllegalArgumentException, IllegalStateException, NullPointerException{
+    public void showStatisticalInfo(int delay, int period) throws IllegalArgumentException, IllegalStateException, NullPointerException {
         try {
             timer.schedule(new TimerTask() {
                 @Override
@@ -95,8 +92,8 @@ public class FileStatisticService implements IStatisticService {
                             parseStatisticalInfo(holder.getStatisticalInfo()))));
                 }
             }, delay, period);
-        }catch (StatisticException e){
-            log.error("Statistic service error. Message: "+e.getMessage());
+        } catch (StatisticException e) {
+            log.error("Statistic service error. Message: " + e.getMessage());
         }
     }
 
@@ -118,6 +115,6 @@ public class FileStatisticService implements IStatisticService {
      */
     @Override
     public void holdInformation(String information) {
-
+        holder.holdStatisticalInfo(information);
     }
 }

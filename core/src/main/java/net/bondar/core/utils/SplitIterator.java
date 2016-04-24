@@ -1,8 +1,8 @@
 package net.bondar.core.utils;
 
+import net.bondar.core.domain.FilePartObject;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.statistics.domain.FilePartObject;
 
 /**
  * Provides iteration for part-files during splitting process.
@@ -60,6 +60,7 @@ class SplitIterator implements Iterable {
         if (end > fileLength) end = fileLength;
         String partName = paramHolder.getValue("partSuffix") + String.format("%03d", partCounter++);
         FilePartObject filePart = new FilePartObject(partName, start, end, partCounter - 1);
+        filePart.setFileSize(fileLength);
         currentPosition = end + 1;
         return filePart;
     }

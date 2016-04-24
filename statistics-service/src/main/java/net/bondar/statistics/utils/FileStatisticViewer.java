@@ -1,12 +1,12 @@
-package net.bondar.new_statistic.utils;
+package net.bondar.statistics.utils;
 
-import net.bondar.new_statistic.exceptions.StatisticException;
-import net.bondar.new_statistic.interfaces.IStatisticViewer;
+import net.bondar.statistics.exceptions.StatisticException;
+import net.bondar.statistics.interfaces.IStatisticViewer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Provides displaying file statistical information.
  */
 public class FileStatisticViewer implements IStatisticViewer {
 
@@ -22,7 +22,7 @@ public class FileStatisticViewer implements IStatisticViewer {
      * @throws StatisticException if one of the statistic parameters is not found
      * @see {@link IStatisticViewer}
      */
-    public void showStatistic(String statistic) throws StatisticException{
+    public void showStatistic(String statistic) throws StatisticException {
         if (statistic != null) {
             log.info(statistic);
         }

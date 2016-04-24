@@ -3,22 +3,22 @@ package net.bondar.statistics.interfaces;
 import java.util.Map;
 
 /**
- * Interface for class that provides holding statistical information.
+ * Interface for class that provides holding statistical data.
  */
 public interface IStatisticHolder {
 
     /**
-     * Gets map with information from threads.
+     * Gets statistical information.
      *
-     * @return map with information
+     * @return map with statistical information
      */
-    Map<String, IPartObject> getStatistic();
+    Map<String, String[]> getStatisticalInfo();
 
     /**
-     * Puts information from threads into information map.
+     * Holds statistical information.
      *
-     * @param threadName name of the thread
-     * @param filePart   <code>IPartObject</code> with parameters for calculating statistic
+     * @param information string with statistical data
      */
-    void putInformation(String threadName, IPartObject filePart);
+    void holdStatisticalInfo(String information);
+
 }

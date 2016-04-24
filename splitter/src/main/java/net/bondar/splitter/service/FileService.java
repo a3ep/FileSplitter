@@ -7,7 +7,7 @@ import net.bondar.input.domain.Command;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
 import net.bondar.splitter.interfaces.IService;
-import net.bondar.statistics.interfaces.AbstractStatisticFactory;
+import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -57,9 +57,9 @@ public class FileService implements IService {
     private final AbstractCloseTaskFactory closeTaskFactory;
 
     /**
-     * Statistic factory.
+     * Statistic service.
      */
-    private final AbstractStatisticFactory statisticFactory;
+    private final IStatisticService statisticService;
 
     /**
      * Help viewer.
@@ -80,7 +80,7 @@ public class FileService implements IService {
      * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
      * @param closeTaskFactory closing task factory
-     * @param statisticFactory statistic factory
+     * @param statisticService statistic service
      * @param helpViewer       help viewer
      */
     public FileService(IConfigHolder parameterHolder,
@@ -89,7 +89,7 @@ public class FileService implements IService {
                        AbstractIteratorFactory iteratorFactory,
                        AbstractTaskFactory taskFactory,
                        AbstractCloseTaskFactory closeTaskFactory,
-                       AbstractStatisticFactory statisticFactory,
+                       IStatisticService statisticService,
                        IHelpViewer helpViewer) {
         this.parameterHolder = parameterHolder;
         this.parserService = parserService;
@@ -97,7 +97,7 @@ public class FileService implements IService {
         this.iteratorFactory = iteratorFactory;
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;
-        this.statisticFactory = statisticFactory;
+        this.statisticService = statisticService;
         this.helpViewer = helpViewer;
     }
 
@@ -128,13 +128,13 @@ public class FileService implements IService {
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()), interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService).process();
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0, interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService).process();
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }

@@ -1,21 +1,16 @@
-package net.bondar.new_statistic.domain;
+package net.bondar.statistics.domain;
 
-import net.bondar.new_statistic.interfaces.IParameterObject;
+import net.bondar.statistics.interfaces.IParameterObject;
 
 /**
  * Provides holding statistical information parameters.
  */
-public class ParameterObject implements IParameterObject{
+public class ParameterObject implements IParameterObject {
 
     /**
      * Parameter name.
      */
     private final String name;
-
-    /**
-     * Identifies needs to convert.
-     */
-    private final boolean convertible;
 
     /**
      * Parameter value.
@@ -25,13 +20,11 @@ public class ParameterObject implements IParameterObject{
     /**
      * Creates <code>ParameterObject</code> instance.
      *
-     * @param name parameter name
-     * @param convertible identifies needs to convert
+     * @param name  parameter name
      * @param value parameter value
      */
-    public ParameterObject(String name, boolean convertible, String value) {
+    public ParameterObject(String name, String value) {
         this.name = name;
-        this.convertible = convertible;
         this.value = value;
     }
 
@@ -42,15 +35,6 @@ public class ParameterObject implements IParameterObject{
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Gets convertible.
-     *
-     * @return convertible
-     */
-    public boolean isConvertible() {
-        return convertible;
     }
 
     /**

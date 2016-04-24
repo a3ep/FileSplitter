@@ -1,14 +1,17 @@
 package net.bondar.statistics.interfaces;
 
+import java.util.List;
+
 /**
- * Interface for class that provides building statistical information.
+ * Interface for class that provides building statistic information string.
  */
 public interface IStatisticBuilder {
 
     /**
-     * Builds statistic information.
+     * Builds statistic information string.
      *
-     * @return string with statistic information
+     * @param statisticValues list of statistical values
+     * @return string with statistical information
      */
-    String buildStatisticString();
+    String buildStatInfoString(List<String> statisticValues);
 }

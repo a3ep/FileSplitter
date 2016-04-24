@@ -1,7 +1,7 @@
-package net.bondar.new_statistic.utils;
+package net.bondar.statistics.utils;
 
-import net.bondar.new_statistic.exceptions.StatisticException;
-import net.bondar.new_statistic.interfaces.IStatisticBuilder;
+import net.bondar.statistics.exceptions.StatisticException;
+import net.bondar.statistics.interfaces.IStatisticBuilder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -26,9 +26,9 @@ public class FileStatisticBuilder implements IStatisticBuilder {
      * @see {@link IStatisticBuilder}
      */
     @Override
-    public String buildStatInfoString(List<String> statisticValues) throws StatisticException{
+    public String buildStatInfoString(List<String> statisticValues) throws StatisticException {
         log.debug("Start building statistic information string.");
-        if(statisticValues.isEmpty()){
+        if (statisticValues.isEmpty()) {
             return null;
         }
         StringBuilder builder = new StringBuilder("Total progress: ");

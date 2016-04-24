@@ -4,7 +4,6 @@ import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.exceptions.ApplicationException;
 import net.bondar.core.interfaces.*;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.statistics.interfaces.AbstractStatisticFactory;
 import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -84,7 +83,7 @@ public class FileProcessor implements IProcessor {
      * @param iteratorFactory  iterator factory
      * @param taskFactory      thread's task factory
      * @param closeTaskFactory close task factory
-     * @param statisticFactory statistic factory
+     * @param statisticService statistic service
      * @see {@link IProcessor}
      */
     public FileProcessor(String partFileDest, AtomicBoolean interrupt,
@@ -92,7 +91,7 @@ public class FileProcessor implements IProcessor {
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractCloseTaskFactory closeTaskFactory,
-                         AbstractStatisticFactory statisticFactory) {
+                         IStatisticService statisticService) {
         this.parameterHolder = parameterHolder;
         this.processOperation = "merge";
         this.interrupt = interrupt;
@@ -100,8 +99,8 @@ public class FileProcessor implements IProcessor {
         List<File> parts = FileCalculationUtils.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix"));
         this.iterator = iteratorFactory.createMergeIterator(parts);
         this.taskFactory = taskFactory;
-        this.statisticService = statisticFactory.createService(0, parts);
-        cleaner = new Thread(closeTaskFactory.createClosable(interrupt, this, parameterHolder, statisticService));
+        this.statisticService = statisticService;
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder, statisticService));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -115,7 +114,7 @@ public class FileProcessor implements IProcessor {
      * @param iteratorFactory  iterator factory
      * @param taskFactory      thread's task factory
      * @param closeTaskFactory closing task factory
-     * @param statisticFactory statistic factory
+     * @param statisticService statistic service
      * @see {@link IProcessor}
      */
     public FileProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
@@ -123,15 +122,15 @@ public class FileProcessor implements IProcessor {
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractCloseTaskFactory closeTaskFactory,
-                         AbstractStatisticFactory statisticFactory) {
+                         IStatisticService statisticService) {
         this.parameterHolder = parameterHolder;
         this.processOperation = "split";
         this.file = new File(fileDest);
         this.interrupt = interrupt;
         this.iterator = iteratorFactory.createSplitIterator(parameterHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
-        this.statisticService = statisticFactory.createService(file.length(), null);
-        cleaner = new Thread(closeTaskFactory.createClosable(interrupt, this, parameterHolder, statisticService));
+        this.statisticService = statisticService;
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder, statisticService));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -144,7 +143,7 @@ public class FileProcessor implements IProcessor {
      */
     public void process() throws ApplicationException {
         try {
-            statisticService.show(0, 1000);
+            statisticService.showStatisticalInfo(0, 1000);
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 if (processOperation.equals("split")) {
@@ -155,7 +154,7 @@ public class FileProcessor implements IProcessor {
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            statisticService.hide();
+            statisticService.hideStatisticalInfo();
             if (interrupt.get()) {
                 cleaner.join();
                 System.exit(0);

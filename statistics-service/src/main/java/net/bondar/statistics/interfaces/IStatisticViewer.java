@@ -7,6 +7,8 @@ public interface IStatisticViewer {
 
     /**
      * Shows statistical information.
+     *
+     * @param statistic string with statistical information
      */
-    void showStatistic();
+    void showStatistic(String statistic);
 }

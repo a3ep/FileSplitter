@@ -1,8 +1,8 @@
-package net.bondar.new_statistic.utils;
+package net.bondar.statistics.utils;
 
-import net.bondar.new_statistic.domain.ParameterObject;
-import net.bondar.new_statistic.interfaces.IParameterObject;
-import net.bondar.new_statistic.interfaces.IStatisticParser;
+import net.bondar.statistics.domain.ParameterObject;
+import net.bondar.statistics.interfaces.IParameterObject;
+import net.bondar.statistics.interfaces.IStatisticParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -22,33 +22,32 @@ public class FileStatisticParser implements IStatisticParser {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Parses file statistical information list to map with file statistical parameters.
+     * Parses file statistical data map into map with file statistical parameters.
      *
-     * @param statisticList statistical information list
+     * @param statisticMap statistical data map
      * @return map with file statistical parameters
      * @see {@link IStatisticParser}
      */
     @Override
-    public Map<String, List<IParameterObject>> parseStatisticalInfo(List<String> statisticList) {
+    public Map<String, List<IParameterObject>> parseStatisticalInfo(Map<String, String[]> statisticMap) {
         log.debug("Start parsing statistical information list.");
         Map<String, List<IParameterObject>> statParametersMap = new TreeMap<>();
-        if(statisticList.isEmpty()){
+        if (statisticMap.isEmpty()) {
             return statParametersMap;
         }
-        for (String str : statisticList) {
-            String[] array = str.split(", ");
+        for (Map.Entry<String, String[]> entry : statisticMap.entrySet()) {
             List<IParameterObject> parameterList = new ArrayList<>();
-            IParameterObject start = new ParameterObject("start", true, array[1]);
-            IParameterObject end = new ParameterObject("end", true, array[2]);
-            IParameterObject writtenSize = new ParameterObject("writtenSize", true, array[3]);
-            IParameterObject totalWrittenSize = new ParameterObject("totalWrittenSize", true, array[4]);
-            IParameterObject fileSize = new ParameterObject("fileSize", true, array[5]);
+            IParameterObject start = new ParameterObject("start", entry.getValue()[1]);
+            IParameterObject end = new ParameterObject("end", entry.getValue()[2]);
+            IParameterObject writtenSize = new ParameterObject("writtenSize", entry.getValue()[3]);
+            IParameterObject totalWrittenSize = new ParameterObject("totalWrittenSize", entry.getValue()[4]);
+            IParameterObject fileSize = new ParameterObject("fileSize", entry.getValue()[5]);
             parameterList.add(start);
             parameterList.add(end);
             parameterList.add(writtenSize);
             parameterList.add(totalWrittenSize);
             parameterList.add(fileSize);
-            statParametersMap.put(array[0], parameterList);
+            statParametersMap.put(entry.getKey(), parameterList);
         }
         log.debug("Finish parsing statistical information list.");
         return statParametersMap;

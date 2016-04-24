@@ -1,7 +1,7 @@
 package net.bondar.core.interfaces;
 
 import net.bondar.core.utils.FileProcessor;
-import net.bondar.statistics.interfaces.AbstractStatisticFactory;
+import net.bondar.statistics.interfaces.IStatisticService;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -20,7 +20,7 @@ public interface AbstractProcessorFactory {
      * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
      * @param closeTaskFactory close task factory
-     * @param statisticFactory statistic factory
+     * @param statisticService statistic service
      * @return concrete processor instance
      */
     FileProcessor createProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
@@ -28,5 +28,5 @@ public interface AbstractProcessorFactory {
                                   AbstractIteratorFactory iteratorFactory,
                                   AbstractTaskFactory taskFactory,
                                   AbstractCloseTaskFactory closeTaskFactory,
-                                  AbstractStatisticFactory statisticFactory);
+                                  IStatisticService statisticService);
 }

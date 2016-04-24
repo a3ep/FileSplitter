@@ -1,8 +1,8 @@
-package net.bondar.new_statistic.utils;
+package net.bondar.statistics.utils;
 
-import net.bondar.new_statistic.exceptions.StatisticException;
-import net.bondar.new_statistic.interfaces.IParameterObject;
-import net.bondar.new_statistic.interfaces.IStatisticConverter;
+import net.bondar.statistics.exceptions.StatisticException;
+import net.bondar.statistics.interfaces.IParameterObject;
+import net.bondar.statistics.interfaces.IStatisticConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -29,10 +29,10 @@ public class FileStatisticConverter implements IStatisticConverter {
      * @see {@link IStatisticConverter}
      */
     @Override
-    public List<String> convert(Map<String, List<IParameterObject>> statParametersMap) throws StatisticException{
+    public List<String> convert(Map<String, List<IParameterObject>> statParametersMap) throws StatisticException {
         log.debug("Start converting map with statistic parameters.");
         List<String> statisticValues = new ArrayList<>();
-        if(statParametersMap.isEmpty()){
+        if (statParametersMap.isEmpty()) {
             return statisticValues;
         }
         double totalWrittenSize = 0;
@@ -49,16 +49,14 @@ public class FileStatisticConverter implements IStatisticConverter {
         }
         statisticValues.add((int) (totalWrittenSize / fileSize * 100) + "%");
         for (Map.Entry<String, List<IParameterObject>> entry : statParametersMap.entrySet()) {
-            String threadName = entry.getKey();
-            long start = Long.parseLong(getParameterValue("start", entry.getValue()));
-            long end = Long.parseLong(getParameterValue("end", entry.getValue()));
-            long partSize = end - start;
+            long partSize = Long.parseLong(getParameterValue("end", entry.getValue()))
+                    - Long.parseLong(getParameterValue("start", entry.getValue()));
             double writtenSize = Double.parseDouble(getParameterValue("writtenSize", entry.getValue()));
-            statisticValues.add(threadName + ": " + (int) (writtenSize / partSize * 100) + "%");
+            statisticValues.add(entry.getKey() + " : " + (int) (writtenSize / partSize * 100) + "%");
         }
         double timeRemaining = fileSize / totalWrittenSize;
-        statisticValues.add(String.format("%.1f", timeRemaining) + " c");
-        log.debug("Finish converting. Statistic values: "+statisticValues.toString());
+        statisticValues.add("time remaining : " + String.format("%.1f", timeRemaining) + " c");
+        log.debug("Finish converting. Statistic values: " + statisticValues.toString());
         return statisticValues;
     }
 

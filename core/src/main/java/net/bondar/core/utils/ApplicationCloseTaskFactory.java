@@ -1,6 +1,5 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.CleanCloseTask;
 import net.bondar.core.domain.CloseTask;
 import net.bondar.core.interfaces.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.ICloseTask;
@@ -22,24 +21,13 @@ public class ApplicationCloseTaskFactory implements AbstractCloseTaskFactory {
      * @param processor        file processor
      * @param parameterHolder  parameter holder
      * @param statisticService statistic service
-     * @return <code>CleanCloseTask</code> instance
+     * @return <code>CloseTask</code> instance
      */
     @Override
-    public ICloseTask createClosable(AtomicBoolean interrupt,
-                                     IProcessor processor,
-                                     IConfigHolder parameterHolder,
-                                     IStatisticService statisticService) {
-        return new CleanCloseTask(interrupt, processor, parameterHolder, statisticService);
-    }
-
-    /**
-     * Creates closing task.
-     *
-     * @param interrupt interrupt flag
-     * @return <code>CloseTask</code>  instance
-     */
-    @Override
-    public ICloseTask createClosable(AtomicBoolean interrupt) {
-        return new CloseTask(interrupt);
+    public ICloseTask createCloseTask(AtomicBoolean interrupt,
+                                      IProcessor processor,
+                                      IConfigHolder parameterHolder,
+                                      IStatisticService statisticService) {
+        return new CloseTask(interrupt, processor, parameterHolder, statisticService);
     }
 }

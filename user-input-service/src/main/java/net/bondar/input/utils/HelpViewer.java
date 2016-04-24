@@ -38,6 +38,7 @@ public class HelpViewer implements IHelpViewer {
 
     /**
      * Shows help message.
+     *
      * @see {@link IHelpViewer}
      */
     @Override

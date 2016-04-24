@@ -6,8 +6,8 @@ import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.AbstractTaskFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.*;
-import net.bondar.statistics.FileStatisticFactory;
-import net.bondar.statistics.interfaces.AbstractStatisticFactory;
+import net.bondar.statistics.interfaces.IStatisticService;
+import net.bondar.statistics.service.FileStatisticService;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -74,17 +74,15 @@ public class ITestProcessor {
     private static AbstractCloseTaskFactory closeTaskFactory;
 
     /**
-     * Statistic factory.
+     * Statistic service.
      */
-    private static AbstractStatisticFactory statisticFactory;
+    private static IStatisticService statisticService;
 
     /**
      * File specified by user.
      */
     private static File specifiedFile;
 
-
-    private static File specifiedPartsFolder;
     /**
      * Part-files specified by user.
      */
@@ -106,7 +104,7 @@ public class ITestProcessor {
         iteratorFactory = new SplitMergeIteratorFactory();
         taskFactory = new FileTaskFactory();
         closeTaskFactory = new ApplicationCloseTaskFactory();
-        statisticFactory = new FileStatisticFactory();
+        statisticService = EasyMock.createMock(FileStatisticService.class);
     }
 
     /**
@@ -127,7 +125,7 @@ public class ITestProcessor {
     public void testProcessSplit() {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory,
-                    taskFactory, closeTaskFactory, statisticFactory).process();
+                    taskFactory, closeTaskFactory, statisticService).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
@@ -145,7 +143,7 @@ public class ITestProcessor {
     public void testProcessMerge() {
         try {
             FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(), interrupt,
-                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticFactory);
+                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
             assertEquals(specifiedFile.length(), resultFile.length());

@@ -1,5 +1,6 @@
 package net.bondar.core.interfaces;
 
+
 import net.bondar.statistics.interfaces.IStatisticService;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public abstract class AbstractTaskFactory {
      * @return <code>SplitTask</code> task instance
      */
     public abstract ITask createSplitTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder,
-                                                 Iterable iterator, IStatisticService statService);
+                                          Iterable iterator, IStatisticService statService);
 
     /**
      * Creates merge task on the basis of received parameters.
@@ -34,5 +35,5 @@ public abstract class AbstractTaskFactory {
      * @return <code>MergeTask</code> instance
      */
     public abstract ITask createMergeTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder,
-                                                 Iterable iterator, IStatisticService statService);
+                                          Iterable iterator, IStatisticService statService);
 }

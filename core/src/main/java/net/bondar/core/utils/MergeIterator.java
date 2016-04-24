@@ -1,7 +1,7 @@
 package net.bondar.core.utils;
 
+import net.bondar.core.domain.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.statistics.domain.FilePartObject;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +22,11 @@ class MergeIterator implements Iterable {
     private long currentPosition = 0;
 
     /**
+     * Size of complete file.
+     */
+    private long completeFileSize = 0;
+
+    /**
      * List of part-files.
      */
     private List<File> parts;
@@ -34,6 +39,9 @@ class MergeIterator implements Iterable {
      */
     MergeIterator(List<File> parts) {
         this.parts = parts;
+        for (File f : parts) {
+            completeFileSize += f.length();
+        }
     }
 
     /**
@@ -51,6 +59,7 @@ class MergeIterator implements Iterable {
         File part = parts.remove(0);
         long end = start + part.length();
         FilePartObject filePart = new FilePartObject(part, start, end, counter++);
+        filePart.setFileSize(completeFileSize);
         currentPosition += part.length() + 1;
         return filePart;
     }

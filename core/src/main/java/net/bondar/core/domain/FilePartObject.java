@@ -1,6 +1,6 @@
-package net.bondar.statistics.domain;
+package net.bondar.core.domain;
 
-import net.bondar.statistics.interfaces.IPartObject;
+import net.bondar.core.interfaces.IPartObject;
 
 import java.io.File;
 
@@ -28,26 +28,26 @@ public class FilePartObject implements IPartObject {
      * Index of the end position in a file.
      */
     private final long endPosition;
-
-    /**
-     * Size of bytes, written by one thread during processing one part-file.
-     */
-    private long writtenSize;
-
-    /**
-     * Size of bytes, written by one thread during processing all part-files.
-     */
-    private long totalWrittenSize;
-
     /**
      * Part counter.
      */
     private final int counter;
-
     /**
      * Part-file.
      */
     private final File partFile;
+    /**
+     * Size of bytes, written by one thread during processing one part-file.
+     */
+    private long writtenSize;
+    /**
+     * Size of bytes, written by one thread during processing all part-files.
+     */
+    private long totalWrittenSize;
+    /**
+     * Size of file.
+     */
+    private long fileSize;
 
     /**
      * Creates <code>FilePartObject</code> instance.
@@ -133,6 +133,16 @@ public class FilePartObject implements IPartObject {
     @Override
     public void setTotalWrittenSize(long totalWrittenSize) {
         this.totalWrittenSize = totalWrittenSize;
+    }
+
+    @Override
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    @Override
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 
     @Override

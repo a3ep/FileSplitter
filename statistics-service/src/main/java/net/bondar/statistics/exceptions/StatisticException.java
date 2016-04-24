@@ -1,4 +1,4 @@
-package net.bondar.new_statistic.exceptions;
+package net.bondar.statistics.exceptions;
 
 /**
  * Custom statistic exception.

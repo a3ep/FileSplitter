@@ -7,8 +7,9 @@ import net.bondar.input.interfaces.*;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.service.FileService;
-import net.bondar.statistics.FileStatisticFactory;
-import net.bondar.statistics.interfaces.AbstractStatisticFactory;
+import net.bondar.statistics.interfaces.*;
+import net.bondar.statistics.service.FileStatisticService;
+import net.bondar.statistics.utils.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -40,14 +41,18 @@ public class Main {
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
-            AbstractStatisticFactory statFactory = new FileStatisticFactory();
+            IStatisticHolder statisticHolder = new FileStatisticHolder();
+            IStatisticParser statisticParser = new FileStatisticParser();
+            IStatisticConverter statisticConverter = new FileStatisticConverter();
+            IStatisticBuilder statisticBuilder = new FileStatisticBuilder();
+            IStatisticViewer statisticViewer = new FileStatisticViewer();
+            IStatisticService statisticService = new FileStatisticService(statisticHolder, statisticParser,
+                    statisticConverter, statisticBuilder, statisticViewer);
 
             new FileService(configHolder, parserService, processorFactory, iteratorFactory, taskFactory, closableFactory,
-                    statFactory, helpViewer).run();
-            //УБРАТЬ ПРИНТ СТЭК ТРЕЙС!!!!!!!!!!!
+                    statisticService, helpViewer).run();
         } catch (Throwable t) {
             log.fatal("Unexpected application error. Message: " + t.getMessage());
-            t.printStackTrace();
         }
     }
 }

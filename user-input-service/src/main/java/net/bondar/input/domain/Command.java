@@ -90,6 +90,7 @@ public enum Command {
      * Identifies contains parameters.
      */
     private boolean parametric;
+
     /**
      * List of parameters.
      */

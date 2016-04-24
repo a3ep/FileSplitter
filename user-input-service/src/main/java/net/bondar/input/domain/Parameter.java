@@ -1,7 +1,7 @@
 package net.bondar.input.domain;
 
 /**
- *
+ * Contains user input parameters.
  */
 public enum Parameter {
 
@@ -19,8 +19,8 @@ public enum Parameter {
      * Creates <code>Parameter</code> instance.
      *
      * @param identifier parameter identifier
-     * @param parsable identifies needs to parse
-     * @param value parameter value
+     * @param parsable   identifies needs to parse
+     * @param value      parameter value
      */
     Parameter(String identifier, boolean parsable, String value, String description) {
         this.identifier = identifier;

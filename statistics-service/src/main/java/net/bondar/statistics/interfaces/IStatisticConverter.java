@@ -1,4 +1,4 @@
-package net.bondar.new_statistic.interfaces;
+package net.bondar.statistics.interfaces;
 
 import java.util.List;
 import java.util.Map;

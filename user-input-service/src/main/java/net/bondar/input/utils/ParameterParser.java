@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Provides parsing of parameter values.
  */
-public class ParameterParser implements IParameterParser{
+public class ParameterParser implements IParameterParser {
 
     /**
      * Logger.

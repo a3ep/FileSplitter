@@ -1,4 +1,4 @@
-package net.bondar.statistics.interfaces;
+package net.bondar.core.interfaces;
 
 import java.io.File;
 
@@ -12,68 +12,82 @@ public interface IPartObject {
      *
      * @return status
      */
-    public String getStatus();
+    String getStatus();
 
     /**
      * Gets name of part-file.
      *
      * @return name of part-file
      */
-    public String getPartFileName();
+    String getPartFileName();
 
     /**
      * Gets index of the start position.
      *
      * @return index of the start position
      */
-    public long getStartPosition();
+    long getStartPosition();
 
     /**
      * Gets index of the end position.
      *
      * @return index of the end position
      */
-    public long getEndPosition();
+    long getEndPosition();
 
     /**
      * Gets size of bytes, written by one thread during processing one part-file.
      *
      * @return size of bytes
      */
-    public long getWrittenSize();
+    long getWrittenSize();
 
     /**
      * Sets size of bytes, written by one thread during processing one part-file.
      *
      * @param writtenSize size of bytes, written by one thread during processing one part-file
      */
-    public void setWrittenSize(long writtenSize);
+    void setWrittenSize(long writtenSize);
 
     /**
      * Gets size of bytes, written by one thread during procesing all part-files.
      *
      * @return size of bytes
      */
-    public long getTotalWrittenSize();
+    long getTotalWrittenSize();
 
     /**
      * Sets size of bytes, written by one thread during processing all part-files.
      *
      * @param totalWrittenSize size of bytes, written by one thread during processing all part-files
      */
-    public void setTotalWrittenSize(long totalWrittenSize);
+    void setTotalWrittenSize(long totalWrittenSize);
+
+    /**
+     * Gets file size.
+     *
+     * @return file size
+     */
+    long getFileSize();
+
+    /**
+     * Sets file size.
+     *
+     * @param fileSize size of file
+     */
+    void setFileSize(long fileSize);
 
     /**
      * Gets part-file counter.
      *
      * @return counter
      */
-    public int getCounter();
+    int getCounter();
 
     /**
      * Gets part-file.
      *
      * @return part-file
      */
-    public File getPartFile();
+    File getPartFile();
 }

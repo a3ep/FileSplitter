@@ -26,8 +26,8 @@ public class FileCalculationUtils {
      * @param files list of part-files
      * @return complete file size
      */
-    public static double getFileSize(List<File> files) {
-        double fileSize = 0;
+    public static long getFileSize(List<File> files) {
+        long fileSize = 0;
         for (File f : files) {
             fileSize += f.length();
         }
@@ -58,7 +58,7 @@ public class FileCalculationUtils {
      * @return list of part-files
      * @throws CalculationsException when occurred exception during collecting part-files
      */
-    public static List<File> getPartsList(String destination, String partNameSuffix) throws CalculationsException{
+    public static List<File> getPartsList(String destination, String partNameSuffix) throws CalculationsException {
         File specifiedFile = new File(destination);
         String destName = specifiedFile.getName();
         File file = specifiedFile.getParentFile();
@@ -71,5 +71,25 @@ public class FileCalculationUtils {
             throw new CalculationsException("Error during collecting part-files. Exception: file not found. Please check your input");
         }
         return parts;
+    }
+
+    /**
+     * Builds string with statistic data.
+     *
+     * @param threadName       name of thread
+     * @param start            start position
+     * @param end              end position
+     * @param writtenSize      written bytes size
+     * @param totalWrittenSize total written bytes size
+     * @param fileSize         the specified file size
+     * @return string with statistic data
+     */
+    public static String buildStatisticData(String threadName, long start, long end, long writtenSize, long totalWrittenSize, long fileSize) {
+        return new StringBuilder(threadName + ", ")
+                .append(start + ", ")
+                .append(end + ", ")
+                .append(writtenSize + ", ")
+                .append(totalWrittenSize + ", ")
+                .append(fileSize).toString();
     }
 }
