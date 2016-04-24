@@ -1,19 +1,16 @@
-package net.bondar.input.exceptions;
-
-
-import net.bondar.core.exceptions.ApplicationException;
+package net.bondar.new_statistic.exceptions;
 
 /**
- * Custom parsing exception.
+ * Custom statistic exception.
  */
-public class ParsingException extends ApplicationException {
+public class StatisticException extends RuntimeException{
 
     /**
      * Creates <code>ParsingException</code> instance.
      *
      * @param message the detail error message
      */
-    public ParsingException(String message) {
+    public StatisticException(String message) {
         super(message);
     }
 
@@ -23,7 +20,7 @@ public class ParsingException extends ApplicationException {
      * @param message the detail error message
      * @param cause the cause
      */
-    public ParsingException(String message, Throwable cause) {
+    public StatisticException(String message, Throwable cause) {
         super(message, cause);
     }
 }
