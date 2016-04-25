@@ -131,13 +131,15 @@ public class FileService implements IService {
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()), interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, inputCommand.name()).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
+                                inputCommand.name()).process();
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0, interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, inputCommand.name()).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
+                                inputCommand.name()).process();
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }

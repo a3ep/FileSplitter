@@ -19,9 +19,14 @@ public class SizeConverter implements IConverter {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
+     * Byte value.
+     */
+    private static final long BYTE = 1;
+
+    /**
      * Kilobyte value.
      */
-    private static final long KILOBYTE = 1024;
+    private static final long KILOBYTE = BYTE * 1024;
 
     /**
      * Megabyte value.
@@ -48,6 +53,7 @@ public class SizeConverter implements IConverter {
         units.put("GB", GIGABYTE);
         units.put("MB", MEGABYTE);
         units.put("KB", KILOBYTE);
+        units.put("B", BYTE);
     }
 
     /**
