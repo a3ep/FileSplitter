@@ -1,12 +1,14 @@
 package net.bondar.splitter.service;
 
 import net.bondar.calculations.exceptions.CalculationsException;
-import net.bondar.core.exceptions.ApplicationException;
+import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.*;
 import net.bondar.input.domain.Command;
+import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
 import net.bondar.splitter.interfaces.IService;
+import net.bondar.statistics.exceptions.StatisticException;
 import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -122,23 +124,24 @@ public class FileService implements IService {
                     case EXIT:
                         log.debug("Closing resources...");
                         br.close();
+                        log.debug("Application closed.");
                         System.exit(0);
                         break;
                     case SPLIT:
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()), interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, inputCommand.name()).process();
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0, interrupt,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService).process();
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, inputCommand.name()).process();
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }
-            } catch (ApplicationException | CalculationsException e) {
+            } catch (RunException | CalculationsException | ParsingException | StatisticException e) {
                 log.warn("File Splitter Application error. Message: " + e.getMessage() + "\n");
             } catch (IOException e) {
                 log.warn("Error while processing input. Message " + e.getMessage());

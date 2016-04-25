@@ -20,6 +20,7 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
      * @param taskFactory      task factory
      * @param closeTaskFactory closing task factory
      * @param statisticService statistic service
+     * @param commandName      name of input command
      * @return <code>FileProcessor</code> instance
      * @see {@link AbstractProcessorFactory}
      */
@@ -29,11 +30,12 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
                                          AbstractIteratorFactory iteratorFactory,
                                          AbstractTaskFactory taskFactory,
                                          AbstractCloseTaskFactory closeTaskFactory,
-                                         IStatisticService statisticService) {
+                                         IStatisticService statisticService,
+                                         String commandName) {
         if (partSize == 0) {
-            return new FileProcessor(fileDest, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService);
+            return new FileProcessor(fileDest, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
         } else {
-            return new FileProcessor(fileDest, partSize, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService);
+            return new FileProcessor(fileDest, partSize, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
         }
     }
 }

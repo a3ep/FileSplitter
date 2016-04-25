@@ -20,11 +20,11 @@ public interface IProcessor {
     File getFile();
 
     /**
-     * Gets process operation.
+     * Gets name of executing command.
      *
-     * @return current process operation
+     * @return name of executing command
      */
-    String getProcessOperation();
+    String getCommandName();
 
     /**
      * Gets process status.

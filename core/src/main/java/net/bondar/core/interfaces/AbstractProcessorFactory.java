@@ -21,6 +21,7 @@ public interface AbstractProcessorFactory {
      * @param taskFactory      task factory
      * @param closeTaskFactory close task factory
      * @param statisticService statistic service
+     * @param commandName      name of input command
      * @return concrete processor instance
      */
     FileProcessor createProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
@@ -28,5 +29,5 @@ public interface AbstractProcessorFactory {
                                   AbstractIteratorFactory iteratorFactory,
                                   AbstractTaskFactory taskFactory,
                                   AbstractCloseTaskFactory closeTaskFactory,
-                                  IStatisticService statisticService);
+                                  IStatisticService statisticService, String commandName);
 }

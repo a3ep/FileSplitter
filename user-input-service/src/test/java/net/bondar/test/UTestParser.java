@@ -1,6 +1,5 @@
 package net.bondar.test;
 
-import net.bondar.core.exceptions.ApplicationException;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.ApplicationConfigHolder;
 import net.bondar.input.exceptions.ParsingException;
@@ -13,8 +12,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Test parameter parser.
@@ -84,7 +83,7 @@ public class UTestParser {
         try {
             inputParserService.parse(arg.split(", "));
             fail("Expected incorrect arguments. Arguments: " + arg);
-        } catch (ApplicationException e) {
+        } catch (ParsingException e) {
             assertEquals(ParsingException.class, e.getClass());
         }
     }

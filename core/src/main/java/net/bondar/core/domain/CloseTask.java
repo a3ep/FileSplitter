@@ -68,7 +68,7 @@ public class CloseTask implements ICloseTask {
         log.debug("Interrupting threads...");
         interrupt.set(true);
         log.debug("Cleaning temporary files...");
-        if (processor.getProcessOperation().equals("split")) {
+        if (processor.getCommandName().equalsIgnoreCase("split")) {
             FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), parameterHolder.getValue("partSuffix")).forEach(File::delete);
         } else {
             processor.getFile().delete();

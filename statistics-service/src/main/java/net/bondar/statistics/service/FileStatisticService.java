@@ -94,7 +94,8 @@ public class FileStatisticService implements IStatisticService {
                 }
             }, delay, period);
         } catch (StatisticException e) {
-            log.error("Statistic service error. Message: " + e.getMessage());
+            log.error("Error while showing statistical information. Message: " + e.getMessage());
+            throw new StatisticException("while showing statistical information.", e);
         }
     }
 

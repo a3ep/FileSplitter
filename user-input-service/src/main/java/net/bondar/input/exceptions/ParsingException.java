@@ -1,12 +1,9 @@
 package net.bondar.input.exceptions;
 
-
-import net.bondar.core.exceptions.ApplicationException;
-
 /**
  * Custom parsing exception.
  */
-public class ParsingException extends ApplicationException {
+public class ParsingException extends RuntimeException {
 
     /**
      * Creates <code>ParsingException</code> instance.

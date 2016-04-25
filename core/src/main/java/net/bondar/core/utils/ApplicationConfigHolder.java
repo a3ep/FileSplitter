@@ -1,6 +1,6 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.exceptions.ApplicationException;
+import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.IConfigHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -27,10 +27,10 @@ public class ApplicationConfigHolder implements IConfigHolder {
     /**
      * Creates <code>ApplicationConfigHolder</code> instance.
      *
-     * @throws ApplicationException when occurred exception during loading properties
+     * @throws RunException when occurred exception during loading properties
      * @see {@link IConfigHolder}
      */
-    public ApplicationConfigHolder() throws ApplicationException {
+    public ApplicationConfigHolder() throws RunException {
         properties = new Properties();
         String propertiesFile = "config.properties";
         try {
@@ -39,11 +39,11 @@ public class ApplicationConfigHolder implements IConfigHolder {
                 properties.load(inputStream);
             } else {
                 log.warn("Property file " + propertiesFile + " not found in the classpath)");
-                throw new ApplicationException("Property file " + propertiesFile + " not found in the classpath)");
+                throw new RunException("Property file " + propertiesFile + " not found in the classpath)");
             }
         } catch (IOException e) {
             log.warn("Catches IOException, during loading properties. Message " + e.getMessage());
-            throw new ApplicationException("Error during loading properties. Exception:" + e.getMessage());
+            throw new RunException("Error during loading properties. Exception:" + e.getMessage());
         }
     }
 
