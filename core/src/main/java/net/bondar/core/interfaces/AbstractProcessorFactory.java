@@ -3,8 +3,6 @@ package net.bondar.core.interfaces;
 import net.bondar.core.utils.FileProcessor;
 import net.bondar.statistics.interfaces.IStatisticService;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Interface for creating concrete processors.
  */
@@ -15,7 +13,6 @@ public interface AbstractProcessorFactory {
      *
      * @param fileDest         specified file destination
      * @param partSize         part-file size
-     * @param interrupt        interrupt flag
      * @param parameterHolder  parameter holder
      * @param iteratorFactory  iterator factory
      * @param taskFactory      task factory
@@ -24,7 +21,7 @@ public interface AbstractProcessorFactory {
      * @param commandName      name of input command
      * @return concrete processor instance
      */
-    FileProcessor createProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
+    FileProcessor createProcessor(String fileDest, long partSize,
                                   IConfigHolder parameterHolder,
                                   AbstractIteratorFactory iteratorFactory,
                                   AbstractTaskFactory taskFactory,

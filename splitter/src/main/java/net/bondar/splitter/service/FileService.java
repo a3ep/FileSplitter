@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provides communication with user.
@@ -67,11 +66,6 @@ public class FileService implements IService {
      * Help viewer.
      */
     private final IHelpViewer helpViewer;
-
-    /**
-     * Interrupt flag.
-     */
-    private AtomicBoolean interrupt = new AtomicBoolean();
 
     /**
      * Creates <code>FileService</code> instance.
@@ -130,14 +124,14 @@ public class FileService implements IService {
                     case SPLIT:
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
-                                Long.parseLong(inputCommand.getParameters().get(1).getValue()), interrupt,
+                                Long.parseLong(inputCommand.getParameters().get(1).getValue()),
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
                                 inputCommand.name()).process();
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
-                        processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0, interrupt,
+                        processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
                                 inputCommand.name()).process();
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");

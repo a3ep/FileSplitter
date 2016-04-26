@@ -3,8 +3,6 @@ package net.bondar.core.utils;
 import net.bondar.core.interfaces.*;
 import net.bondar.statistics.interfaces.IStatisticService;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Provides creating <code>FileProcessor</code>.
  */
@@ -25,7 +23,7 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
      * @see {@link AbstractProcessorFactory}
      */
     @Override
-    public FileProcessor createProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
+    public FileProcessor createProcessor(String fileDest, long partSize,
                                          IConfigHolder parameterHolder,
                                          AbstractIteratorFactory iteratorFactory,
                                          AbstractTaskFactory taskFactory,
@@ -33,9 +31,9 @@ public class FileProcessorFactory implements AbstractProcessorFactory {
                                          IStatisticService statisticService,
                                          String commandName) {
         if (partSize == 0) {
-            return new FileProcessor(fileDest, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
+            return new FileProcessor(fileDest, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
         } else {
-            return new FileProcessor(fileDest, partSize, interrupt, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
+            return new FileProcessor(fileDest, partSize, parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, commandName);
         }
     }
 }

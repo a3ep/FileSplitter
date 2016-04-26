@@ -63,7 +63,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Flag for interrupting working threads.
      */
-    private AtomicBoolean interrupt;
+    private AtomicBoolean interrupt = new AtomicBoolean();
 
     /**
      * Process status
@@ -87,7 +87,7 @@ public class FileProcessor implements IProcessor {
      * @param commandName      name of input command
      * @see {@link IProcessor}
      */
-    public FileProcessor(String partFileDest, AtomicBoolean interrupt,
+    public FileProcessor(String partFileDest,
                          IConfigHolder parameterHolder,
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
@@ -95,7 +95,6 @@ public class FileProcessor implements IProcessor {
                          IStatisticService statisticService,
                          String commandName) {
         this.parameterHolder = parameterHolder;
-        this.interrupt = interrupt;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(parameterHolder.getValue("partSuffix"))));
         List<File> parts = FileCalculationUtils.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix"));
         this.iterator = iteratorFactory.createIterator(parts);
@@ -120,7 +119,7 @@ public class FileProcessor implements IProcessor {
      * @param commandName      name of input command
      * @see {@link IProcessor}
      */
-    public FileProcessor(String fileDest, long partSize, AtomicBoolean interrupt,
+    public FileProcessor(String fileDest, long partSize,
                          IConfigHolder parameterHolder,
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
@@ -129,7 +128,6 @@ public class FileProcessor implements IProcessor {
                          String commandName) {
         this.parameterHolder = parameterHolder;
         this.file = new File(fileDest);
-        this.interrupt = interrupt;
         this.iterator = iteratorFactory.createIterator(parameterHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
         this.statisticService = statisticService;
@@ -150,7 +148,7 @@ public class FileProcessor implements IProcessor {
             statisticService.showStatisticalInfo(0, 1000);
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                    pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticService));
+                pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticService));
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -62,11 +61,6 @@ public class ITestProcessor {
      * Parameter holder.
      */
     private static IConfigHolder paramHolder;
-
-    /**
-     * Interrupt flag.
-     */
-    private static AtomicBoolean interrupt;
 
     /**
      * Iterator factory.
@@ -110,7 +104,6 @@ public class ITestProcessor {
         expect(paramHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
         EasyMock.replay(paramHolder);
         partSuffix = paramHolder.getValue("partSuffix");
-        interrupt = new AtomicBoolean(false);
         iteratorFactory = new SplitMergeIteratorFactory();
         taskFactory = new FileTaskFactory();
         closeTaskFactory = new ApplicationCloseTaskFactory();
@@ -134,7 +127,7 @@ public class ITestProcessor {
     @Test
     public void testProcessSplit() {
         try {
-            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, interrupt, paramHolder, iteratorFactory,
+            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, paramHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticService, SPLIT_COMMAND).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
@@ -152,7 +145,7 @@ public class ITestProcessor {
     @Test
     public void testProcessMerge() {
         try {
-            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(), interrupt,
+            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(),
                     paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, MERGE_COMMAND);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
