@@ -13,7 +13,7 @@ public enum Parameter {
     /**
      * Size parameter.
      */
-    SIZE("-s", true, "", "Size of the parts (Example: 10B/KB/MB/GB/TB).");
+    SIZE("-s", true, "", "Size of the parts (Example: 10/10KB/10MB/10GB/10TB).");
 
     /**
      * Creates <code>Parameter</code> instance.

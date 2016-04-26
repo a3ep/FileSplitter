@@ -22,7 +22,7 @@ public class SplitMergeIteratorFactory implements AbstractIteratorFactory {
      * @see {@link AbstractIteratorFactory}
      */
     @Override
-    public Iterable createSplitIterator(IConfigHolder parameterHolder, long fileLength, long partLength) {
+    public Iterable createIterator(IConfigHolder parameterHolder, long fileLength, long partLength) {
         return new SplitIterator(parameterHolder, fileLength, partLength);
     }
 
@@ -34,7 +34,7 @@ public class SplitMergeIteratorFactory implements AbstractIteratorFactory {
      * @see {@link AbstractIteratorFactory}
      */
     @Override
-    public Iterable createMergeIterator(List<File> parts) {
+    public Iterable createIterator(List<File> parts) {
         return new MergeIterator(parts);
     }
 }

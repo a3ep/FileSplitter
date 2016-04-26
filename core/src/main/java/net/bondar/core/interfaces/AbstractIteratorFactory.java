@@ -15,7 +15,7 @@ public interface AbstractIteratorFactory {
      * @param partLength part-file length
      * @return concrete iterator instance
      */
-    Iterable createSplitIterator(IConfigHolder parameterHolder, long fileLength, long partLength);
+    Iterable createIterator(IConfigHolder parameterHolder, long fileLength, long partLength);
 
     /**
      * Creates concrete iterator on the basis of the list of part-files.
@@ -23,5 +23,6 @@ public interface AbstractIteratorFactory {
      * @param parts list of part-files
      * @return concrete iterator instance
      */
-    Iterable createMergeIterator(List<File> parts);
+    Iterable createIterator(List<File> parts);
 }
+

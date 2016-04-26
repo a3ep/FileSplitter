@@ -15,34 +15,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FileTaskFactory extends AbstractTaskFactory {
 
     /**
-     * Creates <code>SplitTask</code> depending on the received parameters.
+     * Creates task depending on the received parameters.
      *
+     * @param commandName current command
      * @param file        specified file
      * @param interrupt   interrupt flag
      * @param paramHolder parameter holder
      * @param iterator    split iterator
      * @param statService statistic service
-     * @return <code>SplitTask</code> task instance
+     * @return concrete task instance
      * @see {@link AbstractTask}
      */
     @Override
-    public ITask createSplitTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticService statService) {
-        return new SplitTask(file, interrupt, paramHolder, iterator, statService);
-    }
-
-    /**
-     * Creates <code>MergeTask</code> depending on the received parameters.
-     *
-     * @param file        specified file
-     * @param interrupt   interrupt flag
-     * @param paramHolder parameter holder
-     * @param iterator    merge iterator
-     * @param statService statistic service
-     * @return <code>MergeTask</code> task instance
-     * @see {@link AbstractTask}
-     */
-    @Override
-    public ITask createMergeTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticService statService) {
-        return new MergeTask(file, interrupt, paramHolder, iterator, statService);
+    public ITask createTask(String commandName, File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticService statService) {
+        if (commandName.equalsIgnoreCase("split")) {
+            return new SplitTask(file, interrupt, paramHolder, iterator, statService);
+        } else {
+            return new MergeTask(file, interrupt, paramHolder, iterator, statService);
+        }
     }
 }

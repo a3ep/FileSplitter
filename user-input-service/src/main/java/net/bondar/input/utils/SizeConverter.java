@@ -5,8 +5,8 @@ import net.bondar.input.interfaces.IConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Provides converting specified size value.
@@ -19,14 +19,9 @@ public class SizeConverter implements IConverter {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Byte value.
-     */
-    private static final long BYTE = 1;
-
-    /**
      * Kilobyte value.
      */
-    private static final long KILOBYTE = BYTE * 1024;
+    private static final long KILOBYTE = 1024;
 
     /**
      * Megabyte value.
@@ -46,14 +41,16 @@ public class SizeConverter implements IConverter {
     /**
      * Map with size units.
      */
-    private Map<String, Long> units = new HashMap<>();
+    private Map<String, Long> units = new TreeMap<>();
 
+    /**
+     * Creates <code>SizeConverter</code> instance.
+     */
     SizeConverter() {
         units.put("TB", TERABYTE);
         units.put("GB", GIGABYTE);
         units.put("MB", MEGABYTE);
         units.put("KB", KILOBYTE);
-        units.put("B", BYTE);
     }
 
     /**

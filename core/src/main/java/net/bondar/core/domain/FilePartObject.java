@@ -28,22 +28,27 @@ public class FilePartObject implements IPartObject {
      * Index of the end position in a file.
      */
     private final long endPosition;
+
     /**
      * Part counter.
      */
     private final int counter;
+
     /**
      * Part-file.
      */
     private final File partFile;
+
     /**
      * Size of bytes, written by one thread during processing one part-file.
      */
     private long writtenSize;
+
     /**
      * Size of bytes, written by one thread during processing all part-files.
      */
     private long totalWrittenSize;
+
     /**
      * Size of file.
      */

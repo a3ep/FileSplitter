@@ -18,7 +18,7 @@ public class RunException extends RuntimeException {
      * Creates <code>RunException</code> instance.
      *
      * @param message the detail error message
-     * @param cause the cause
+     * @param cause   the cause
      */
     public RunException(String message, Throwable cause) {
         super(message, cause);

@@ -15,11 +15,6 @@ import java.util.Properties;
 public class ApplicationConfigHolder implements IConfigHolder {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * Application properties.
      */
     private Properties properties;
@@ -33,6 +28,7 @@ public class ApplicationConfigHolder implements IConfigHolder {
     public ApplicationConfigHolder() throws RunException {
         properties = new Properties();
         String propertiesFile = "config.properties";
+        Logger log = LogManager.getLogger(getClass());
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propertiesFile);
             if (inputStream != null) {
