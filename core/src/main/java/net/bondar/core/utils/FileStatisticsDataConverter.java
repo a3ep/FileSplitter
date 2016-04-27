@@ -19,11 +19,6 @@ import java.util.Map;
 public class FileStatisticsDataConverter implements IStatisticsDataConverter {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * Statistics holder.
      */
     private final IStatisticsHolder holder;
@@ -40,17 +35,9 @@ public class FileStatisticsDataConverter implements IStatisticsDataConverter {
     @Override
     public IParameterObject convert() throws StatisticsException {
         Map<String, IStatObject> records = holder.getAllRecords();
-        try {
-            while (records.isEmpty()) {
-                Thread.sleep(20);
-            }
-            return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
-                    StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records),
-                    StatisticsCalculationUtils.calculateCurrentVolumesByParts(FileStatisticsParameter.PART_WRITTEN, records),
-                    StatisticsCalculationUtils.calculateTotalVolumesByParts(FileStatisticsParameter.PART_SIZE, records));
-        } catch (InterruptedException e) {
-            log.error("Error while waiting for statistical data. MessageL: " + e.getMessage());
-            throw new StatisticsException("Error while waiting for statistical data.", e);
-        }
+        return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
+                StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records),
+                StatisticsCalculationUtils.calculateCurrentVolumesByParts(FileStatisticsParameter.PART_WRITTEN, records),
+                StatisticsCalculationUtils.calculateTotalVolumesByParts(FileStatisticsParameter.PART_SIZE, records));
     }
 }

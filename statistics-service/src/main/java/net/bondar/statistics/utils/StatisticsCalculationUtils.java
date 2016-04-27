@@ -35,11 +35,6 @@ public class StatisticsCalculationUtils {
      * @return total volume of work
      */
     public static double calculateTotalVolume(IStatisticsParameter parameter, Map<String, IStatObject> recordsMap) {
-//        double totalSize = 0;
-//        for (IStatObject object : recordsMap.values()) {
-//            totalSize = object.getParameterByName(parameter);
-//            break;
-//        }
         return (double) recordsMap.entrySet().stream().map(entry -> entry.getValue().getParameterByName(parameter)).findFirst().get();
     }
 

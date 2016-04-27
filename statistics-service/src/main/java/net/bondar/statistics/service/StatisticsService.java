@@ -16,6 +16,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class StatisticsService implements IStatisticsService {
 
     /**
+     * Statistics thread name.
+     */
+    private static final String THREAD_NAME = "StatisticsThread";
+
+    /**
      * Logger.
      */
     private final Logger log = LogManager.getLogger(getClass());
@@ -54,7 +59,7 @@ public class StatisticsService implements IStatisticsService {
                 log.error("Error while showing statistical data. Message: " + e.getMessage());
                 throw new StatisticsException("Error while showing statistical data.", e);
             }
-        }, "StatThread");
+        }, THREAD_NAME);
         statThread.setDaemon(true);
         statThread.start();
     }
