@@ -1,8 +1,8 @@
-package net.bondar.statistics.utils;
+package net.bondar.statistics.utils.simple;
 
 import net.bondar.statistics.interfaces.IParameterObject;
-import net.bondar.statistics.interfaces.IStatisticsCalculator;
-import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.interfaces.ISimpleStatisticsCalculator;
+import net.bondar.statistics.interfaces.client.ISimpleStatisticsDataConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides calculation of statistical data.
+ * Provides calculation of simple statistical data.
  */
-public class StatisticsCalculator implements IStatisticsCalculator {
+public class SimpleStatisticsCalculator implements ISimpleStatisticsCalculator {
 
     /**
      * Logger.
@@ -22,14 +22,14 @@ public class StatisticsCalculator implements IStatisticsCalculator {
     /**
      * Statistics converter.
      */
-    private final IStatisticsDataConverter converter;
+    private final ISimpleStatisticsDataConverter converter;
 
     /**
-     * Creates <code>StatisticsCalculator</code> instance.
+     * Creates <code>AdvancedStatisticsCalculator</code> instance.
      *
      * @param converter statistics data converter
      */
-    public StatisticsCalculator(IStatisticsDataConverter converter) {
+    public SimpleStatisticsCalculator(ISimpleStatisticsDataConverter converter) {
         this.converter = converter;
     }
 
@@ -39,9 +39,6 @@ public class StatisticsCalculator implements IStatisticsCalculator {
         IParameterObject parameterObject = converter.convert();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
-        for (int i = 0; i < parameterObject.getTotalVolumesByParts().size(); i++) {
-            result.add(parameterObject.getCurrentVolumesByParts().get(i) / parameterObject.getTotalVolumesByParts().get(i));
-        }
         result.add(parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
         log.debug("Finish calculating statistical information: " + result.toString());
         return result;

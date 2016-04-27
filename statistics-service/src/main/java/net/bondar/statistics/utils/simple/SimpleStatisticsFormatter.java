@@ -1,22 +1,20 @@
-package net.bondar.statistics.utils;
+package net.bondar.statistics.utils.simple;
 
 import net.bondar.statistics.domain.DelimiterFormat;
 import net.bondar.statistics.domain.ProgressFormat;
 import net.bondar.statistics.domain.TimerFormat;
-import net.bondar.statistics.interfaces.IStatisticsCalculator;
-import net.bondar.statistics.interfaces.IStatisticsFormatter;
+import net.bondar.statistics.interfaces.ISimpleStatisticsCalculator;
+import net.bondar.statistics.interfaces.ISimpleStatisticsFormatter;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Provides formatting of statistical data.
+ * Provides formatting of simple statistical data.
  */
-public class StatisticsFormatter implements IStatisticsFormatter {
+public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
 
     /**
      * Logger.
@@ -60,10 +58,10 @@ public class StatisticsFormatter implements IStatisticsFormatter {
     /**
      * Statistics calculator.
      */
-    private final IStatisticsCalculator calculator;
+    private final ISimpleStatisticsCalculator calculator;
 
     /**
-     * Creates <code>StatisticsFormatter</code> instance.
+     * Creates <code>AdvancedStatisticsFormatter</code> instance.
      *
      * @param totalProgressDescription description for total progress value
      * @param timerDescription         description for timer value
@@ -74,14 +72,14 @@ public class StatisticsFormatter implements IStatisticsFormatter {
      * @param holder                   statistics holder
      * @param calculator               statistics calculator
      */
-    public StatisticsFormatter(String totalProgressDescription,
-                               String timerDescription,
-                               DelimiterFormat outerDelimiter,
-                               DelimiterFormat innerDelimiter,
-                               ProgressFormat progressFormat,
-                               TimerFormat timerFormat,
-                               IStatisticsHolder holder,
-                               IStatisticsCalculator calculator) {
+    public SimpleStatisticsFormatter(String totalProgressDescription,
+                                     String timerDescription,
+                                     DelimiterFormat outerDelimiter,
+                                     DelimiterFormat innerDelimiter,
+                                     ProgressFormat progressFormat,
+                                     TimerFormat timerFormat,
+                                     IStatisticsHolder holder,
+                                     ISimpleStatisticsCalculator calculator) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;
@@ -95,16 +93,10 @@ public class StatisticsFormatter implements IStatisticsFormatter {
     @Override
     public String format() {
         List<Double> data = calculator.calculate();
-        List<String> listOfIds = new ArrayList<>(holder.getAllRecordsIds());
-        Collections.sort(listOfIds);
         log.debug("Start formatting statistical data.");
         StringBuilder builder = new StringBuilder(totalProgressDescription)
-                .append(" " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0)) + outerDelimiter.getValue() + " ");
-        for (int i = 0; i < listOfIds.size(); i++) {
-            builder.append(listOfIds.get(i) + " " + innerDelimiter.getValue() + " " + progressFormat.format(data.get(i))
-                    + outerDelimiter.getValue() + " ");
-        }
-        builder.append(timerDescription + " " + innerDelimiter.getValue() + " " + timerFormat.format(data.get(data.size() - 1)));
+                .append(" " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0)) + outerDelimiter.getValue() + " ")
+                .append(timerDescription + " " + innerDelimiter.getValue() + " " + timerFormat.format(data.get(data.size() - 1)));
         log.debug("Finish formatting statistical data.");
         return builder.toString();
     }

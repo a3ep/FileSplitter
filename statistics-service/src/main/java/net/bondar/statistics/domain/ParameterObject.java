@@ -2,6 +2,7 @@ package net.bondar.statistics.domain;
 
 import net.bondar.statistics.interfaces.IParameterObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +43,19 @@ public class ParameterObject implements IParameterObject {
         this.totalVolume = totalVolume;
         this.currentVolumesByParts = currentVolumesByParts;
         this.totalVolumesByParts = totalVolumesByParts;
+    }
+
+    /**
+     * Creates <code>ParameterObject</code> instance.
+     *
+     * @param currentVolume current volume of performed work
+     * @param totalVolume   total volume of work
+     */
+    public ParameterObject(long currentVolume, double totalVolume) {
+        this.currentVolume = currentVolume;
+        this.totalVolume = totalVolume;
+        this.currentVolumesByParts = new ArrayList<>();
+        this.totalVolumesByParts = new ArrayList<>();
     }
 
     @Override

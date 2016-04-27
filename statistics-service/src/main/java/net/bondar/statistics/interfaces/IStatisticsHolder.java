@@ -17,7 +17,7 @@ public interface IStatisticsHolder {
      * @return map with records
      * @throws StatisticsException if error occurred while waiting statistical data
      */
-    Map<String, IStatObject> getAllRecords();
+    Map<String, IStatObject> getAllRecords() throws StatisticsException;
 
     /**
      * Gets record by id

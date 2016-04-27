@@ -1,6 +1,5 @@
 package net.bondar.splitter;
 
-
 import net.bondar.core.interfaces.*;
 import net.bondar.core.utils.*;
 import net.bondar.input.interfaces.*;
@@ -11,12 +10,12 @@ import net.bondar.statistics.domain.DelimiterFormat;
 import net.bondar.statistics.domain.ProgressFormat;
 import net.bondar.statistics.domain.TimerFormat;
 import net.bondar.statistics.interfaces.*;
-import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.interfaces.client.IAdvancedStatisticsDataConverter;
 import net.bondar.statistics.service.StatisticsService;
-import net.bondar.statistics.utils.StatisticsCalculator;
-import net.bondar.statistics.utils.StatisticsFormatter;
 import net.bondar.statistics.utils.StatisticsHolder;
 import net.bondar.statistics.utils.StatisticsViewer;
+import net.bondar.statistics.utils.advanced.AdvancedStatisticsCalculator;
+import net.bondar.statistics.utils.advanced.AdvancedStatisticsFormatter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -49,9 +48,9 @@ public class Main {
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
             IStatisticsHolder statisticHolder = new StatisticsHolder();
-            IStatisticsDataConverter statisticsDataConverter = new FileStatisticsDataConverter(statisticHolder);
-            IStatisticsCalculator statisticsCalculator = new StatisticsCalculator(statisticsDataConverter);
-            IStatisticsFormatter statisticsFormatter = new StatisticsFormatter("Total progress", "time remaining",
+            IAdvancedStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
+            IAdvancedStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator(statisticsDataConverter);
+            IAdvancedStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter("Total progress", "time remaining",
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
                     statisticHolder, statisticsCalculator);
             IStatisticsViewer statisticsViewer = new StatisticsViewer(statisticsFormatter);

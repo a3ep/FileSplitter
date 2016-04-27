@@ -26,7 +26,7 @@ public class StatisticsHolder implements IStatisticsHolder {
     private Map<String, IStatObject> records = new TreeMap<>();
 
     @Override
-    public synchronized Map<String, IStatObject> getAllRecords() {
+    public synchronized Map<String, IStatObject> getAllRecords() throws StatisticsException{
         try {
             while (records.isEmpty()) {
                 wait();
