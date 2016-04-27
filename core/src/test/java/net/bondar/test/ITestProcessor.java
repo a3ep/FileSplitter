@@ -6,8 +6,8 @@ import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.AbstractTaskFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.*;
-import net.bondar.statistics.interfaces.IStatisticService;
-import net.bondar.statistics.service.FileStatisticService;
+import net.bondar.statistics.interfaces.IStatisticsService;
+import net.bondar.statistics.service.StatisticsService;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -80,7 +80,7 @@ public class ITestProcessor {
     /**
      * Statistic service.
      */
-    private static IStatisticService statisticService;
+    private static IStatisticsService statisticsService;
 
     /**
      * File specified by user.
@@ -107,7 +107,7 @@ public class ITestProcessor {
         iteratorFactory = new SplitMergeIteratorFactory();
         taskFactory = new FileTaskFactory();
         closeTaskFactory = new ApplicationCloseTaskFactory();
-        statisticService = EasyMock.createMock(FileStatisticService.class);
+        statisticsService = EasyMock.createMock(StatisticsService.class);
     }
 
     /**
@@ -128,7 +128,7 @@ public class ITestProcessor {
     public void testProcessSplit() {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, paramHolder, iteratorFactory,
-                    taskFactory, closeTaskFactory, statisticService, SPLIT_COMMAND).process();
+                    taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
@@ -146,7 +146,7 @@ public class ITestProcessor {
     public void testProcessMerge() {
         try {
             FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(),
-                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService, MERGE_COMMAND);
+                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
             assertEquals(specifiedFile.length(), resultFile.length());

@@ -8,8 +8,8 @@ import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
 import net.bondar.splitter.interfaces.IService;
-import net.bondar.statistics.exceptions.StatisticException;
-import net.bondar.statistics.interfaces.IStatisticService;
+import net.bondar.statistics.exceptions.StatisticsException;
+import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -60,7 +60,7 @@ public class FileService implements IService {
     /**
      * Statistic service.
      */
-    private final IStatisticService statisticService;
+    private final IStatisticsService statisticsService;
 
     /**
      * Help viewer.
@@ -70,14 +70,14 @@ public class FileService implements IService {
     /**
      * Creates <code>FileService</code> instance.
      *
-     * @param parameterHolder  parameter holder
-     * @param parserService    input parser service
-     * @param processorFactory processor factory
-     * @param iteratorFactory  iterator factory
-     * @param taskFactory      task factory
-     * @param closeTaskFactory closing task factory
-     * @param statisticService statistic service
-     * @param helpViewer       help viewer
+     * @param parameterHolder   parameter holder
+     * @param parserService     input parser service
+     * @param processorFactory  processor factory
+     * @param iteratorFactory   iterator factory
+     * @param taskFactory       task factory
+     * @param closeTaskFactory  closing task factory
+     * @param statisticsService statistics service
+     * @param helpViewer        help viewer
      */
     public FileService(IConfigHolder parameterHolder,
                        IInputParserService parserService,
@@ -85,7 +85,7 @@ public class FileService implements IService {
                        AbstractIteratorFactory iteratorFactory,
                        AbstractTaskFactory taskFactory,
                        AbstractCloseTaskFactory closeTaskFactory,
-                       IStatisticService statisticService,
+                       IStatisticsService statisticsService,
                        IHelpViewer helpViewer) {
         this.parameterHolder = parameterHolder;
         this.parserService = parserService;
@@ -93,7 +93,7 @@ public class FileService implements IService {
         this.iteratorFactory = iteratorFactory;
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;
-        this.statisticService = statisticService;
+        this.statisticsService = statisticsService;
         this.helpViewer = helpViewer;
     }
 
@@ -125,19 +125,19 @@ public class FileService implements IService {
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()),
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
                                 inputCommand.name()).process();
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
                         processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
-                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticService,
+                                parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
                                 inputCommand.name()).process();
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }
-            } catch (RunException | CalculationsException | ParsingException | StatisticException e) {
+            } catch (RunException | CalculationsException | ParsingException | StatisticsException e) {
                 log.warn("File Splitter Application error. Message: " + e.getMessage() + "\n");
             } catch (IOException e) {
                 log.warn("Error while processing input. Message " + e.getMessage());

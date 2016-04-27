@@ -3,7 +3,7 @@ package net.bondar.core.domain;
 import net.bondar.core.interfaces.AbstractTask;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.statistics.interfaces.IStatisticService;
+import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -24,15 +24,15 @@ public class SplitTask extends AbstractTask {
     /**
      * Creates <code>SplitTask</code> instance.
      *
-     * @param file        specified file
-     * @param interrupt   interrupt flag
-     * @param paramHolder parameter holder
-     * @param iterator    iterator
-     * @param statService statistic service
+     * @param file              specified file
+     * @param interrupt         interrupt flag
+     * @param paramHolder       parameter holder
+     * @param iterator          iterator
+     * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public SplitTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticService statService) {
-        super(file, interrupt, paramHolder, iterator, statService);
+    public SplitTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticsService statisticsService) {
+        super(file, interrupt, paramHolder, iterator, statisticsService);
     }
 
     /**

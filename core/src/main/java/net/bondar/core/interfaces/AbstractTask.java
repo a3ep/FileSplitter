@@ -1,7 +1,8 @@
 package net.bondar.core.interfaces;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.statistics.interfaces.IStatisticService;
+import net.bondar.core.domain.FileStatObject;
+import net.bondar.statistics.interfaces.IStatisticsService;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Statistic service.
      */
-    private final IStatisticService statService;
+    private final IStatisticsService statisticsService;
 
     /**
      * Interrupt flag.
@@ -56,18 +57,18 @@ public abstract class AbstractTask implements ITask {
     /**
      * Initialises <code>AbstractTask</code> fields.
      *
-     * @param file        specified file
-     * @param interrupt   interrupt flag
-     * @param paramHolder parameter holder
-     * @param iterator    iterator
-     * @param statService statistic service
+     * @param file              specified file
+     * @param interrupt         interrupt flag
+     * @param paramHolder       parameter holder
+     * @param iterator          iterator
+     * @param statisticsService statistics service
      */
-    public AbstractTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticService statService) {
+    public AbstractTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
         this.interrupt = interrupt;
         this.paramHolder = paramHolder;
         this.iterator = iterator;
-        this.statService = statService;
+        this.statisticsService = statisticsService;
     }
 
     /**
@@ -91,9 +92,9 @@ public abstract class AbstractTask implements ITask {
             totalWritten += writtenSize;
             filePart.setWrittenSize(start - filePart.getStartPosition());
             filePart.setTotalWrittenSize(totalWritten);
-            statService.holdInformation(FileCalculationUtils.buildStatisticData(Thread.currentThread().getName(),
-                    filePart.getStartPosition(), filePart.getEndPosition(), filePart.getWrittenSize(),
-                    filePart.getTotalWrittenSize(), filePart.getFileSize()));
+            statisticsService.holdInformation(Thread.currentThread().getName(),
+                    new FileStatObject(filePart.getStartPosition(), filePart.getEndPosition(), filePart.getWrittenSize(),
+                            filePart.getTotalWrittenSize(), filePart.getFileSize()));
         }
     }
 }

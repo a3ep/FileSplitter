@@ -2,47 +2,65 @@ package net.bondar.statistics.domain;
 
 import net.bondar.statistics.interfaces.IParameterObject;
 
+import java.util.List;
+
 /**
- * Provides holding statistical information parameters.
+ * Provides holding statistical parameters.
  */
 public class ParameterObject implements IParameterObject {
 
     /**
-     * Parameter name.
+     * Current volume of performed work.
      */
-    private final String name;
+    private final long currentVolume;
 
     /**
-     * Parameter value.
+     * Total volume of work.
      */
-    private final String value;
+    private final double totalVolume;
+
+    /**
+     * List of volumes of performed works by parts
+     */
+    private final List<Long> currentVolumesByParts;
+
+    /**
+     * List of total volumes of works by parts.
+     */
+    private final List<Double> totalVolumesByParts;
 
     /**
      * Creates <code>ParameterObject</code> instance.
      *
-     * @param name  parameter name
-     * @param value parameter value
+     * @param currentVolume         current volume of performed work
+     * @param totalVolume           total volume of work
+     * @param currentVolumesByParts a list of volumes of performed works by parts
+     * @param totalVolumesByParts   a list of total volumes of works by parts.
      */
-    public ParameterObject(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public ParameterObject(long currentVolume, double totalVolume, List<Long> currentVolumesByParts, List<Double> totalVolumesByParts) {
+        this.currentVolume = currentVolume;
+        this.totalVolume = totalVolume;
+        this.currentVolumesByParts = currentVolumesByParts;
+        this.totalVolumesByParts = totalVolumesByParts;
     }
 
-    /**
-     * Gets parameter name.
-     *
-     * @return parameter name
-     */
-    public String getName() {
-        return name;
+    @Override
+    public long getCurrentVolume() {
+        return currentVolume;
     }
 
-    /**
-     * Gets parameter value.
-     *
-     * @return parameter value
-     */
-    public String getValue() {
-        return value;
+    @Override
+    public double getTotalVolume() {
+        return totalVolume;
+    }
+
+    @Override
+    public List<Long> getCurrentVolumesByParts() {
+        return currentVolumesByParts;
+    }
+
+    @Override
+    public List<Double> getTotalVolumesByParts() {
+        return totalVolumesByParts;
     }
 }

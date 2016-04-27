@@ -4,7 +4,6 @@ import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.interfaces.ICloseTask;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
-import net.bondar.statistics.interfaces.IStatisticService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -27,6 +26,11 @@ public class CloseTask implements ICloseTask {
     private AtomicBoolean interrupt;
 
     /**
+     * Flag for disabling statistical information.
+     */
+    private AtomicBoolean disableStatInfo;
+
+    /**
      * File processor.
      */
     private IProcessor processor;
@@ -37,23 +41,18 @@ public class CloseTask implements ICloseTask {
     private IConfigHolder parameterHolder;
 
     /**
-     * Statistic service.
-     */
-    private IStatisticService statisticService;
-
-    /**
      * Creates <code>CloseTask</code> instance.
      *
-     * @param interrupt        interrupt flag
-     * @param processor        file processor
-     * @param parameterHolder  parameter holder
-     * @param statisticService statistic service
+     * @param interrupt       flag for interrupting working threads
+     * @param disableStatInfo flag for disabling statistical information
+     * @param processor       file processor
+     * @param parameterHolder parameter holder
      */
-    public CloseTask(AtomicBoolean interrupt, IProcessor processor, IConfigHolder parameterHolder, IStatisticService statisticService) {
+    public CloseTask(AtomicBoolean interrupt, AtomicBoolean disableStatInfo, IProcessor processor, IConfigHolder parameterHolder) {
         this.interrupt = interrupt;
+        this.disableStatInfo = disableStatInfo;
         this.processor = processor;
         this.parameterHolder = parameterHolder;
-        this.statisticService = statisticService;
     }
 
     /**
@@ -64,9 +63,9 @@ public class CloseTask implements ICloseTask {
         if (processor.getProcessStatus().equals("OK")) {
             return;
         }
-        statisticService.hideStatisticalInfo();
         log.debug("Interrupting threads...");
         interrupt.set(true);
+        disableStatInfo.set(true);
         log.debug("Cleaning temporary files...");
         if (processor.getCommandName().equalsIgnoreCase("split")) {
             FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), parameterHolder.getValue("partSuffix")).forEach(File::delete);

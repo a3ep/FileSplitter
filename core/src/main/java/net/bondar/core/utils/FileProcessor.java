@@ -4,7 +4,7 @@ import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.*;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.statistics.interfaces.IStatisticService;
+import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -48,7 +48,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Statistic service.
      */
-    private final IStatisticService statisticService;
+    private final IStatisticsService statisticsService;
 
     /**
      * Cleans temporary files and closes application.
@@ -63,7 +63,12 @@ public class FileProcessor implements IProcessor {
     /**
      * Flag for interrupting working threads.
      */
-    private AtomicBoolean interrupt = new AtomicBoolean();
+    private AtomicBoolean interrupt = new AtomicBoolean(false);
+
+    /**
+     * Flag for disabling statistical information.
+     */
+    private AtomicBoolean disableStatInfo = new AtomicBoolean(false);
 
     /**
      * Process status
@@ -78,13 +83,13 @@ public class FileProcessor implements IProcessor {
     /**
      * Creates <code>FileProcessor</code> instance.
      *
-     * @param partFileDest     destination of the part-file
-     * @param parameterHolder  parameter holder
-     * @param iteratorFactory  iterator factory
-     * @param taskFactory      thread's task factory
-     * @param closeTaskFactory close task factory
-     * @param statisticService statistic service
-     * @param commandName      name of input command
+     * @param partFileDest      destination of the part-file
+     * @param parameterHolder   parameter holder
+     * @param iteratorFactory   iterator factory
+     * @param taskFactory       thread's task factory
+     * @param closeTaskFactory  close task factory
+     * @param statisticsService statistics service
+     * @param commandName       name of input command
      * @see {@link IProcessor}
      */
     public FileProcessor(String partFileDest,
@@ -92,16 +97,16 @@ public class FileProcessor implements IProcessor {
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractCloseTaskFactory closeTaskFactory,
-                         IStatisticService statisticService,
+                         IStatisticsService statisticsService,
                          String commandName) {
         this.parameterHolder = parameterHolder;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(parameterHolder.getValue("partSuffix"))));
         List<File> parts = FileCalculationUtils.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix"));
         this.iterator = iteratorFactory.createIterator(parts);
         this.taskFactory = taskFactory;
-        this.statisticService = statisticService;
+        this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder, statisticService));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, disableStatInfo, this, parameterHolder));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -109,14 +114,14 @@ public class FileProcessor implements IProcessor {
     /**
      * Creates <code>FileProcessor</code> instance.
      *
-     * @param fileDest         the specified file destination
-     * @param partSize         the specified size of the part-file
-     * @param parameterHolder  parameter holder
-     * @param iteratorFactory  iterator factory
-     * @param taskFactory      thread's task factory
-     * @param closeTaskFactory closing task factory
-     * @param statisticService statistic service
-     * @param commandName      name of input command
+     * @param fileDest          the specified file destination
+     * @param partSize          the specified size of the part-file
+     * @param parameterHolder   parameter holder
+     * @param iteratorFactory   iterator factory
+     * @param taskFactory       thread's task factory
+     * @param closeTaskFactory  closing task factory
+     * @param statisticsService statistics service
+     * @param commandName       name of input command
      * @see {@link IProcessor}
      */
     public FileProcessor(String fileDest, long partSize,
@@ -124,15 +129,15 @@ public class FileProcessor implements IProcessor {
                          AbstractIteratorFactory iteratorFactory,
                          AbstractTaskFactory taskFactory,
                          AbstractCloseTaskFactory closeTaskFactory,
-                         IStatisticService statisticService,
+                         IStatisticsService statisticsService,
                          String commandName) {
         this.parameterHolder = parameterHolder;
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator(parameterHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
-        this.statisticService = statisticService;
+        this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder, statisticService));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, disableStatInfo, this, parameterHolder));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -145,14 +150,14 @@ public class FileProcessor implements IProcessor {
      */
     public void process() throws RunException {
         try {
-            statisticService.showStatisticalInfo(0, 1000);
+            statisticsService.showStatInfo(disableStatInfo, 0, 1000);
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticService));
+                pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticsService));
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            statisticService.hideStatisticalInfo();
+            disableStatInfo.set(true);
             if (interrupt.get()) {
                 cleaner.join();
                 System.exit(0);

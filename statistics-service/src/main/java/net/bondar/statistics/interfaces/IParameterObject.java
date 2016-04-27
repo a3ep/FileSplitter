@@ -1,21 +1,38 @@
 package net.bondar.statistics.interfaces;
 
+import java.util.List;
+
 /**
  * Interface for class that provides holding statistical information parameters.
  */
 public interface IParameterObject {
 
     /**
-     * Gets parameter name.
+     * Gets current volume of performed work.
      *
-     * @return parameter name
+     * @return current volume of performed work
      */
-    String getName();
+    long getCurrentVolume();
 
     /**
-     * Gets parameter value.
+     * Gets total volume of work.
      *
-     * @return parameter value
+     * @return total volume of work
      */
-    String getValue();
+    double getTotalVolume();
+
+    /**
+     * Gets a list of volumes of performed works by parts.
+     *
+     * @return a list of volumes of performed works by parts
+     */
+    List<Long> getCurrentVolumesByParts();
+
+    /**
+     * Gets a list of total volumes of works by parts.
+     *
+     * @return a list of total volumes of works by parts
+     */
+    List<Double> getTotalVolumesByParts();
+
 }

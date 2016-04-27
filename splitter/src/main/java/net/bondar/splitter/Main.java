@@ -7,9 +7,16 @@ import net.bondar.input.interfaces.*;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.service.FileService;
+import net.bondar.statistics.domain.DelimiterFormat;
+import net.bondar.statistics.domain.ProgressFormat;
+import net.bondar.statistics.domain.TimerFormat;
 import net.bondar.statistics.interfaces.*;
-import net.bondar.statistics.service.FileStatisticService;
-import net.bondar.statistics.utils.*;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.service.StatisticsService;
+import net.bondar.statistics.utils.StatisticsCalculator;
+import net.bondar.statistics.utils.StatisticsFormatter;
+import net.bondar.statistics.utils.StatisticsHolder;
+import net.bondar.statistics.utils.StatisticsViewer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -41,16 +48,17 @@ public class Main {
             AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
-            IStatisticHolder statisticHolder = new FileStatisticHolder();
-            IStatisticParser statisticParser = new FileStatisticParser();
-            IStatisticConverter statisticConverter = new FileStatisticConverter();
-            IStatisticBuilder statisticBuilder = new FileStatisticBuilder();
-            IStatisticViewer statisticViewer = new FileStatisticViewer();
-            IStatisticService statisticService = new FileStatisticService(statisticHolder, statisticParser,
-                    statisticConverter, statisticBuilder, statisticViewer);
+            IStatisticsHolder statisticHolder = new StatisticsHolder();
+            IStatisticsDataConverter statisticsDataConverter = new FileStatisticsDataConverter(statisticHolder);
+            IStatisticsCalculator statisticsCalculator = new StatisticsCalculator(statisticsDataConverter);
+            IStatisticsFormatter statisticsFormatter = new StatisticsFormatter("Total progress", "time remaining",
+                    DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
+                    statisticHolder, statisticsCalculator);
+            IStatisticsViewer statisticsViewer = new StatisticsViewer(statisticsFormatter);
+            IStatisticsService statisticsService = new StatisticsService(statisticHolder, statisticsViewer);
 
             new FileService(configHolder, parserService, processorFactory, iteratorFactory, taskFactory, closableFactory,
-                    statisticService, helpViewer).run();
+                    statisticsService, helpViewer).run();
         } catch (Throwable t) {
             log.fatal("Unexpected application error. Message: " + t.getMessage());
         }
