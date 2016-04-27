@@ -35,8 +35,8 @@ public class AdvancedStatisticsCalculator implements IAdvancedStatisticsCalculat
 
     @Override
     public List<Double> calculate() {
-        List<Double> result = new ArrayList<>();
         IParameterObject parameterObject = converter.convert();
+        List<Double> result = new ArrayList<>();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
         for (int i = 0; i < parameterObject.getTotalVolumesByParts().size(); i++) {

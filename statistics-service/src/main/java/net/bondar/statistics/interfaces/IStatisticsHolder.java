@@ -12,33 +12,33 @@ import java.util.Set;
 public interface IStatisticsHolder {
 
     /**
-     * Gets all records.
+     * Gets all statistics records.
      *
-     * @return map with records
+     * @return map with statistics records
      * @throws StatisticsException if error occurred while waiting statistical data
      */
     Map<String, IStatObject> getAllRecords() throws StatisticsException;
 
     /**
-     * Gets record by id
+     * Gets statistics record by id.
      *
-     * @param id record id
-     * @return current record
+     * @param id statistics record id
+     * @return statistics record
      */
     IStatObject getRecordById(String id);
 
     /**
      * Holds record to map of records.
      *
-     * @param id         record id
-     * @param statObject object contains parameters for calculating statistical data
+     * @param id         statistics record id
+     * @param statObject <code>IStatObject</code> object contains parameters for calculating statistical data
      */
     void addRecord(String id, IStatObject statObject);
 
     /**
-     * Gets all ids of records.
+     * Gets all ids of statistics records.
      *
-     * @return set of ids of records
+     * @return set of ids of statistics records
      */
     Set<String> getAllRecordsIds();
 }
