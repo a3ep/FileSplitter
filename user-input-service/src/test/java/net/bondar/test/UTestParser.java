@@ -4,16 +4,21 @@ import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.ApplicationConfigHolder;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.*;
+import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
+import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
+import net.bondar.test.utils.*;
 import org.easymock.EasyMock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.fail;
 import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.fail;
 
 /**
  * Test parameter parser.
@@ -39,14 +44,14 @@ public class UTestParser {
         expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
         EasyMock.replay(configHolder);
         partSuffix = configHolder.getValue("partSuffix");
-        ICommandHolder commandHolder = new CommandHolder();
-        ICommandFinder commandFinder = new FileCommandFinder(commandHolder);
-        IParameterHolder parameterHolder = new ParameterHolder();
-        IParameterFinder parameterFinder = new FileParameterFinder(parameterHolder);
-        AbstractConverterFactory converterFactory = new ConverterFactory();
-        IParameterParser parameterParser = new ParameterParser(converterFactory);
-        ICommandVerifier commandVerifier = new FileCommandVerifier(configHolder);
-        inputParserService = new InputParserService(commandFinder, parameterFinder, parameterParser, commandVerifier);
+        ICommandHolder commandHolder = new CommandHolder(Arrays.asList(TestCommand.values()));
+        ICommandFinder commandFinder = new CommandFinder(commandHolder);
+        IParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(TestParameter.values()));
+        IParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
+        AbstractParameterConverterFactory converterFactory = new TestParameterConverterFactory();
+        IParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
+        ICommandVerifier commandVerifier = new TestCommandVerifier();
+        inputParserService = new InputParserService(commandFinder, parameterParser, commandVerifier);
     }
 
     /**

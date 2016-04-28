@@ -1,6 +1,6 @@
 package net.bondar.input.interfaces;
 
-import net.bondar.input.domain.Parameter;
+import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface IParameterHolder {
      *
      * @return list of parameters
      */
-    List<Parameter> getParameters();
+    List<IParameter> getParameters();
 }

@@ -1,24 +1,16 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.domain.Command;
-import net.bondar.input.domain.Parameter;
+import net.bondar.input.interfaces.ICommandHolder;
 import net.bondar.input.interfaces.IOptionsHolder;
+import net.bondar.input.interfaces.IParameterHolder;
+import net.bondar.input.interfaces.client.ICommand;
+import net.bondar.input.interfaces.client.IParameter;
 import org.apache.commons.cli.Options;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Provides holding options.
  */
 public class CliOptionsHolder implements IOptionsHolder {
-
-    /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Commands options.
@@ -32,14 +24,15 @@ public class CliOptionsHolder implements IOptionsHolder {
 
     /**
      * Creates <code>CliOptionHolder</code> instance.
+     *
+     * @param commandHolder   command holder
+     * @param parameterHolder parameter holder
      */
-    public CliOptionsHolder() {
-        List<Command> commands = Arrays.asList(Command.values());
-        for (Command command : commands) {
+    public CliOptionsHolder(ICommandHolder commandHolder, IParameterHolder parameterHolder) {
+        for (ICommand command : commandHolder.getCommands()) {
             commandOptions.addOption(command.name().toLowerCase(), false, command.getDescription());
         }
-        List<Parameter> parameters = Arrays.asList(Parameter.values());
-        for (Parameter parameter : parameters) {
+        for (IParameter parameter : parameterHolder.getParameters()) {
             parameterOptions.addOption(parameter.getIdentifier().substring(1), true, parameter.getDescription());
         }
     }
@@ -52,7 +45,6 @@ public class CliOptionsHolder implements IOptionsHolder {
      */
     @Override
     public Options getCommandOptions() {
-        log.debug("Getting command line options.");
         return commandOptions;
     }
 

@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces;
 
 
-import net.bondar.input.domain.Command;
+import net.bondar.input.interfaces.client.ICommand;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface ICommandHolder {
      *
      * @return list of commands
      */
-    List<Command> getCommands();
+    List<ICommand> getCommands();
 }

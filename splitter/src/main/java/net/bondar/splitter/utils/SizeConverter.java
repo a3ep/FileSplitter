@@ -1,7 +1,7 @@
-package net.bondar.input.utils;
+package net.bondar.splitter.utils;
 
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.IConverter;
+import net.bondar.input.interfaces.client.IConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

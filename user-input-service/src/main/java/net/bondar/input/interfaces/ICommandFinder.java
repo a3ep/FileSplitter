@@ -1,6 +1,6 @@
 package net.bondar.input.interfaces;
 
-import net.bondar.input.domain.Command;
+import net.bondar.input.interfaces.client.ICommand;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public interface ICommandFinder {
      * @param list list of arguments
      * @return current command
      */
-    Command findCommand(List<String> list);
+    ICommand findCommand(List<String> list);
 
 }

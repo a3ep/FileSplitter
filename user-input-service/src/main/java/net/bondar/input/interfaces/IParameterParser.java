@@ -1,6 +1,6 @@
 package net.bondar.input.interfaces;
 
-import net.bondar.input.domain.Parameter;
+import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ public interface IParameterParser {
     /**
      * Parses parameter value.
      *
-     * @param parameters list of parameters
+     * @param arguments list of arguments
      * @return list of parameters with correct parameter values
      */
-    List<Parameter> parseParameterValue(List<Parameter> parameters);
+    List<IParameter> parse(List<String> arguments);
 }

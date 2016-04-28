@@ -1,8 +1,9 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.domain.Parameter;
-import net.bondar.input.interfaces.AbstractConverterFactory;
+import net.bondar.input.interfaces.IParameterFinder;
 import net.bondar.input.interfaces.IParameterParser;
+import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
+import net.bondar.input.interfaces.client.IParameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -19,31 +20,39 @@ public class ParameterParser implements IParameterParser {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
+     * Parameter finder.
+     */
+    private final IParameterFinder parameterFinder;
+
+    /**
      * Converter factory.
      */
-    private final AbstractConverterFactory converterFactory;
+    private final AbstractParameterConverterFactory converterFactory;
 
     /**
      * Creates <code>ParameterParser</code> instance.
      *
+     * @param parameterFinder  parameter finder
      * @param converterFactory converter factory
      * @see {@link IParameterParser}
      */
-    public ParameterParser(AbstractConverterFactory converterFactory) {
+    public ParameterParser(IParameterFinder parameterFinder, AbstractParameterConverterFactory converterFactory) {
+        this.parameterFinder = parameterFinder;
         this.converterFactory = converterFactory;
     }
 
     /**
      * Parses parameter value.
      *
-     * @param parameters list of parameters
+     * @param arguments list of arguments
      * @return list of parameters with correct parameter values
      * @see {@link IParameterParser}
      */
     @Override
-    public List<Parameter> parseParameterValue(List<Parameter> parameters) {
+    public List<IParameter> parse(List<String> arguments) {
+        List<IParameter> parameters = parameterFinder.find(arguments);
         log.debug("Parsing parameter values.");
-        parameters.stream().filter(Parameter::isParsable).forEach(parameter -> {
+        parameters.stream().filter(IParameter::isParsable).forEach(parameter -> {
             log.debug("Found parsable parameter: " + parameter.name());
             parameter.setValue(converterFactory.createConverter(parameter).convert(parameter.getValue()));
         });

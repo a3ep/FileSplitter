@@ -1,4 +1,7 @@
-package net.bondar.input.domain;
+package net.bondar.test.utils;
+
+import net.bondar.input.interfaces.client.ICommand;
+import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +9,7 @@ import java.util.List;
 /**
  * Contains user input commands.
  */
-public enum Command {
+public enum TestCommand implements ICommand {
 
     /**
      * Exit command.
@@ -34,7 +37,7 @@ public enum Command {
      * @param parametric identifies contains parameters
      * @param parameters list of parameters
      */
-    Command(boolean parametric, List<Parameter> parameters, String description) {
+    TestCommand(boolean parametric, List<IParameter> parameters, String description) {
         this.parametric = parametric;
         this.parameters = parameters;
         this.description = description;
@@ -45,43 +48,27 @@ public enum Command {
      *
      * @param parametric identifies contains parameters
      */
-    Command(boolean parametric, String description) {
+    TestCommand(boolean parametric, String description) {
         this.parametric = parametric;
         this.description = description;
     }
 
-    /**
-     * Gets parametric flag.
-     *
-     * @return parametric flag
-     */
+    @Override
     public boolean isParametric() {
         return parametric;
     }
 
-    /**
-     * Gets parameters.
-     *
-     * @return list of parameters
-     */
-    public List<Parameter> getParameters() {
+    @Override
+    public List<IParameter> getParameters() {
         return parameters;
     }
 
-    /**
-     * Sets parameters.
-     *
-     * @param parameters setting list of patameters
-     */
-    public void setParameters(List<Parameter> parameters) {
+    @Override
+    public void setParameters(List<IParameter> parameters) {
         this.parameters = parameters;
     }
 
-    /**
-     * Gets command description.
-     *
-     * @return command description
-     */
+    @Override
     public String getDescription() {
         return description;
     }
@@ -94,7 +81,7 @@ public enum Command {
     /**
      * List of parameters.
      */
-    private List<Parameter> parameters = new ArrayList<>();
+    private List<IParameter> parameters = new ArrayList<>();
 
     /**
      * Command description.

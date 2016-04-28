@@ -1,9 +1,9 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.domain.Parameter;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IParameterFinder;
 import net.bondar.input.interfaces.IParameterHolder;
+import net.bondar.input.interfaces.client.IParameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides finding file parameters.
+ * Provides finding parameters.
  */
-public class FileParameterFinder implements IParameterFinder {
+public class ParameterFinder implements IParameterFinder {
 
     /**
      * Logger.
@@ -26,30 +26,30 @@ public class FileParameterFinder implements IParameterFinder {
     private final IParameterHolder parameterHolder;
 
     /**
-     * Creates <code>FileParameterFinder</code> instance.
+     * Creates <code>ParameterFinder</code> instance.
      *
      * @param parameterHolder parameter holder
      */
-    public FileParameterFinder(IParameterHolder parameterHolder) {
+    public ParameterFinder(IParameterHolder parameterHolder) {
         this.parameterHolder = parameterHolder;
     }
 
     /**
      * Finds parameters in the specified array of strings.
      *
-     * @param list specified array of strings
+     * @param arguments list of arguments
      * @return list of parameters
      * @throws ParsingException if parameters are not found
      * @see {@link IParameterHolder}
      */
     @Override
-    public List<Parameter> findParameters(List<String> list) throws ParsingException {
-        List<Parameter> result = new ArrayList<>();
-        parameterHolder.getParameters().stream().filter(parameter -> list.contains(parameter.getIdentifier())).forEach(parameter -> {
+    public List<IParameter> find(List<String> arguments) throws ParsingException {
+        List<IParameter> result = new ArrayList<>();
+        parameterHolder.getParameters().stream().filter(parameter -> arguments.contains(parameter.getIdentifier())).forEach(parameter -> {
             log.debug("Found parameter: " + parameter.name());
-            int parameterIndex = list.indexOf(parameter.getIdentifier());
-            if (parameterIndex < list.size() - 1) {
-                parameter.setValue(list.get(parameterIndex + 1));
+            int parameterIndex = arguments.indexOf(parameter.getIdentifier());
+            if (parameterIndex < arguments.size() - 1) {
+                parameter.setValue(arguments.get(parameterIndex + 1));
             }
             log.debug("Parameter " + parameter.name() + " added to list of parameters.");
             result.add(parameter);
@@ -58,6 +58,6 @@ public class FileParameterFinder implements IParameterFinder {
             return result;
         }
         log.error("Error while finding parameters. Parameters not found.");
-        throw new ParsingException("Error while finding parameters in " + list.toString() + ". Parameters not found.");
+        throw new ParsingException("Error while finding parameters in " + arguments.toString() + ". Parameters not found.");
     }
 }

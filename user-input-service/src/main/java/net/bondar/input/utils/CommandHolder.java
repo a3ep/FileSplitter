@@ -1,11 +1,8 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.domain.Command;
 import net.bondar.input.interfaces.ICommandHolder;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import net.bondar.input.interfaces.client.ICommand;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,14 +11,18 @@ import java.util.List;
 public class CommandHolder implements ICommandHolder {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * List of commands.
      */
-    private final List<Command> commands = Arrays.asList(Command.values());
+    private final List<ICommand> commands;
+
+    /**
+     * Creates <code>CommandHolder</code> instance.
+     *
+     * @param commands list of commands
+     */
+    public CommandHolder(List<ICommand> commands) {
+        this.commands = commands;
+    }
 
     /**
      * Gets list of commands.
@@ -30,7 +31,7 @@ public class CommandHolder implements ICommandHolder {
      * @see {@link ICommandHolder}
      */
     @Override
-    public List<Command> getCommands() {
+    public List<ICommand> getCommands() {
         return commands;
     }
 }

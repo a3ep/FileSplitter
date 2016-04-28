@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces;
 
 
-import net.bondar.input.domain.Command;
+import net.bondar.input.interfaces.client.ICommand;
 
 /**
  * Interface for class that provides parsing user input.
@@ -14,5 +14,5 @@ public interface IInputParserService {
      * @param args user input arguments
      * @return user input command
      */
-    Command parse(String[] args);
+    ICommand parse(String[] args);
 }

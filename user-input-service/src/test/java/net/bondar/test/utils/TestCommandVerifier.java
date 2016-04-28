@@ -1,10 +1,9 @@
-package net.bondar.input.utils;
+package net.bondar.test.utils;
 
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.input.domain.Command;
-import net.bondar.input.domain.Parameter;
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.ICommandVerifier;
+import net.bondar.input.interfaces.client.ICommand;
+import net.bondar.input.interfaces.client.ICommandVerifier;
+import net.bondar.input.interfaces.client.IParameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -15,26 +14,12 @@ import java.util.regex.Pattern;
 /**
  * Provides verifying file command's parameters.
  */
-public class FileCommandVerifier implements ICommandVerifier {
+public class TestCommandVerifier implements ICommandVerifier {
 
     /**
      * Logger.
      */
     private final Logger log = LogManager.getLogger(getClass());
-
-    /**
-     * Configurations holder.
-     */
-    private final IConfigHolder configHolder;
-
-    /**
-     * Creates <code>FileCommandVerifier</code> instance.
-     *
-     * @param configHolder configurations holder
-     */
-    public FileCommandVerifier(IConfigHolder configHolder) {
-        this.configHolder = configHolder;
-    }
 
     /**
      * Verifies current file command's parameters.
@@ -45,18 +30,18 @@ public class FileCommandVerifier implements ICommandVerifier {
      * @see {@link ICommandVerifier}
      */
     @Override
-    public boolean verify(Command command) throws ParsingException {
+    public boolean verify(ICommand command) throws ParsingException {
         log.debug("Start verifying parameters. Current command: " + command.name());
-        List<Parameter> parameters = command.getParameters();
-        for (Parameter parameter : parameters) {
-            if (parameter.equals(Parameter.PATH)) {
+        List<IParameter> parameters = command.getParameters();
+        for (IParameter parameter : parameters) {
+            if (parameter.equals(TestParameter.PATH)) {
                 Pattern p = Pattern.compile("^[A-Za-z0-9./_]+");
                 Matcher m = p.matcher(parameter.getValue());
                 if (!m.matches()) {
                     log.error("Error while verifying parameter: " + parameter.getValue());
                     throw new ParsingException("Error while verifying parameter: " + parameter.getValue());
                 }
-            } else if (parameter.equals(Parameter.SIZE)) {
+            } else if (parameter.equals(TestParameter.SIZE)) {
                 Pattern p = Pattern.compile("^[0-9]+");
                 Matcher m = p.matcher(parameter.getValue());
                 if (!m.matches()) {

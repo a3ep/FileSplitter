@@ -1,9 +1,11 @@
-package net.bondar.input.domain;
+package net.bondar.splitter.domain;
+
+import net.bondar.input.interfaces.client.IParameter;
 
 /**
  * Contains user input parameters.
  */
-public enum Parameter {
+public enum Parameter implements IParameter {
 
     /**
      * Path parameter.
@@ -29,47 +31,27 @@ public enum Parameter {
         this.description = description;
     }
 
-    /**
-     * Gets parameter identifier.
-     *
-     * @return parameter identifier
-     */
+    @Override
     public String getIdentifier() {
         return identifier;
     }
 
-    /**
-     * Gets parsable flag.
-     *
-     * @return parsable flag
-     */
+    @Override
     public boolean isParsable() {
         return parsable;
     }
 
-    /**
-     * Gets parameter value.
-     *
-     * @return current value
-     */
+    @Override
     public String getValue() {
         return value;
     }
 
-    /**
-     * Sets parameter value.
-     *
-     * @param value setting value
-     */
+    @Override
     public void setValue(String value) {
         this.value = value;
     }
 
-    /**
-     * Gets parameter description.
-     *
-     * @return parameter description
-     */
+    @Override
     public String getDescription() {
         return description;
     }

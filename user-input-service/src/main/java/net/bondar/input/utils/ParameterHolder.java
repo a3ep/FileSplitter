@@ -1,12 +1,9 @@
 package net.bondar.input.utils;
 
 
-import net.bondar.input.domain.Parameter;
 import net.bondar.input.interfaces.IParameterHolder;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import net.bondar.input.interfaces.client.IParameter;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,14 +12,18 @@ import java.util.List;
 public class ParameterHolder implements IParameterHolder {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * List of parameters.
      */
-    private final List<Parameter> parameters = Arrays.asList(Parameter.values());
+    private final List<IParameter> parameters;
+
+    /**
+     * Creates <code>ParameterHolder</code> instance.
+     *
+     * @param parameters list of parameters
+     */
+    public ParameterHolder(List<IParameter> parameters) {
+        this.parameters = parameters;
+    }
 
     /**
      * Gets list of parameters.
@@ -31,7 +32,7 @@ public class ParameterHolder implements IParameterHolder {
      * @see {@link IParameterHolder}
      */
     @Override
-    public List<Parameter> getParameters() {
+    public List<IParameter> getParameters() {
         return parameters;
     }
 }

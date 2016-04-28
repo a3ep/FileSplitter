@@ -1,6 +1,6 @@
 package net.bondar.input.interfaces;
 
-import net.bondar.input.domain.Parameter;
+import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.List;
 
@@ -12,8 +12,9 @@ public interface IParameterFinder {
     /**
      * Finds parameters.
      *
-     * @param list list of arguments
+     * @param arguments list of arguments
      * @return list of current parameters
      */
-    List<Parameter> findParameters(List<String> list);
+    List<IParameter> find(List<String> arguments);
+
 }

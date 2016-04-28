@@ -1,9 +1,12 @@
 package net.bondar.input.service;
 
 
-import net.bondar.input.domain.Command;
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.*;
+import net.bondar.input.interfaces.ICommandFinder;
+import net.bondar.input.interfaces.IInputParserService;
+import net.bondar.input.interfaces.IParameterParser;
+import net.bondar.input.interfaces.client.ICommand;
+import net.bondar.input.interfaces.client.ICommandVerifier;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -26,11 +29,6 @@ public class InputParserService implements IInputParserService {
     private final ICommandFinder commandFinder;
 
     /**
-     * Parameter finder.
-     */
-    private final IParameterFinder parameterFinder;
-
-    /**
      * Parameter parser.
      */
     private final IParameterParser parameterParser;
@@ -44,15 +42,12 @@ public class InputParserService implements IInputParserService {
      * Creates <code>InputParserService</code>
      *
      * @param commandFinder   command finder
-     * @param parameterFinder parameter finder
      * @param parameterParser parameter parser
      */
     public InputParserService(ICommandFinder commandFinder,
-                              IParameterFinder parameterFinder,
                               IParameterParser parameterParser,
                               ICommandVerifier commandVerifier) {
         this.commandFinder = commandFinder;
-        this.parameterFinder = parameterFinder;
         this.parameterParser = parameterParser;
         this.commandVerifier = commandVerifier;
     }
@@ -65,15 +60,15 @@ public class InputParserService implements IInputParserService {
      * @throws ParsingException if received incorrect arguments
      * @see {@link IInputParserService}
      */
-    public Command parse(String[] args) throws ParsingException {
+    public ICommand parse(String[] args) throws ParsingException {
         log.debug("Start parsing input: " + Arrays.toString(args));
         List<String> argsList = Arrays.asList(args);
-        Command currentCommand = commandFinder.findCommand(argsList);
+        ICommand currentCommand = commandFinder.findCommand(argsList);
         if (!currentCommand.isParametric()) {
             log.debug("Finish parsing: " + Arrays.toString(args));
             return currentCommand;
         }
-        currentCommand.setParameters(parameterParser.parseParameterValue(parameterFinder.findParameters(argsList.subList(1, argsList.size()))));
+        currentCommand.setParameters(parameterParser.parse(argsList.subList(1, argsList.size())));
         if (commandVerifier.verify(currentCommand)) {
             log.debug("Finish parsing: " + Arrays.toString(args));
             return currentCommand;

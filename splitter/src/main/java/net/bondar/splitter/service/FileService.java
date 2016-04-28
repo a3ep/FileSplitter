@@ -3,10 +3,10 @@ package net.bondar.splitter.service;
 import net.bondar.calculations.exceptions.CalculationsException;
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.*;
-import net.bondar.input.domain.Command;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
+import net.bondar.splitter.domain.Command;
 import net.bondar.splitter.interfaces.IService;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsService;
@@ -110,7 +110,7 @@ public class FileService implements IService {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
                 log.debug("Introduced string -> " + input);
-                Command inputCommand = parserService.parse(input.split(" "));
+                Command inputCommand = (Command) parserService.parse(input.split(" "));
                 switch (inputCommand) {
                     case HELP:
                         helpViewer.showHelp();
