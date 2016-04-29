@@ -55,7 +55,7 @@ public class StatisticsService implements IStatisticsService {
                     viewer.showInLogs(disable);
                     Thread.sleep(period);
                 }
-                holder.getAllRecords().clear();
+                holder.cleanRecords();
             } catch (InterruptedException e) {
                 log.error("Error while showing statistical data. Message: " + e.getMessage());
                 throw new StatisticsException("Error while showing statistical data.", e);

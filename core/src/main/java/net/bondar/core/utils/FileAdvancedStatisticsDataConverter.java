@@ -9,6 +9,7 @@ import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.utils.StatisticsCalculationUtils;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Provides converting advanced file statistical data.
@@ -31,7 +32,7 @@ public class FileAdvancedStatisticsDataConverter implements IAdvancedStatisticsD
 
     @Override
     public IParameterObject convert() {
-        Map<String, IStatObject> records = holder.getAllRecords();
+        Map<String, IStatObject> records = new TreeMap<>(holder.getAllRecords());
         return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records),
                 StatisticsCalculationUtils.calculateCurrentVolumesByParts(FileStatisticsParameter.PART_WRITTEN, records),

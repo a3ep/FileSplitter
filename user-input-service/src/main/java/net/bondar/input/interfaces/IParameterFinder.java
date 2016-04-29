@@ -16,5 +16,4 @@ public interface IParameterFinder {
      * @return list of current parameters
      */
     List<IParameter> find(List<String> arguments);
-
 }

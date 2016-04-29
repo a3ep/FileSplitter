@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces.client;
 
 /**
- * Interface for a class contains parameters.
+ * Interface for a enum contains parameters.
  */
 public interface IParameter {
 

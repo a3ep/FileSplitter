@@ -37,6 +37,16 @@ public class Main {
      */
     private static final Logger log = LogManager.getLogger(Main.class);
 
+    /**
+     * String with progress description.
+     */
+    private static final String PROGRESS_DESCRIPTION = "Total progress";
+
+    /**
+     * String with timer description.
+     */
+    private static final String TIMER_DESCRIPTION = "time remaining";
+
     public static void main(String[] args) {
         try {
             IConfigHolder configHolder = new ApplicationConfigHolder();
@@ -58,7 +68,7 @@ public class Main {
             IStatisticsHolder statisticHolder = new StatisticsHolder();
             IAdvancedStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
             IAdvancedStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator(statisticsDataConverter);
-            IAdvancedStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter("Total progress", "time remaining",
+            IAdvancedStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
                     statisticHolder, statisticsCalculator);
             IStatisticsViewer statisticsViewer = new StatisticsViewer(statisticsFormatter);

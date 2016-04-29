@@ -5,7 +5,6 @@ import net.bondar.statistics.domain.ProgressFormat;
 import net.bondar.statistics.domain.TimerFormat;
 import net.bondar.statistics.interfaces.ISimpleStatisticsCalculator;
 import net.bondar.statistics.interfaces.ISimpleStatisticsFormatter;
-import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -15,11 +14,6 @@ import java.util.List;
  * Provides formatting of simple statistical data.
  */
 public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
-
-    /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Description for total progress value.
@@ -51,11 +45,6 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
     private final TimerFormat timerFormat;
 
     /**
-     * Statistics holder.
-     */
-    private final IStatisticsHolder holder;
-
-    /**
      * Statistics calculator.
      */
     private final ISimpleStatisticsCalculator calculator;
@@ -69,7 +58,6 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
      * @param innerDelimiter           delimiter between description and value
      * @param progressFormat           format for progress
      * @param timerFormat              format for timer
-     * @param holder                   statistics holder
      * @param calculator               statistics calculator
      */
     public SimpleStatisticsFormatter(String totalProgressDescription,
@@ -78,7 +66,6 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
                                      DelimiterFormat innerDelimiter,
                                      ProgressFormat progressFormat,
                                      TimerFormat timerFormat,
-                                     IStatisticsHolder holder,
                                      ISimpleStatisticsCalculator calculator) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
@@ -86,18 +73,14 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
         this.innerDelimiter = innerDelimiter;
         this.progressFormat = progressFormat;
         this.timerFormat = timerFormat;
-        this.holder = holder;
         this.calculator = calculator;
     }
 
     @Override
     public String format() {
         List<Double> data = calculator.calculate();
-        log.debug("Start formatting statistical data.");
-        StringBuilder builder = new StringBuilder(totalProgressDescription)
-                .append(" " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0)) + outerDelimiter.getValue() + " ")
-                .append(timerDescription + " " + innerDelimiter.getValue() + " " + timerFormat.format(data.get(data.size() - 1)));
-        log.debug("Finish formatting statistical data.");
-        return builder.toString();
+        return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0))
+                + outerDelimiter.getValue() + " " + timerDescription + " " + innerDelimiter.getValue() + " "
+                + timerFormat.format(data.get(data.size() - 1));
     }
 }

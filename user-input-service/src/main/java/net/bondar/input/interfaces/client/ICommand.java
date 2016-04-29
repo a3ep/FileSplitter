@@ -3,7 +3,7 @@ package net.bondar.input.interfaces.client;
 import java.util.List;
 
 /**
- * Interface for a class that contains commands.
+ * Interface for a enum that contains commands.
  */
 public interface ICommand {
 

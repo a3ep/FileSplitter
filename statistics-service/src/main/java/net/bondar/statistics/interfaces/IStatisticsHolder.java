@@ -41,4 +41,9 @@ public interface IStatisticsHolder {
      * @return set of ids of statistics records
      */
     Set<String> getAllRecordsIds();
+
+    /**
+     * Cleans statistics records.
+     */
+    void cleanRecords();
 }
