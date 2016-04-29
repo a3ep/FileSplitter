@@ -1,10 +1,10 @@
 package net.bondar.statistics.utils.advanced;
 
-import net.bondar.statistics.domain.DelimiterFormat;
-import net.bondar.statistics.domain.ProgressFormat;
-import net.bondar.statistics.domain.TimerFormat;
-import net.bondar.statistics.interfaces.IAdvancedStatisticsCalculator;
-import net.bondar.statistics.interfaces.IAdvancedStatisticsFormatter;
+import net.bondar.statistics.formatters.DelimiterFormat;
+import net.bondar.statistics.formatters.ProgressFormat;
+import net.bondar.statistics.formatters.TimerFormat;
+import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.interfaces.IStatisticsFormatter;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Provides formatting of advanced statistical data.
  */
-public class AdvancedStatisticsFormatter implements IAdvancedStatisticsFormatter {
+public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
 
     /**
      * Logger.
@@ -60,7 +60,7 @@ public class AdvancedStatisticsFormatter implements IAdvancedStatisticsFormatter
     /**
      * Statistics calculator.
      */
-    private final IAdvancedStatisticsCalculator calculator;
+    private final IStatisticsCalculator calculator;
 
     /**
      * Creates <code>AdvancedStatisticsFormatter</code> instance.
@@ -81,7 +81,7 @@ public class AdvancedStatisticsFormatter implements IAdvancedStatisticsFormatter
                                        ProgressFormat progressFormat,
                                        TimerFormat timerFormat,
                                        IStatisticsHolder holder,
-                                       IAdvancedStatisticsCalculator calculator) {
+                                       IStatisticsCalculator calculator) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;

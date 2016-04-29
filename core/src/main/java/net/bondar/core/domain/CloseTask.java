@@ -26,11 +26,6 @@ public class CloseTask implements ICloseTask {
     private AtomicBoolean interrupt;
 
     /**
-     * Flag for disabling statistical information.
-     */
-    private AtomicBoolean disableStatInfo;
-
-    /**
      * File processor.
      */
     private IProcessor processor;
@@ -44,13 +39,11 @@ public class CloseTask implements ICloseTask {
      * Creates <code>CloseTask</code> instance.
      *
      * @param interrupt       flag for interrupting working threads
-     * @param disableStatInfo flag for disabling statistical information
      * @param processor       file processor
      * @param parameterHolder parameter holder
      */
-    public CloseTask(AtomicBoolean interrupt, AtomicBoolean disableStatInfo, IProcessor processor, IConfigHolder parameterHolder) {
+    public CloseTask(AtomicBoolean interrupt, IProcessor processor, IConfigHolder parameterHolder) {
         this.interrupt = interrupt;
-        this.disableStatInfo = disableStatInfo;
         this.processor = processor;
         this.parameterHolder = parameterHolder;
     }
@@ -65,7 +58,6 @@ public class CloseTask implements ICloseTask {
         }
         log.debug("Interrupting threads...");
         interrupt.set(true);
-        disableStatInfo.set(true);
         log.debug("Cleaning temporary files...");
         if (processor.getCommandName().equalsIgnoreCase("split")) {
             FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), parameterHolder.getValue("partSuffix")).forEach(File::delete);

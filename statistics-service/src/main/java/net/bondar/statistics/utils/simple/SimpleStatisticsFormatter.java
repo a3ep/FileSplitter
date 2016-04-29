@@ -1,19 +1,17 @@
 package net.bondar.statistics.utils.simple;
 
-import net.bondar.statistics.domain.DelimiterFormat;
-import net.bondar.statistics.domain.ProgressFormat;
-import net.bondar.statistics.domain.TimerFormat;
-import net.bondar.statistics.interfaces.ISimpleStatisticsCalculator;
-import net.bondar.statistics.interfaces.ISimpleStatisticsFormatter;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import net.bondar.statistics.formatters.DelimiterFormat;
+import net.bondar.statistics.formatters.ProgressFormat;
+import net.bondar.statistics.formatters.TimerFormat;
+import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.interfaces.IStatisticsFormatter;
 
 import java.util.List;
 
 /**
  * Provides formatting of simple statistical data.
  */
-public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
+public class SimpleStatisticsFormatter implements IStatisticsFormatter {
 
     /**
      * Description for total progress value.
@@ -47,10 +45,10 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
     /**
      * Statistics calculator.
      */
-    private final ISimpleStatisticsCalculator calculator;
+    private final IStatisticsCalculator calculator;
 
     /**
-     * Creates <code>AdvancedStatisticsFormatter</code> instance.
+     * Creates <code>SimpleStatisticsFormatter</code> instance.
      *
      * @param totalProgressDescription description for total progress value
      * @param timerDescription         description for timer value
@@ -66,7 +64,7 @@ public class SimpleStatisticsFormatter implements ISimpleStatisticsFormatter {
                                      DelimiterFormat innerDelimiter,
                                      ProgressFormat progressFormat,
                                      TimerFormat timerFormat,
-                                     ISimpleStatisticsCalculator calculator) {
+                                     IStatisticsCalculator calculator) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;

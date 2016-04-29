@@ -17,16 +17,14 @@ public class ApplicationCloseTaskFactory implements AbstractCloseTaskFactory {
      * Creates concrete cleaning-closing task.
      *
      * @param interrupt       flag for interrupting working threads
-     * @param disableStatInfo flag for disabling statistical information
      * @param processor       file processor
      * @param parameterHolder parameter holder
      * @return <code>CloseTask</code> instance
      */
     @Override
     public ICloseTask createCloseTask(AtomicBoolean interrupt,
-                                      AtomicBoolean disableStatInfo,
                                       IProcessor processor,
                                       IConfigHolder parameterHolder) {
-        return new CloseTask(interrupt, disableStatInfo, processor, parameterHolder);
+        return new CloseTask(interrupt, processor, parameterHolder);
     }
 }

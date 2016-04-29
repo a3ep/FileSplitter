@@ -1,4 +1,4 @@
-package net.bondar.statistics.domain;
+package net.bondar.statistics.service;
 
 import net.bondar.statistics.interfaces.IParameterObject;
 
@@ -21,28 +21,20 @@ public class ParameterObject implements IParameterObject {
     private final double totalVolume;
 
     /**
-     * List of volumes of performed works by parts
+     * List of <code>ParameterObject</code>s.
      */
-    private final List<Long> currentVolumesByParts;
-
-    /**
-     * List of total volumes of works by parts.
-     */
-    private final List<Double> totalVolumesByParts;
+    private final List<ParameterObject> parameterList;
 
     /**
      * Creates <code>ParameterObject</code> instance.
      *
      * @param currentVolume         current volume of performed work
      * @param totalVolume           total volume of work
-     * @param currentVolumesByParts a list of volumes of performed works by parts
-     * @param totalVolumesByParts   a list of total volumes of works by parts.
      */
-    public ParameterObject(long currentVolume, double totalVolume, List<Long> currentVolumesByParts, List<Double> totalVolumesByParts) {
+    public ParameterObject(long currentVolume, double totalVolume, List<ParameterObject> parameterList) {
         this.currentVolume = currentVolume;
         this.totalVolume = totalVolume;
-        this.currentVolumesByParts = currentVolumesByParts;
-        this.totalVolumesByParts = totalVolumesByParts;
+        this.parameterList = parameterList;
     }
 
     /**
@@ -54,8 +46,7 @@ public class ParameterObject implements IParameterObject {
     public ParameterObject(long currentVolume, double totalVolume) {
         this.currentVolume = currentVolume;
         this.totalVolume = totalVolume;
-        this.currentVolumesByParts = new ArrayList<>();
-        this.totalVolumesByParts = new ArrayList<>();
+        this.parameterList = new ArrayList<>();
     }
 
     @Override
@@ -69,12 +60,7 @@ public class ParameterObject implements IParameterObject {
     }
 
     @Override
-    public List<Long> getCurrentVolumesByParts() {
-        return currentVolumesByParts;
-    }
-
-    @Override
-    public List<Double> getTotalVolumesByParts() {
-        return totalVolumesByParts;
+    public List<ParameterObject> getParameterList() {
+        return parameterList;
     }
 }

@@ -1,5 +1,7 @@
 package net.bondar.statistics.interfaces;
 
+import net.bondar.statistics.service.ParameterObject;
+
 import java.util.List;
 
 /**
@@ -22,17 +24,9 @@ public interface IParameterObject {
     double getTotalVolume();
 
     /**
-     * Gets a list of volumes of performed works by parts.
+     * Gets a list of <code>IParameterObject</code>s.
      *
-     * @return a list of volumes of performed works by parts
+     * @return a list of <code>IParameterObject</code>s
      */
-    List<Long> getCurrentVolumesByParts();
-
-    /**
-     * Gets a list of total volumes of works by parts.
-     *
-     * @return a list of total volumes of works by parts
-     */
-    List<Double> getTotalVolumesByParts();
-
+    List<ParameterObject> getParameterList();
 }

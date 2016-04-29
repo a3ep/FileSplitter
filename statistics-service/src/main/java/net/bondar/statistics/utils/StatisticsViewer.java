@@ -32,14 +32,12 @@ public class StatisticsViewer implements IStatisticsViewer {
     }
 
     @Override
-    public void showInLogs(AtomicBoolean disable) {
-        String info = formatter.format();
-        if (!disable.get()) log.info(info);
+    public void showInLogs() {
+        log.info(formatter.format());
     }
 
     @Override
-    public void showInConsole(AtomicBoolean disable) {
-        String info = formatter.format();
-        if (!disable.get()) System.out.println(info);
+    public void showInConsole() {
+       System.out.println(formatter.format());
     }
 }

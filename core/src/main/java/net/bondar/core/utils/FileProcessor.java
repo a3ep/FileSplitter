@@ -66,11 +66,6 @@ public class FileProcessor implements IProcessor {
     private AtomicBoolean interrupt = new AtomicBoolean(false);
 
     /**
-     * Flag for disabling statistical information.
-     */
-    private AtomicBoolean disableStatInfo = new AtomicBoolean(false);
-
-    /**
      * Process status
      */
     private String processStatus = "";
@@ -106,7 +101,7 @@ public class FileProcessor implements IProcessor {
         this.taskFactory = taskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, disableStatInfo, this, parameterHolder));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -137,7 +132,7 @@ public class FileProcessor implements IProcessor {
         this.taskFactory = taskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, disableStatInfo, this, parameterHolder));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder));
         int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
@@ -150,14 +145,14 @@ public class FileProcessor implements IProcessor {
      */
     public void process() throws RunException {
         try {
-            statisticsService.showStatInfo(disableStatInfo, 0, 1000);
+            statisticsService.showStatInfo(1000);
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticsService));
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-            disableStatInfo.set(true);
+            statisticsService.stop();
             if (interrupt.get()) {
                 cleaner.join();
                 System.exit(0);

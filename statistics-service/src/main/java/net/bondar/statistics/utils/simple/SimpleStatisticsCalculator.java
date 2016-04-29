@@ -1,8 +1,8 @@
 package net.bondar.statistics.utils.simple;
 
 import net.bondar.statistics.interfaces.IParameterObject;
-import net.bondar.statistics.interfaces.ISimpleStatisticsCalculator;
-import net.bondar.statistics.interfaces.client.ISimpleStatisticsDataConverter;
+import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Provides calculation of simple statistical data.
  */
-public class SimpleStatisticsCalculator implements ISimpleStatisticsCalculator {
+public class SimpleStatisticsCalculator implements IStatisticsCalculator {
 
     /**
      * Logger.
@@ -22,14 +22,14 @@ public class SimpleStatisticsCalculator implements ISimpleStatisticsCalculator {
     /**
      * Statistics converter.
      */
-    private final ISimpleStatisticsDataConverter converter;
+    private final IStatisticsDataConverter converter;
 
     /**
      * Creates <code>AdvancedStatisticsCalculator</code> instance.
      *
      * @param converter statistics data converter
      */
-    public SimpleStatisticsCalculator(ISimpleStatisticsDataConverter converter) {
+    public SimpleStatisticsCalculator(IStatisticsDataConverter converter) {
         this.converter = converter;
     }
 

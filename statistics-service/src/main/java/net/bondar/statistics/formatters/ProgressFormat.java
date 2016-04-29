@@ -1,20 +1,20 @@
-package net.bondar.statistics.domain;
+package net.bondar.statistics.formatters;
 
 /**
- * Contains timer formats.
+ * Contains progress formats.
  */
-public enum TimerFormat {
+public enum ProgressFormat {
 
-    SECONDS {
+    PERCENTAGE {
         @Override
         public String format(double value) {
-            return String.format("%.1f", value) + " c";
+            return (int) (value * 100) + "%";
         }
     },
-    MINUTES {
+    FRACTIONAL {
         @Override
         public String format(double value) {
-            return String.format("%.1f", value / 60) + " m";
+            return String.format("%.2f", value);
         }
     };
 

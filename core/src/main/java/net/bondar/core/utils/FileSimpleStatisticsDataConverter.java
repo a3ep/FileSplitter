@@ -1,10 +1,10 @@
 package net.bondar.core.utils;
 
 import net.bondar.core.domain.FileStatisticsParameter;
-import net.bondar.statistics.domain.ParameterObject;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.service.ParameterObject;
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
-import net.bondar.statistics.interfaces.client.ISimpleStatisticsDataConverter;
 import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.utils.StatisticsCalculationUtils;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Provides converting simple file statistical data.
  */
-public class FileSimpleStatisticsDataConverter implements ISimpleStatisticsDataConverter {
+public class FileSimpleStatisticsDataConverter implements IStatisticsDataConverter {
     /**
      * Statistics holder.
      */

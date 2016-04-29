@@ -12,11 +12,11 @@ import net.bondar.splitter.domain.Parameter;
 import net.bondar.splitter.service.FileService;
 import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;
-import net.bondar.statistics.domain.DelimiterFormat;
-import net.bondar.statistics.domain.ProgressFormat;
-import net.bondar.statistics.domain.TimerFormat;
+import net.bondar.statistics.formatters.DelimiterFormat;
+import net.bondar.statistics.formatters.ProgressFormat;
+import net.bondar.statistics.formatters.TimerFormat;
 import net.bondar.statistics.interfaces.*;
-import net.bondar.statistics.interfaces.client.IAdvancedStatisticsDataConverter;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import net.bondar.statistics.service.StatisticsService;
 import net.bondar.statistics.utils.StatisticsHolder;
 import net.bondar.statistics.utils.StatisticsViewer;
@@ -66,9 +66,9 @@ public class Main {
             AbstractTaskFactory taskFactory = new FileTaskFactory();
             AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
             IStatisticsHolder statisticHolder = new StatisticsHolder();
-            IAdvancedStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
-            IAdvancedStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator(statisticsDataConverter);
-            IAdvancedStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
+            IStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
+            IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator(statisticsDataConverter);
+            IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
                     statisticHolder, statisticsCalculator);
             IStatisticsViewer statisticsViewer = new StatisticsViewer(statisticsFormatter);

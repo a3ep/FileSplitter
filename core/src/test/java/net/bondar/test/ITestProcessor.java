@@ -6,8 +6,11 @@ import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.AbstractTaskFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.*;
-import net.bondar.statistics.interfaces.IStatisticsService;
+import net.bondar.statistics.interfaces.*;
 import net.bondar.statistics.service.StatisticsService;
+import net.bondar.statistics.utils.StatisticsHolder;
+import net.bondar.statistics.utils.StatisticsViewer;
+import net.bondar.statistics.utils.advanced.AdvancedStatisticsFormatter;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -188,7 +192,7 @@ public class ITestProcessor {
     }
 
     /**
-     * Creates pert-files for testing.
+     * Creates part-files for testing.
      *
      * @param dest part-file destination
      * @param size complete file size

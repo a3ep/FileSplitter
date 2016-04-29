@@ -1,18 +1,20 @@
 package net.bondar.statistics.utils.advanced;
 
-import net.bondar.statistics.interfaces.IAdvancedStatisticsCalculator;
 import net.bondar.statistics.interfaces.IParameterObject;
-import net.bondar.statistics.interfaces.client.IAdvancedStatisticsDataConverter;
+import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.service.ParameterObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Provides calculation of advanced statistical data.
  */
-public class AdvancedStatisticsCalculator implements IAdvancedStatisticsCalculator {
+public class AdvancedStatisticsCalculator implements IStatisticsCalculator {
 
     /**
      * Logger.
@@ -22,14 +24,14 @@ public class AdvancedStatisticsCalculator implements IAdvancedStatisticsCalculat
     /**
      * Statistics converter.
      */
-    private final IAdvancedStatisticsDataConverter converter;
+    private final IStatisticsDataConverter converter;
 
     /**
      * Creates <code>AdvancedStatisticsCalculator</code> instance.
      *
      * @param converter statistics data converter
      */
-    public AdvancedStatisticsCalculator(IAdvancedStatisticsDataConverter converter) {
+    public AdvancedStatisticsCalculator(IStatisticsDataConverter converter) {
         this.converter = converter;
     }
 
@@ -39,9 +41,7 @@ public class AdvancedStatisticsCalculator implements IAdvancedStatisticsCalculat
         List<Double> result = new ArrayList<>();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
-        for (int i = 0; i < parameterObject.getTotalVolumesByParts().size(); i++) {
-            result.add(parameterObject.getCurrentVolumesByParts().get(i) / parameterObject.getTotalVolumesByParts().get(i));
-        }
+        result.addAll(parameterObject.getParameterList().stream().map(object -> object.getCurrentVolume() / object.getTotalVolume()).collect(Collectors.toList()));
         result.add(parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
         log.debug("Finish calculating statistical information: " + result.toString());
         return result;

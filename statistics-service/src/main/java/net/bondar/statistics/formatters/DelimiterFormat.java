@@ -1,4 +1,4 @@
-package net.bondar.statistics.domain;
+package net.bondar.statistics.formatters;
 
 /**
  * Contains delimiter formats.

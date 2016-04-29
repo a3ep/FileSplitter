@@ -8,8 +8,6 @@ import net.bondar.statistics.interfaces.client.IStatObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Provides processing of statistical data.
  */
@@ -36,6 +34,11 @@ public class StatisticsService implements IStatisticsService {
     private final IStatisticsViewer viewer;
 
     /**
+     * Thread for processing showing statistical information.
+     */
+    private Thread statThread;
+
+    /**
      * Creates <code>StatisticsService</code> instance.
      *
      * @param holder statistics holder
@@ -47,18 +50,16 @@ public class StatisticsService implements IStatisticsService {
     }
 
     @Override
-    public void showStatInfo(AtomicBoolean disable, int delay, int period) throws IllegalArgumentException, IllegalStateException, NullPointerException {
-        Thread statThread = new Thread(() -> {
+    public void showStatInfo(int period) throws StatisticsException {
+        statThread = new Thread(() -> {
             try {
-                Thread.sleep(delay);
-                while (!disable.get()) {
-                    viewer.showInLogs(disable);
+                do {
+                    viewer.showInLogs();
                     Thread.sleep(period);
-                }
+                } while (!Thread.interrupted());
                 holder.cleanRecords();
             } catch (InterruptedException e) {
-                log.error("Error while showing statistical data. Message: " + e.getMessage());
-                throw new StatisticsException("Error while showing statistical data.", e);
+                log.warn("Error while showing statistical data. Message: " + e.getMessage());
             }
         }, THREAD_NAME);
         statThread.setDaemon(true);
@@ -68,5 +69,10 @@ public class StatisticsService implements IStatisticsService {
     @Override
     public void holdInformation(String id, IStatObject statObject) {
         holder.addRecord(id, statObject);
+    }
+
+    @Override
+    public void stop() {
+        statThread.interrupt();
     }
 }
