@@ -7,11 +7,15 @@ public interface IStatisticsViewer {
 
     /**
      * Shows statistical information in log.
+     *
+     * @param statInfo string with statistical information
      */
-    void showInLogs();
+    void showInLogs(String statInfo);
 
     /**
      * Shows statistical information in console.
+     *
+     * @param statInfo string with statistical information
      */
-    void showInConsole();
+    void showInConsole(String statInfo);
 }

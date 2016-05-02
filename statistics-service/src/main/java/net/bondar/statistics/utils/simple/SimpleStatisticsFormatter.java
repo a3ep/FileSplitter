@@ -43,11 +43,6 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
     private final TimerFormat timerFormat;
 
     /**
-     * Statistics calculator.
-     */
-    private final IStatisticsCalculator calculator;
-
-    /**
      * Creates <code>SimpleStatisticsFormatter</code> instance.
      *
      * @param totalProgressDescription description for total progress value
@@ -56,29 +51,25 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
      * @param innerDelimiter           delimiter between description and value
      * @param progressFormat           format for progress
      * @param timerFormat              format for timer
-     * @param calculator               statistics calculator
      */
     public SimpleStatisticsFormatter(String totalProgressDescription,
                                      String timerDescription,
                                      DelimiterFormat outerDelimiter,
                                      DelimiterFormat innerDelimiter,
                                      ProgressFormat progressFormat,
-                                     TimerFormat timerFormat,
-                                     IStatisticsCalculator calculator) {
+                                     TimerFormat timerFormat) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;
         this.innerDelimiter = innerDelimiter;
         this.progressFormat = progressFormat;
         this.timerFormat = timerFormat;
-        this.calculator = calculator;
     }
 
     @Override
-    public String format() {
-        List<Double> data = calculator.calculate();
-        return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0))
+    public String format(List<Double> dataList) {
+        return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.remove(0))
                 + outerDelimiter.getValue() + " " + timerDescription + " " + innerDelimiter.getValue() + " "
-                + timerFormat.format(data.get(data.size() - 1));
+                + timerFormat.format(dataList.get(dataList.size() - 1));
     }
 }

@@ -9,6 +9,7 @@ import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.utils.StatisticsCalculationUtils;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Provides converting simple file statistical data.
@@ -29,8 +30,10 @@ public class FileSimpleStatisticsDataConverter implements IStatisticsDataConvert
     }
 
     @Override
-    public IParameterObject convert() {
-        Map<String, IStatObject> records = holder.getAllRecords();
+    public IParameterObject convert(Map<String, IStatObject> records) {
+        while(records.isEmpty()){
+            records = new TreeMap<>(holder.getAllRecords());
+        }
         return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records));
     }

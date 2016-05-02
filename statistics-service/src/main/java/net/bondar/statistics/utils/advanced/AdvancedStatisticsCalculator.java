@@ -21,23 +21,8 @@ public class AdvancedStatisticsCalculator implements IStatisticsCalculator {
      */
     private final Logger log = LogManager.getLogger(getClass());
 
-    /**
-     * Statistics converter.
-     */
-    private final IStatisticsDataConverter converter;
-
-    /**
-     * Creates <code>AdvancedStatisticsCalculator</code> instance.
-     *
-     * @param converter statistics data converter
-     */
-    public AdvancedStatisticsCalculator(IStatisticsDataConverter converter) {
-        this.converter = converter;
-    }
-
     @Override
-    public List<Double> calculate() {
-        IParameterObject parameterObject = converter.convert();
+    public List<Double> calculate(IParameterObject parameterObject) {
         List<Double> result = new ArrayList<>();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());

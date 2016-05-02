@@ -10,7 +10,8 @@ public interface IStatisticsCalculator {
     /**
      * Calculates statistical data.
      *
+     * @param parameterObject object with statistics parameters
      * @return list of statistical data
      */
-    List<Double> calculate();
+    List<Double> calculate(IParameterObject parameterObject);
 }

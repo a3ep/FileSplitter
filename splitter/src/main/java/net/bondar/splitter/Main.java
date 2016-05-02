@@ -67,13 +67,13 @@ public class Main {
             AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
             IStatisticsHolder statisticHolder = new StatisticsHolder();
             IStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
-            IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator(statisticsDataConverter);
+            IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();
             IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
-                    statisticHolder, statisticsCalculator);
-            IStatisticsViewer statisticsViewer = new StatisticsViewer(statisticsFormatter);
-            IStatisticsService statisticsService = new StatisticsService(statisticHolder, statisticsViewer);
-
+                    statisticHolder);
+            IStatisticsViewer statisticsViewer = new StatisticsViewer();
+            IStatisticsService statisticsService = new StatisticsService(statisticHolder, statisticsDataConverter,
+                    statisticsCalculator, statisticsFormatter, statisticsViewer);
             new FileService(configHolder, parserService, processorFactory, iteratorFactory, taskFactory, closableFactory,
                     statisticsService, helpViewer).run();
         } catch (Throwable t) {

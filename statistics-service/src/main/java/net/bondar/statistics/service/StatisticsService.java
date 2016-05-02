@@ -1,10 +1,9 @@
 package net.bondar.statistics.service;
 
 import net.bondar.statistics.exceptions.StatisticsException;
-import net.bondar.statistics.interfaces.IStatisticsHolder;
-import net.bondar.statistics.interfaces.IStatisticsService;
-import net.bondar.statistics.interfaces.IStatisticsViewer;
+import net.bondar.statistics.interfaces.*;
 import net.bondar.statistics.interfaces.client.IStatObject;
+import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -29,6 +28,21 @@ public class StatisticsService implements IStatisticsService {
     private final IStatisticsHolder holder;
 
     /**
+     * Statisics data converter.
+     */
+    private final IStatisticsDataConverter dataConverter;
+
+    /**
+     * Statistics calculator.
+     */
+    private final IStatisticsCalculator calculator;
+
+    /**
+     * Statistics formatter.
+     */
+    private final IStatisticsFormatter formatter;
+
+    /**
      * Statistics viewer.
      */
     private final IStatisticsViewer viewer;
@@ -42,10 +56,20 @@ public class StatisticsService implements IStatisticsService {
      * Creates <code>StatisticsService</code> instance.
      *
      * @param holder statistics holder
+     * @param dataConverter statistics data converter
+     * @param calculator statistics calculator
+     * @param formatter statistics formatter
      * @param viewer statistics viewer
      */
-    public StatisticsService(IStatisticsHolder holder, IStatisticsViewer viewer) {
+    public StatisticsService(IStatisticsHolder holder,
+                             IStatisticsDataConverter dataConverter,
+                             IStatisticsCalculator calculator,
+                             IStatisticsFormatter formatter,
+                             IStatisticsViewer viewer) {
         this.holder = holder;
+        this.dataConverter = dataConverter;
+        this.calculator = calculator;
+        this.formatter = formatter;
         this.viewer = viewer;
     }
 
@@ -54,12 +78,12 @@ public class StatisticsService implements IStatisticsService {
         statThread = new Thread(() -> {
             try {
                 do {
-                    viewer.showInLogs();
+                    viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder.getAllRecords()))));
                     Thread.sleep(period);
                 } while (!Thread.interrupted());
-                holder.cleanRecords();
             } catch (InterruptedException e) {
-                log.warn("Error while showing statistical data. Message: " + e.getMessage());
+                holder.cleanRecords();
+//                log.warn("Error while showing statistical data. Message: " + e.getMessage());
             }
         }, THREAD_NAME);
         statThread.setDaemon(true);

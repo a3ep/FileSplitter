@@ -19,24 +19,9 @@ public class SimpleStatisticsCalculator implements IStatisticsCalculator {
      */
     private final Logger log = LogManager.getLogger(getClass());
 
-    /**
-     * Statistics converter.
-     */
-    private final IStatisticsDataConverter converter;
-
-    /**
-     * Creates <code>AdvancedStatisticsCalculator</code> instance.
-     *
-     * @param converter statistics data converter
-     */
-    public SimpleStatisticsCalculator(IStatisticsDataConverter converter) {
-        this.converter = converter;
-    }
-
     @Override
-    public List<Double> calculate() {
+    public List<Double> calculate(IParameterObject parameterObject) {
         List<Double> result = new ArrayList<>();
-        IParameterObject parameterObject = converter.convert();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
         result.add(parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());

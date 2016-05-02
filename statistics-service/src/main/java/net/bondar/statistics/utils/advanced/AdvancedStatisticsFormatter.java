@@ -3,7 +3,6 @@ package net.bondar.statistics.utils.advanced;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
-import net.bondar.statistics.interfaces.IStatisticsCalculator;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
@@ -58,11 +57,6 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
     private final IStatisticsHolder holder;
 
     /**
-     * Statistics calculator.
-     */
-    private final IStatisticsCalculator calculator;
-
-    /**
      * Creates <code>AdvancedStatisticsFormatter</code> instance.
      *
      * @param totalProgressDescription description for total progress value
@@ -72,7 +66,6 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * @param progressFormat           format for progress
      * @param timerFormat              format for timer
      * @param holder                   statistics holder
-     * @param calculator               statistics calculator
      */
     public AdvancedStatisticsFormatter(String totalProgressDescription,
                                        String timerDescription,
@@ -80,8 +73,7 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
                                        DelimiterFormat innerDelimiter,
                                        ProgressFormat progressFormat,
                                        TimerFormat timerFormat,
-                                       IStatisticsHolder holder,
-                                       IStatisticsCalculator calculator) {
+                                       IStatisticsHolder holder) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;
@@ -89,22 +81,20 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
         this.progressFormat = progressFormat;
         this.timerFormat = timerFormat;
         this.holder = holder;
-        this.calculator = calculator;
     }
 
     @Override
-    public String format() {
-        List<Double> data = calculator.calculate();
+    public String format(List<Double> dataList) {
         List<String> listOfIds = new ArrayList<>(holder.getAllRecordsIds());
         Collections.sort(listOfIds);
         log.debug("Start formatting statistical data.");
         StringBuilder builder = new StringBuilder(totalProgressDescription)
-                .append(" " + innerDelimiter.getValue() + " " + progressFormat.format(data.remove(0)) + outerDelimiter.getValue() + " ");
+                .append(" " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.remove(0)) + outerDelimiter.getValue() + " ");
         for (int i = 0; i < listOfIds.size(); i++) {
-            builder.append(listOfIds.get(i) + " " + innerDelimiter.getValue() + " " + progressFormat.format(data.get(i))
+            builder.append(listOfIds.get(i) + " " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.get(i))
                     + outerDelimiter.getValue() + " ");
         }
-        builder.append(timerDescription + " " + innerDelimiter.getValue() + " " + timerFormat.format(data.get(data.size() - 1)));
+        builder.append(timerDescription + " " + innerDelimiter.getValue() + " " + timerFormat.format(dataList.get(dataList.size() - 1)));
         log.debug("Finish formatting statistical data.");
         return builder.toString();
     }
