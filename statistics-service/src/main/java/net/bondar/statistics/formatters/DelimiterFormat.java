@@ -4,6 +4,7 @@ package net.bondar.statistics.formatters;
  * Contains delimiter formats.
  */
 public enum DelimiterFormat {
+
     DOT("."),
     COMMA(","),
     COLON(":"),

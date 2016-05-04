@@ -1,4 +1,4 @@
-package net.bondar.core.domain;
+package net.bondar.core.tasks;
 
 import net.bondar.core.interfaces.AbstractTask;
 import net.bondar.core.interfaces.IConfigHolder;

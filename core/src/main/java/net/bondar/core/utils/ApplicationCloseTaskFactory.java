@@ -1,6 +1,6 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.CloseTask;
+import net.bondar.core.tasks.CloseTask;
 import net.bondar.core.interfaces.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.ICloseTask;
 import net.bondar.core.interfaces.IConfigHolder;

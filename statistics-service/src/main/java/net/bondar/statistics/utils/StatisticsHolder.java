@@ -1,6 +1,5 @@
 package net.bondar.statistics.utils;
 
-import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import net.bondar.statistics.interfaces.client.IStatObject;
 
@@ -15,7 +14,7 @@ import java.util.TreeSet;
 public class StatisticsHolder implements IStatisticsHolder {
 
     /**
-     * Map of statistics records.
+     * Map with statistics records.
      */
     private Map<String, IStatObject> records = new TreeMap<>();
 
@@ -30,7 +29,7 @@ public class StatisticsHolder implements IStatisticsHolder {
      * @return map with statistics records
      */
     @Override
-    public synchronized Map<String, IStatObject> getAllRecords() throws StatisticsException {
+    public synchronized Map<String, IStatObject> getAllRecords() {
         recordsIds = new TreeSet<>(records.keySet());
         return records;
     }
@@ -68,7 +67,7 @@ public class StatisticsHolder implements IStatisticsHolder {
     }
 
     /**
-     * Cleans map of statistics records.
+     * Cleans map with statistics records.
      */
     @Override
     public synchronized void cleanRecords() {

@@ -31,6 +31,7 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * Description for timer value.
      */
     private final String timerDescription;
+
     /**
      * Delimiter between parts of statistical information.
      */
@@ -83,6 +84,12 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
         this.holder = holder;
     }
 
+    /**
+     * Formats statistical data.
+     *
+     * @param dataList list with statistical data
+     * @return formatted string with statistical information
+     */
     @Override
     public String format(List<Double> dataList) {
         List<String> listOfIds = new ArrayList<>(holder.getAllRecordsIds());

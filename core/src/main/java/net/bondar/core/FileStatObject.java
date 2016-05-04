@@ -1,4 +1,4 @@
-package net.bondar.core.domain;
+package net.bondar.core;
 
 import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.interfaces.client.IStatisticsParameter;

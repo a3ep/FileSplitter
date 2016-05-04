@@ -1,6 +1,5 @@
 package net.bondar.statistics.interfaces;
 
-import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.client.IStatObject;
 
 import java.util.Map;

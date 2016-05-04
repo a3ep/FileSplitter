@@ -1,6 +1,6 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.FileStatisticsParameter;
+import net.bondar.core.FileStatisticsParameter;
 import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import net.bondar.statistics.service.ParameterObject;
 import net.bondar.statistics.interfaces.IParameterObject;
@@ -15,6 +15,7 @@ import java.util.TreeMap;
  * Provides converting simple file statistical data.
  */
 public class FileSimpleStatisticsDataConverter implements IStatisticsDataConverter {
+
     /**
      * Statistics holder.
      */
@@ -29,6 +30,12 @@ public class FileSimpleStatisticsDataConverter implements IStatisticsDataConvert
         this.holder = holder;
     }
 
+    /**
+     * Converts file statistical data.
+     *
+     * @param records map with statistics records
+     * @return object contains converted statistical data
+     */
     @Override
     public IParameterObject convert(Map<String, IStatObject> records) {
         while(records.isEmpty()){

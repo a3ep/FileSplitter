@@ -3,8 +3,6 @@ package net.bondar.statistics.interfaces;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.client.IStatObject;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Interface for class that provides working with statistical information.
  */
@@ -13,7 +11,7 @@ public interface IStatisticsService {
     /**
      * Starts showing statistical information to user.
      *
-     * @param period  time in milliseconds between successive task executions.
+     * @param period time in milliseconds between showing statistical information
      * @throws StatisticsException if error occurred while showing statistical information
      */
     void showStatInfo(int period) throws StatisticsException;

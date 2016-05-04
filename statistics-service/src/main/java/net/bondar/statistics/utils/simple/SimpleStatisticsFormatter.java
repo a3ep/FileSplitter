@@ -3,7 +3,6 @@ package net.bondar.statistics.utils.simple;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
-import net.bondar.statistics.interfaces.IStatisticsCalculator;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
 
 import java.util.List;
@@ -22,6 +21,7 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
      * Description for timer value.
      */
     private final String timerDescription;
+
     /**
      * Delimiter between parts of statistical information.
      */
@@ -66,6 +66,12 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
         this.timerFormat = timerFormat;
     }
 
+    /**
+     * Formats statistical data.
+     *
+     * @param dataList list with statistical data
+     * @return formatted string with statistical information
+     */
     @Override
     public String format(List<Double> dataList) {
         return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.remove(0))

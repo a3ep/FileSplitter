@@ -2,7 +2,6 @@ package net.bondar.statistics.utils.simple;
 
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsCalculator;
-import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -19,6 +18,12 @@ public class SimpleStatisticsCalculator implements IStatisticsCalculator {
      */
     private final Logger log = LogManager.getLogger(getClass());
 
+    /**
+     * Calculates statistical data.
+     *
+     * @param parameterObject object with statistics parameters
+     * @return list with statistical data
+     */
     @Override
     public List<Double> calculate(IParameterObject parameterObject) {
         List<Double> result = new ArrayList<>();

@@ -1,6 +1,6 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.FileStatisticsParameter;
+import net.bondar.core.FileStatisticsParameter;
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import net.bondar.statistics.interfaces.client.IStatObject;
@@ -30,6 +30,12 @@ public class FileAdvancedStatisticsDataConverter implements IStatisticsDataConve
         this.holder = holder;
     }
 
+    /**
+     * Converts file statistical data.
+     *
+     * @param records map with statistics records
+     * @return object contains converted file statistical data
+     */
     @Override
     public IParameterObject convert(Map<String, IStatObject> records) {
         while (records.isEmpty()) {

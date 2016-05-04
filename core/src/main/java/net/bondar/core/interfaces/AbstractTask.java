@@ -1,7 +1,7 @@
 package net.bondar.core.interfaces;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.core.domain.FileStatObject;
+import net.bondar.core.FileStatObject;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 import java.io.File;

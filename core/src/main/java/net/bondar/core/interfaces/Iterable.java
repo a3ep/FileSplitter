@@ -1,6 +1,6 @@
 package net.bondar.core.interfaces;
 
-import net.bondar.core.domain.FilePartObject;
+import net.bondar.core.FilePartObject;
 
 /**
  * Interface for class that provides iterating.

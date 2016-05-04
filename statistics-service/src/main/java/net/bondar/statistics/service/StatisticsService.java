@@ -28,7 +28,7 @@ public class StatisticsService implements IStatisticsService {
     private final IStatisticsHolder holder;
 
     /**
-     * Statisics data converter.
+     * Statistics data converter.
      */
     private final IStatisticsDataConverter dataConverter;
 
@@ -55,11 +55,11 @@ public class StatisticsService implements IStatisticsService {
     /**
      * Creates <code>StatisticsService</code> instance.
      *
-     * @param holder statistics holder
+     * @param holder        statistics holder
      * @param dataConverter statistics data converter
-     * @param calculator statistics calculator
-     * @param formatter statistics formatter
-     * @param viewer statistics viewer
+     * @param calculator    statistics calculator
+     * @param formatter     statistics formatter
+     * @param viewer        statistics viewer
      */
     public StatisticsService(IStatisticsHolder holder,
                              IStatisticsDataConverter dataConverter,
@@ -73,6 +73,12 @@ public class StatisticsService implements IStatisticsService {
         this.viewer = viewer;
     }
 
+    /**
+     * Starts showing statistical information.
+     *
+     * @param period time in milliseconds between showing statistical information
+     * @throws StatisticsException if error occurred while showing statistical information
+     */
     @Override
     public void showStatInfo(int period) throws StatisticsException {
         statThread = new Thread(() -> {
@@ -83,18 +89,26 @@ public class StatisticsService implements IStatisticsService {
                 } while (!Thread.interrupted());
             } catch (InterruptedException e) {
                 holder.cleanRecords();
-//                log.warn("Error while showing statistical data. Message: " + e.getMessage());
             }
         }, THREAD_NAME);
         statThread.setDaemon(true);
         statThread.start();
     }
 
+    /**
+     * Holds statistical information.
+     *
+     * @param id         record id
+     * @param statObject object contains parameters for calculating statistical data
+     */
     @Override
     public void holdInformation(String id, IStatObject statObject) {
         holder.addRecord(id, statObject);
     }
 
+    /**
+     * Stops of showing statistical information.
+     */
     @Override
     public void stop() {
         statThread.interrupt();

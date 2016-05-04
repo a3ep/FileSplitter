@@ -1,7 +1,7 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.MergeTask;
-import net.bondar.core.domain.SplitTask;
+import net.bondar.core.tasks.MergeTask;
+import net.bondar.core.tasks.SplitTask;
 import net.bondar.core.interfaces.*;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.statistics.interfaces.IStatisticsService;

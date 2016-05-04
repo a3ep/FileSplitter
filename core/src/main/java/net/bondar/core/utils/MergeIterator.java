@@ -1,6 +1,6 @@
 package net.bondar.core.utils;
 
-import net.bondar.core.domain.FilePartObject;
+import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
 
 import java.io.File;
