@@ -44,12 +44,12 @@ public class SplitTask extends AbstractTask {
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
                 log.debug("Start to write: " + partFile.getName());
-                // /Set the file-pointer to the start position of partFile
+                // /Sets the file-pointer to the start position of partFile
                 sourceFile.seek(filePart.getStartPosition());
                 start = filePart.getStartPosition();
                 long finish = filePart.getEndPosition();
                 int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
-                // write data into file
+                // writes data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
                 filePart = iterator.getNext();

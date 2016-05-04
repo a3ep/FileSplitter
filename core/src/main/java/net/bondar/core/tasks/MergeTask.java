@@ -48,9 +48,9 @@ public class MergeTask extends AbstractTask {
                 start = filePart.getStartPosition();
                 long finish = filePart.getEndPosition();
                 int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
-                //Set the file-pointer to the start position of partFile
+                //Sets the file-pointer to the start position of partFile
                 outputFile.seek(start);
-                // write data into file
+                // writes data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write " + part.getName() + " into " + file.getName());
                 filePart = iterator.getNext();

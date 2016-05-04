@@ -44,7 +44,7 @@ public class UTestParser {
     @BeforeClass
     public static void setUp() {
         IConfigHolder configHolder = EasyMock.createMock(ConfigHolder.class);
-        expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
+        expect(configHolder.getValue("partSuffix")).andReturn("_part_").anyTimes();
         EasyMock.replay(configHolder);
         partSuffix = configHolder.getValue("partSuffix");
         ICommandHolder commandHolder = new CommandHolder(Arrays.asList(TestCommand.values()));

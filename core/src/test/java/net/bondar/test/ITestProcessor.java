@@ -104,17 +104,17 @@ public class ITestProcessor {
     public static void setUp() {
         // initializing processor's components
         configHolder = EasyMock.createMock(ConfigHolder.class);
-        expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
-        expect(configHolder.getValue("threadsCount")).andReturn("3").times(0, Integer.MAX_VALUE);
-        expect(configHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
-        expect(configHolder.getValue("statisticsTimer")).andReturn("1000").times(0, Integer.MAX_VALUE);
+        expect(configHolder.getValue("partSuffix")).andReturn("_part_").anyTimes();
+        expect(configHolder.getValue("threadsCount")).andReturn("3").anyTimes();
+        expect(configHolder.getValue("bufferSize")).andReturn("1048576").anyTimes();
+        expect(configHolder.getValue("statisticsTimer")).andReturn("1000").anyTimes();
         EasyMock.replay(configHolder);
         partSuffix = configHolder.getValue("partSuffix");
         iteratorFactory = new IteratorFactory();
         taskFactory = new TaskFactory();
         closeTaskFactory = new CloseTaskFactory();
         statisticsService = EasyMock.createMock(StatisticsService.class);
-        statisticsService.showStatInfo(1000);
+        statisticsService.showStatInfo(anyInt());
         expectLastCall().anyTimes();
         statisticsService.stop();
         expectLastCall().anyTimes();
