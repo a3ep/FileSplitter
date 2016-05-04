@@ -58,10 +58,10 @@ public class UTestParser {
     }
 
     /**
-     * Initializes correct testing arguments.
+     * Initializes incorrect testing arguments.
      */
     @DataProvider(name = "testParseIncorrect")
-    public Object[][] createData1() {
+    public Object[][] createIncorrectData() {
         return new Object[][]{
                 {"abc"},
                 {"split, -p, /home/test/test.txt, -s, asdasdas"},
@@ -74,7 +74,7 @@ public class UTestParser {
      * Initializes correct testing arguments.
      */
     @DataProvider(name = "testParseCorrect")
-    public Object[][] createData2() {
+    public Object[][] createCorrectData() {
         return new Object[][]{
                 {"split, -p, /test.txt, -s, 5MB"},
                 {"merge, -p, /test/test.txt" + partSuffix + "001"},

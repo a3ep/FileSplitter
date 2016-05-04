@@ -12,6 +12,16 @@ import org.apache.log4j.Logger;
 public class HelpViewer implements IHelpViewer {
 
     /**
+     * String with commands options description.
+     */
+    private static final String COMMANDS_OPTIONS_DESCRIPTION = "===FileSplitter Commands Options===";
+
+    /**
+     * String with parameters options description.
+     */
+    private static final String PARAMETERS_OPTIONS_DESCRIPTION = "===FileSplitter Parameters Options===";
+
+    /**
      * Logger.
      */
     private final Logger log = LogManager.getLogger(getClass());
@@ -44,7 +54,7 @@ public class HelpViewer implements IHelpViewer {
     @Override
     public void showHelp() {
         log.debug("Showing help.");
-        helpFormatter.printHelp("===FileSplitter Commands Options===", optionsHolder.getCommandOptions());
-        helpFormatter.printHelp("===FileSplitter Parameters Options===", optionsHolder.getParameterOptions());
+        helpFormatter.printHelp(COMMANDS_OPTIONS_DESCRIPTION, optionsHolder.getCommandOptions());
+        helpFormatter.printHelp(PARAMETERS_OPTIONS_DESCRIPTION, optionsHolder.getParameterOptions());
     }
 }
