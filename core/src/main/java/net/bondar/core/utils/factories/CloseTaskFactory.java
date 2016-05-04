@@ -1,4 +1,4 @@
-package net.bondar.core.utils;
+package net.bondar.core.utils.factories;
 
 import net.bondar.core.tasks.CloseTask;
 import net.bondar.core.interfaces.AbstractCloseTaskFactory;
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Provides creating application closable.
  */
-public class ApplicationCloseTaskFactory implements AbstractCloseTaskFactory {
+public class CloseTaskFactory implements AbstractCloseTaskFactory {
 
     /**
      * Creates concrete cleaning-closing task.

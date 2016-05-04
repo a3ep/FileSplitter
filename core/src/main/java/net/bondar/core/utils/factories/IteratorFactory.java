@@ -1,9 +1,11 @@
-package net.bondar.core.utils;
+package net.bondar.core.utils.factories;
 
 
 import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.utils.iterators.MergeIterator;
+import net.bondar.core.utils.iterators.SplitIterator;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Creates concrete file iterators.
  */
-public class SplitMergeIteratorFactory implements AbstractIteratorFactory {
+public class IteratorFactory implements AbstractIteratorFactory {
 
     /**
      * Creates <code>SplitIterator</code>.

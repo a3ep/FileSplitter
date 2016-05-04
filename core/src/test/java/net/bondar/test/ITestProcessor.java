@@ -6,11 +6,11 @@ import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.AbstractTaskFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.*;
+import net.bondar.core.utils.factories.CloseTaskFactory;
+import net.bondar.core.utils.factories.IteratorFactory;
+import net.bondar.core.utils.factories.TaskFactory;
 import net.bondar.statistics.interfaces.*;
 import net.bondar.statistics.service.StatisticsService;
-import net.bondar.statistics.utils.StatisticsHolder;
-import net.bondar.statistics.utils.StatisticsViewer;
-import net.bondar.statistics.utils.advanced.AdvancedStatisticsFormatter;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -102,15 +101,15 @@ public class ITestProcessor {
     @BeforeTest
     public static void setUp() {
         // initializing processor's components
-        paramHolder = EasyMock.createMock(ApplicationConfigHolder.class);
+        paramHolder = EasyMock.createMock(ConfigHolder.class);
         expect(paramHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
         expect(paramHolder.getValue("threadsCount")).andReturn("3").times(0, Integer.MAX_VALUE);
         expect(paramHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
         EasyMock.replay(paramHolder);
         partSuffix = paramHolder.getValue("partSuffix");
-        iteratorFactory = new SplitMergeIteratorFactory();
-        taskFactory = new FileTaskFactory();
-        closeTaskFactory = new ApplicationCloseTaskFactory();
+        iteratorFactory = new IteratorFactory();
+        taskFactory = new TaskFactory();
+        closeTaskFactory = new CloseTaskFactory();
         statisticsService = EasyMock.createMock(StatisticsService.class);
     }
 
@@ -131,7 +130,7 @@ public class ITestProcessor {
     @Test
     public void testProcessSplit() {
         try {
-            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, paramHolder, iteratorFactory,
+            new FileSplitterProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, paramHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
@@ -149,7 +148,7 @@ public class ITestProcessor {
     @Test
     public void testProcessMerge() {
         try {
-            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(),
+            FileSplitterProcessor mergeProcessor = new FileSplitterProcessor(specifiedParts.get(0).getAbsolutePath(),
                     paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();

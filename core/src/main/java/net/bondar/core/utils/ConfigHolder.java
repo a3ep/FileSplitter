@@ -12,7 +12,7 @@ import java.util.Properties;
 /**
  * Holds application configurations and parameters.
  */
-public class ApplicationConfigHolder implements IConfigHolder {
+public class ConfigHolder implements IConfigHolder {
 
     /**
      * Application properties.
@@ -20,12 +20,12 @@ public class ApplicationConfigHolder implements IConfigHolder {
     private Properties properties;
 
     /**
-     * Creates <code>ApplicationConfigHolder</code> instance.
+     * Creates <code>ConfigHolder</code> instance.
      *
      * @throws RunException when occurred exception during loading properties
      * @see {@link IConfigHolder}
      */
-    public ApplicationConfigHolder() throws RunException {
+    public ConfigHolder() throws RunException {
         properties = new Properties();
         String propertiesFile = "config.properties";
         Logger log = LogManager.getLogger(getClass());

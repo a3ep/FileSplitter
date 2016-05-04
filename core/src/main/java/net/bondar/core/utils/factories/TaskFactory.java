@@ -1,4 +1,4 @@
-package net.bondar.core.utils;
+package net.bondar.core.utils.factories;
 
 import net.bondar.core.tasks.MergeTask;
 import net.bondar.core.tasks.SplitTask;
@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Creates file tasks.
  */
-public class FileTaskFactory extends AbstractTaskFactory {
+public class TaskFactory extends AbstractTaskFactory {
 
     /**
      * Creates task depending on the received parameters.

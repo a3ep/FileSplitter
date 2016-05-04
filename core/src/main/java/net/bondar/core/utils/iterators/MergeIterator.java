@@ -1,4 +1,4 @@
-package net.bondar.core.utils;
+package net.bondar.core.utils.iterators;
 
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Provides iteration for part-files during merging process.
  */
-class MergeIterator implements Iterable {
+public class MergeIterator implements Iterable {
 
     /**
      * File part counter.
@@ -37,7 +37,7 @@ class MergeIterator implements Iterable {
      * @param parts list of part-files.
      * @see {@link Iterable}
      */
-    MergeIterator(List<File> parts) {
+    public MergeIterator(List<File> parts) {
         this.parts = parts;
         for (File f : parts) {
             completeFileSize += f.length();

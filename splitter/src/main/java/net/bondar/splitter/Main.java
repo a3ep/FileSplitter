@@ -2,6 +2,11 @@ package net.bondar.splitter;
 
 import net.bondar.core.interfaces.*;
 import net.bondar.core.utils.*;
+import net.bondar.core.utils.converters.AdvancedStatisticsDataConverter;
+import net.bondar.core.utils.factories.CloseTaskFactory;
+import net.bondar.core.utils.factories.IteratorFactory;
+import net.bondar.core.utils.factories.ProcessorFactory;
+import net.bondar.core.utils.factories.TaskFactory;
 import net.bondar.input.interfaces.*;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
 import net.bondar.input.interfaces.client.ICommandVerifier;
@@ -49,7 +54,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            IConfigHolder configHolder = new ApplicationConfigHolder();
+            IConfigHolder configHolder = new ConfigHolder();
             ICommandHolder commandHolder = new CommandHolder(Arrays.asList(Command.values()));
             ICommandFinder commandFinder = new CommandFinder(commandHolder);
             IParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(Parameter.values()));
@@ -61,12 +66,12 @@ public class Main {
                     commandVerifier);
             IOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
             IHelpViewer helpViewer = new HelpViewer(optionsHolder);
-            AbstractProcessorFactory processorFactory = new FileProcessorFactory();
-            AbstractIteratorFactory iteratorFactory = new SplitMergeIteratorFactory();
-            AbstractTaskFactory taskFactory = new FileTaskFactory();
-            AbstractCloseTaskFactory closableFactory = new ApplicationCloseTaskFactory();
+            AbstractProcessorFactory processorFactory = new ProcessorFactory();
+            AbstractIteratorFactory iteratorFactory = new IteratorFactory();
+            AbstractTaskFactory taskFactory = new TaskFactory();
+            AbstractCloseTaskFactory closableFactory = new CloseTaskFactory();
             IStatisticsHolder statisticHolder = new StatisticsHolder();
-            IStatisticsDataConverter statisticsDataConverter = new FileAdvancedStatisticsDataConverter(statisticHolder);
+            IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter(statisticHolder);
             IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();
             IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,

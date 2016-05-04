@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Provides process of splitting or merging file.
  */
-public class FileProcessor implements IProcessor {
+public class FileSplitterProcessor implements IProcessor {
 
     /**
      * Logger.
@@ -26,9 +26,9 @@ public class FileProcessor implements IProcessor {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Parameter holder.
+     * Configuration holder.
      */
-    private final IConfigHolder parameterHolder;
+    private final IConfigHolder configHolder;
 
     /**
      * Merge iterator.
@@ -76,10 +76,10 @@ public class FileProcessor implements IProcessor {
     private File file;
 
     /**
-     * Creates <code>FileProcessor</code> instance.
+     * Creates <code>FileSplitterProcessor</code> instance.
      *
      * @param partFileDest      destination of the part-file
-     * @param parameterHolder   parameter holder
+     * @param configHolder      configuration holder
      * @param iteratorFactory   iterator factory
      * @param taskFactory       thread's task factory
      * @param closeTaskFactory  close task factory
@@ -87,31 +87,31 @@ public class FileProcessor implements IProcessor {
      * @param commandName       name of input command
      * @see {@link IProcessor}
      */
-    public FileProcessor(String partFileDest,
-                         IConfigHolder parameterHolder,
-                         AbstractIteratorFactory iteratorFactory,
-                         AbstractTaskFactory taskFactory,
-                         AbstractCloseTaskFactory closeTaskFactory,
-                         IStatisticsService statisticsService,
-                         String commandName) {
-        this.parameterHolder = parameterHolder;
-        this.file = new File(partFileDest.substring(0, partFileDest.indexOf(parameterHolder.getValue("partSuffix"))));
-        List<File> parts = FileCalculationUtils.getPartsList(file.getAbsolutePath(), parameterHolder.getValue("partSuffix"));
+    public FileSplitterProcessor(String partFileDest,
+                                 IConfigHolder configHolder,
+                                 AbstractIteratorFactory iteratorFactory,
+                                 AbstractTaskFactory taskFactory,
+                                 AbstractCloseTaskFactory closeTaskFactory,
+                                 IStatisticsService statisticsService,
+                                 String commandName) {
+        this.configHolder = configHolder;
+        this.file = new File(partFileDest.substring(0, partFileDest.indexOf(configHolder.getValue("partSuffix"))));
+        List<File> parts = FileCalculationUtils.getPartsList(file.getAbsolutePath(), configHolder.getValue("partSuffix"));
         this.iterator = iteratorFactory.createIterator(parts);
         this.taskFactory = taskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder));
-        int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, configHolder));
+        int threadsCount = Integer.parseInt(configHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
 
     /**
-     * Creates <code>FileProcessor</code> instance.
+     * Creates <code>FileSplitterProcessor</code> instance.
      *
      * @param fileDest          the specified file destination
      * @param partSize          the specified size of the part-file
-     * @param parameterHolder   parameter holder
+     * @param configHolder      configuration holder
      * @param iteratorFactory   iterator factory
      * @param taskFactory       thread's task factory
      * @param closeTaskFactory  closing task factory
@@ -119,21 +119,21 @@ public class FileProcessor implements IProcessor {
      * @param commandName       name of input command
      * @see {@link IProcessor}
      */
-    public FileProcessor(String fileDest, long partSize,
-                         IConfigHolder parameterHolder,
-                         AbstractIteratorFactory iteratorFactory,
-                         AbstractTaskFactory taskFactory,
-                         AbstractCloseTaskFactory closeTaskFactory,
-                         IStatisticsService statisticsService,
-                         String commandName) {
-        this.parameterHolder = parameterHolder;
+    public FileSplitterProcessor(String fileDest, long partSize,
+                                 IConfigHolder configHolder,
+                                 AbstractIteratorFactory iteratorFactory,
+                                 AbstractTaskFactory taskFactory,
+                                 AbstractCloseTaskFactory closeTaskFactory,
+                                 IStatisticsService statisticsService,
+                                 String commandName) {
+        this.configHolder = configHolder;
         this.file = new File(fileDest);
-        this.iterator = iteratorFactory.createIterator(parameterHolder, file.length(), partSize);
+        this.iterator = iteratorFactory.createIterator(configHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, parameterHolder));
-        int threadsCount = Integer.parseInt(parameterHolder.getValue("threadsCount"));
+        cleaner = new Thread(closeTaskFactory.createCloseTask(interrupt, this, configHolder));
+        int threadsCount = Integer.parseInt(configHolder.getValue("threadsCount"));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
     }
 
@@ -145,10 +145,10 @@ public class FileProcessor implements IProcessor {
      */
     public void process() throws RunException {
         try {
-            statisticsService.showStatInfo(1000);
+            statisticsService.showStatInfo(Integer.parseInt(configHolder.getValue("statisticsTimer")));
             Runtime.getRuntime().addShutdownHook(cleaner);
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                pool.execute(taskFactory.createTask(commandName, file, interrupt, parameterHolder, iterator, statisticsService));
+                pool.execute(taskFactory.createTask(commandName, file, interrupt, configHolder, iterator, statisticsService));
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
@@ -167,16 +167,31 @@ public class FileProcessor implements IProcessor {
         }
     }
 
+    /**
+     * Gets the complete file.
+     *
+     * @return complete file
+     */
     @Override
     public File getFile() {
         return file;
     }
 
+    /**
+     * Gets name of executing command.
+     *
+     * @return name of executing command
+     */
     @Override
     public String getCommandName() {
         return commandName;
     }
 
+    /**
+     * Gets process status.
+     *
+     * @return current process status
+     */
     @Override
     public String getProcessStatus() {
         return processStatus;

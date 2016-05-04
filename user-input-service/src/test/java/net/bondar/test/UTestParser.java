@@ -1,7 +1,7 @@
 package net.bondar.test;
 
 import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.utils.ApplicationConfigHolder;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.*;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
@@ -43,7 +43,7 @@ public class UTestParser {
      */
     @BeforeClass
     public static void setUp() {
-        IConfigHolder configHolder = EasyMock.createMock(ApplicationConfigHolder.class);
+        IConfigHolder configHolder = EasyMock.createMock(ConfigHolder.class);
         expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
         EasyMock.replay(configHolder);
         partSuffix = configHolder.getValue("partSuffix");

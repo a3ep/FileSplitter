@@ -1,4 +1,4 @@
-package net.bondar.core.utils;
+package net.bondar.core.utils.iterators;
 
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.IConfigHolder;
@@ -7,7 +7,7 @@ import net.bondar.core.interfaces.Iterable;
 /**
  * Provides iteration for part-files during splitting process.
  */
-class SplitIterator implements Iterable {
+public class SplitIterator implements Iterable {
 
     /**
      * Part-file counter.
@@ -41,7 +41,7 @@ class SplitIterator implements Iterable {
      * @param partLength the specified part-file length
      * @see {@link Iterable}
      */
-    SplitIterator(IConfigHolder paramHolder, long fileLength, long partLength) {
+    public SplitIterator(IConfigHolder paramHolder, long fileLength, long partLength) {
         this.paramHolder = paramHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;
