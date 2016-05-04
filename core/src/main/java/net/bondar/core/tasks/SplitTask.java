@@ -1,15 +1,14 @@
 package net.bondar.core.tasks;
 
-import net.bondar.core.interfaces.AbstractTask;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.interfaces.tasks.AbstractTask;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provides split tasks for thread pool.
@@ -25,14 +24,13 @@ public class SplitTask extends AbstractTask {
      * Creates <code>SplitTask</code> instance.
      *
      * @param file              specified file
-     * @param interrupt         interrupt flag
-     * @param paramHolder       parameter holder
+     * @param configHolder      configuration holder
      * @param iterator          iterator
      * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public SplitTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticsService statisticsService) {
-        super(file, interrupt, paramHolder, iterator, statisticsService);
+    public SplitTask(File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+        super(file, configHolder, iterator, statisticsService);
     }
 
     /**
@@ -41,7 +39,7 @@ public class SplitTask extends AbstractTask {
     @Override
     public void run() {
         filePart = iterator.getNext();
-        while (!filePart.getStatus().equals("NULL") && !interrupt.get()) {
+        while (!filePart.getStatus().equals("NULL") && !Thread.currentThread().isInterrupted()) {
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
@@ -50,13 +48,18 @@ public class SplitTask extends AbstractTask {
                 sourceFile.seek(filePart.getStartPosition());
                 start = filePart.getStartPosition();
                 long finish = filePart.getEndPosition();
-                int bufferSize = Integer.parseInt(paramHolder.getValue("bufferSize"));
+                int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
                 // write data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 filePart = iterator.getNext();
             } catch (IOException e) {
-                log.warn("Catches IOException, during writing " + partFile + ". Message " + e.getMessage());
+                log.error("Error during writing " + partFile + ". Message " + e.getMessage());
                 return;
             }
         }

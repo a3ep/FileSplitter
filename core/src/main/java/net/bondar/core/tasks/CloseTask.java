@@ -1,14 +1,15 @@
 package net.bondar.core.tasks;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.core.interfaces.ICloseTask;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
+import net.bondar.core.interfaces.tasks.ICloseTask;
+import net.bondar.core.utils.Command;
+import net.bondar.core.utils.ProcessorStatus;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provides cleaning temporary resources and closing application.
@@ -21,31 +22,31 @@ public class CloseTask implements ICloseTask {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Interrupt flag.
+     * Name of the threads that need to interrupt.
      */
-    private AtomicBoolean interrupt;
+    private final String threadName;
 
     /**
-     * File processor.
+     * File splitter processor.
      */
     private IProcessor processor;
 
     /**
-     * Parameter holder.
+     * Configuration holder.
      */
-    private IConfigHolder parameterHolder;
+    private IConfigHolder configHolder;
 
     /**
      * Creates <code>CloseTask</code> instance.
      *
-     * @param interrupt       flag for interrupting working threads
-     * @param processor       file processor
-     * @param parameterHolder parameter holder
+     * @param processor    file splitter processor
+     * @param configHolder configuration holder
+     * @param threadName   name of the threads that need to interrupt
      */
-    public CloseTask(AtomicBoolean interrupt, IProcessor processor, IConfigHolder parameterHolder) {
-        this.interrupt = interrupt;
+    public CloseTask(IProcessor processor, IConfigHolder configHolder, String threadName) {
         this.processor = processor;
-        this.parameterHolder = parameterHolder;
+        this.configHolder = configHolder;
+        this.threadName = threadName;
     }
 
     /**
@@ -53,14 +54,14 @@ public class CloseTask implements ICloseTask {
      */
     @Override
     public void run() {
-        if (processor.getProcessStatus().equals("OK")) {
+        if (processor.getProcessorStatus().equals(ProcessorStatus.DONE)) {
             return;
         }
         log.debug("Interrupting threads...");
-        interrupt.set(true);
+        Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.getName().contains(threadName)).forEach(Thread::interrupt);
         log.debug("Cleaning temporary files...");
-        if (processor.getCommandName().equalsIgnoreCase("split")) {
-            FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), parameterHolder.getValue("partSuffix")).forEach(File::delete);
+        if (processor.getCommandName().equalsIgnoreCase(Command.SPLIT.name())) {
+            FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix")).forEach(File::delete);
         } else {
             processor.getFile().delete();
         }

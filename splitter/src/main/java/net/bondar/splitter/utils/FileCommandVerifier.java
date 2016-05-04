@@ -1,11 +1,10 @@
 package net.bondar.splitter.utils;
 
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.client.ICommand;
 import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.interfaces.client.IParameter;
-import net.bondar.splitter.domain.Parameter;
+import net.bondar.splitter.Parameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

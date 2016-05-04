@@ -1,15 +1,16 @@
 package net.bondar.test;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.core.interfaces.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.AbstractIteratorFactory;
-import net.bondar.core.interfaces.AbstractTaskFactory;
 import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.utils.*;
+import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
+import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
+import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.ConfigHolder;
+import net.bondar.core.utils.FileSplitterProcessor;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.TaskFactory;
-import net.bondar.statistics.interfaces.*;
+import net.bondar.statistics.interfaces.IStatisticsService;
 import net.bondar.statistics.service.StatisticsService;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.LogManager;
@@ -63,7 +64,7 @@ public class ITestProcessor {
     /**
      * Parameter holder.
      */
-    private static IConfigHolder paramHolder;
+    private static IConfigHolder configHolder;
 
     /**
      * Iterator factory.
@@ -101,12 +102,13 @@ public class ITestProcessor {
     @BeforeTest
     public static void setUp() {
         // initializing processor's components
-        paramHolder = EasyMock.createMock(ConfigHolder.class);
-        expect(paramHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
-        expect(paramHolder.getValue("threadsCount")).andReturn("3").times(0, Integer.MAX_VALUE);
-        expect(paramHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
-        EasyMock.replay(paramHolder);
-        partSuffix = paramHolder.getValue("partSuffix");
+        configHolder = EasyMock.createMock(ConfigHolder.class);
+        expect(configHolder.getValue("partSuffix")).andReturn("_part_").times(0, Integer.MAX_VALUE);
+        expect(configHolder.getValue("threadsCount")).andReturn("3").times(0, Integer.MAX_VALUE);
+        expect(configHolder.getValue("bufferSize")).andReturn("1048576").times(0, Integer.MAX_VALUE);
+        expect(configHolder.getValue("statisticsTimer")).andReturn("1000").times(0, Integer.MAX_VALUE);
+        EasyMock.replay(configHolder);
+        partSuffix = configHolder.getValue("partSuffix");
         iteratorFactory = new IteratorFactory();
         taskFactory = new TaskFactory();
         closeTaskFactory = new CloseTaskFactory();
@@ -130,7 +132,7 @@ public class ITestProcessor {
     @Test
     public void testProcessSplit() {
         try {
-            new FileSplitterProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, paramHolder, iteratorFactory,
+            new FileSplitterProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, configHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
@@ -149,7 +151,7 @@ public class ITestProcessor {
     public void testProcessMerge() {
         try {
             FileSplitterProcessor mergeProcessor = new FileSplitterProcessor(specifiedParts.get(0).getAbsolutePath(),
-                    paramHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
+                    configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
             assertEquals(specifiedFile.length(), resultFile.length());

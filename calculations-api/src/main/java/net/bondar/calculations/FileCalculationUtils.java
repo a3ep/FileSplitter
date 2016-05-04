@@ -72,24 +72,4 @@ public class FileCalculationUtils {
         }
         return parts;
     }
-
-    /**
-     * Builds string with statistic data.
-     *
-     * @param threadName       name of thread
-     * @param start            start position
-     * @param end              end position
-     * @param writtenSize      written bytes size
-     * @param totalWrittenSize total written bytes size
-     * @param fileSize         the specified file size
-     * @return string with statistic data
-     */
-    public static String buildStatisticData(String threadName, long start, long end, long writtenSize, long totalWrittenSize, long fileSize) {
-        return new StringBuilder(threadName + ", ")
-                .append(start + ", ")
-                .append(end + ", ")
-                .append(writtenSize + ", ")
-                .append(totalWrittenSize + ", ")
-                .append(fileSize).toString();
-    }
 }

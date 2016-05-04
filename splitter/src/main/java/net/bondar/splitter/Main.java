@@ -1,7 +1,11 @@
 package net.bondar.splitter;
 
-import net.bondar.core.interfaces.*;
-import net.bondar.core.utils.*;
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
+import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
+import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
+import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.core.utils.converters.AdvancedStatisticsDataConverter;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
@@ -12,8 +16,6 @@ import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
 import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
-import net.bondar.splitter.domain.Command;
-import net.bondar.splitter.domain.Parameter;
 import net.bondar.splitter.service.FileService;
 import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;

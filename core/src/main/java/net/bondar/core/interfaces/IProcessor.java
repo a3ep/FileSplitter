@@ -1,5 +1,7 @@
 package net.bondar.core.interfaces;
 
+import net.bondar.core.utils.ProcessorStatus;
+
 import java.io.File;
 
 /**
@@ -27,9 +29,10 @@ public interface IProcessor {
     String getCommandName();
 
     /**
-     * Gets process status.
+     * Gets processor status.
      *
-     * @return current process status
+     * @return current processor status
      */
-    String getProcessStatus();
+    ProcessorStatus getProcessorStatus();
+
 }

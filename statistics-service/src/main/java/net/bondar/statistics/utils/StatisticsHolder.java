@@ -30,7 +30,9 @@ public class StatisticsHolder implements IStatisticsHolder {
      */
     @Override
     public synchronized Map<String, IStatObject> getAllRecords() {
-        recordsIds = new TreeSet<>(records.keySet());
+        if (!records.isEmpty()) {
+            recordsIds = new TreeSet<>(records.keySet());
+        }
         return records;
     }
 

@@ -1,4 +1,7 @@
-package net.bondar.core.interfaces;
+package net.bondar.core.interfaces.factories;
+
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.interfaces.Iterable;
 
 import java.io.File;
 import java.util.List;

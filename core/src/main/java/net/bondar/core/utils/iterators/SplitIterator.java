@@ -32,7 +32,7 @@ public class SplitIterator implements Iterable {
     /**
      * Parameter holder.
      */
-    private IConfigHolder paramHolder;
+    private IConfigHolder configHolder;
 
     /**
      * Creates <code>SplitIterator</code> instance.
@@ -41,8 +41,8 @@ public class SplitIterator implements Iterable {
      * @param partLength the specified part-file length
      * @see {@link Iterable}
      */
-    public SplitIterator(IConfigHolder paramHolder, long fileLength, long partLength) {
-        this.paramHolder = paramHolder;
+    public SplitIterator(IConfigHolder configHolder, long fileLength, long partLength) {
+        this.configHolder = configHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;
     }
@@ -58,7 +58,7 @@ public class SplitIterator implements Iterable {
         long start = currentPosition;
         long end = currentPosition + partLength;
         if (end > fileLength) end = fileLength;
-        String partName = paramHolder.getValue("partSuffix") + String.format("%03d", partCounter++);
+        String partName = configHolder.getValue("partSuffix") + String.format("%03d", partCounter++);
         FilePartObject filePart = new FilePartObject(partName, start, end, partCounter - 1);
         filePart.setFileSize(fileLength);
         currentPosition = end + 1;

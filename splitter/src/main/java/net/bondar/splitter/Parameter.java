@@ -1,4 +1,4 @@
-package net.bondar.splitter.domain;
+package net.bondar.splitter;
 
 import net.bondar.input.interfaces.client.IParameter;
 

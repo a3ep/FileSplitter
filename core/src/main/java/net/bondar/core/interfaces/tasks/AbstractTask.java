@@ -1,13 +1,15 @@
-package net.bondar.core.interfaces;
+package net.bondar.core.interfaces.tasks;
 
 import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.FileStatObject;
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.interfaces.IPartObject;
+import net.bondar.core.interfaces.Iterable;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provides tasks for thread pool.
@@ -22,7 +24,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Parameter holder
      */
-    protected final IConfigHolder paramHolder;
+    protected final IConfigHolder configHolder;
 
     /**
      * Iterator.
@@ -33,11 +35,6 @@ public abstract class AbstractTask implements ITask {
      * Statistic service.
      */
     private final IStatisticsService statisticsService;
-
-    /**
-     * Interrupt flag.
-     */
-    protected AtomicBoolean interrupt;
 
     /**
      * Total written size.
@@ -58,15 +55,13 @@ public abstract class AbstractTask implements ITask {
      * Initialises <code>AbstractTask</code> fields.
      *
      * @param file              specified file
-     * @param interrupt         interrupt flag
-     * @param paramHolder       parameter holder
+     * @param configHolder       parameter holder
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
-    public AbstractTask(File file, AtomicBoolean interrupt, IConfigHolder paramHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public AbstractTask(File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
-        this.interrupt = interrupt;
-        this.paramHolder = paramHolder;
+        this.configHolder = configHolder;
         this.iterator = iterator;
         this.statisticsService = statisticsService;
     }

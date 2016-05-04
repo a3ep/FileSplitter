@@ -1,5 +1,6 @@
-package net.bondar.core.interfaces;
+package net.bondar.core.interfaces.factories;
 
+import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.utils.FileSplitterProcessor;
 import net.bondar.statistics.interfaces.IStatisticsService;
 

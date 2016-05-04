@@ -1,9 +1,9 @@
 package net.bondar.core.utils.factories;
 
 
-import net.bondar.core.interfaces.AbstractIteratorFactory;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.utils.iterators.MergeIterator;
 import net.bondar.core.utils.iterators.SplitIterator;
 
@@ -18,14 +18,15 @@ public class IteratorFactory implements AbstractIteratorFactory {
     /**
      * Creates <code>SplitIterator</code>.
      *
-     * @param fileLength specified file length
-     * @param partLength part-file length
+     * @param configHolder configuration holder
+     * @param fileLength   specified file length
+     * @param partLength   part-file length
      * @return <code>SplitIterator</code> instance
      * @see {@link AbstractIteratorFactory}
      */
     @Override
-    public Iterable createIterator(IConfigHolder parameterHolder, long fileLength, long partLength) {
-        return new SplitIterator(parameterHolder, fileLength, partLength);
+    public Iterable createIterator(IConfigHolder configHolder, long fileLength, long partLength) {
+        return new SplitIterator(configHolder, fileLength, partLength);
     }
 
     /**

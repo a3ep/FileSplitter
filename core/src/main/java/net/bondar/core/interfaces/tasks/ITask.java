@@ -1,4 +1,4 @@
-package net.bondar.core.interfaces;
+package net.bondar.core.interfaces.tasks;
 
 /**
  * Interface for file tasks.
