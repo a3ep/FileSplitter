@@ -1,6 +1,7 @@
 package net.bondar.test;
 
 import net.bondar.calculations.FileCalculationUtils;
+import net.bondar.core.FileStatObject;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
 /**
  * Test file processor.
@@ -113,6 +114,13 @@ public class ITestProcessor {
         taskFactory = new TaskFactory();
         closeTaskFactory = new CloseTaskFactory();
         statisticsService = EasyMock.createMock(StatisticsService.class);
+        statisticsService.showStatInfo(1000);
+        expectLastCall().anyTimes();
+        statisticsService.stop();
+        expectLastCall().anyTimes();
+        statisticsService.holdInformation(anyString(), anyObject());
+        expectLastCall().anyTimes();
+        EasyMock.replay(statisticsService);
     }
 
     /**

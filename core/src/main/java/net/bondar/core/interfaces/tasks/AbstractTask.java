@@ -87,9 +87,10 @@ public abstract class AbstractTask implements ITask {
             totalWritten += writtenSize;
             filePart.setWrittenSize(start - filePart.getStartPosition());
             filePart.setTotalWrittenSize(totalWritten);
+            ;
             statisticsService.holdInformation(Thread.currentThread().getName(),
                     new FileStatObject(filePart.getStartPosition(), filePart.getEndPosition(), filePart.getWrittenSize(),
-                            filePart.getTotalWrittenSize(), filePart.getFileSize()));
+                    filePart.getTotalWrittenSize(), filePart.getFileSize()));
         }
     }
 }
