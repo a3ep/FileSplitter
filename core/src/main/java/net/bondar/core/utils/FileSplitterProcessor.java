@@ -8,6 +8,7 @@ import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.factories.NamedThreadFactory;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
@@ -15,7 +16,6 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -68,18 +68,6 @@ public class FileSplitterProcessor implements IProcessor {
      * Thread pool.
      */
     private final ThreadPoolExecutor pool;
-
-    /**
-     * Named thread factory.
-     */
-    private final ThreadFactory namedThreadFactory = new ThreadFactory() {
-        int count = 1;
-
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, THREAD_NAME + "-" + count++);
-        }
-    };
 
     /**
      * Thread's task factory.
@@ -140,7 +128,7 @@ public class FileSplitterProcessor implements IProcessor {
         cleaner = new Thread(closeTaskFactory.createCloseTask(this, configHolder, THREAD_NAME), CLEANER_NAME);
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
-                namedThreadFactory);
+                new NamedThreadFactory());
     }
 
     /**
@@ -172,7 +160,7 @@ public class FileSplitterProcessor implements IProcessor {
         cleaner = new Thread(closeTaskFactory.createCloseTask(this, configHolder, THREAD_NAME), CLEANER_NAME);
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
-                namedThreadFactory);
+                new NamedThreadFactory());
     }
 
     /**
