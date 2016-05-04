@@ -38,7 +38,9 @@ public class AdvancedStatisticsDataConverter implements IStatisticsDataConverter
      */
     @Override
     public IParameterObject convert(Map<String, IStatObject> records) {
-        while (records.isEmpty()) records = new TreeMap<>(holder.getAllRecords());
+        while (records.isEmpty()) {
+            records = new TreeMap<>(holder.getAllRecords());
+        }
         return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records),
                 StatisticsCalculationUtils.calculateParametersList(FileStatisticsParameter.PART_WRITTEN, FileStatisticsParameter.PART_SIZE, records));
