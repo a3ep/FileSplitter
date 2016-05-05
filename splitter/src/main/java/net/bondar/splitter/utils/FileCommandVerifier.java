@@ -23,6 +23,15 @@ public class FileCommandVerifier implements ICommandVerifier {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
+     * Path pattern.
+     */
+    private final Pattern pathPattern = Pattern.compile("^[A-Za-z0-9./_]+");
+
+    /**
+     * Size pattern.
+     */
+    private final Pattern sizePattern = Pattern.compile("^[0-9]+");
+    /**
      * Verifies current file command's parameters.
      *
      * @param command the specified command
@@ -36,15 +45,13 @@ public class FileCommandVerifier implements ICommandVerifier {
         List<IParameter> parameters = command.getParameters();
         for (IParameter parameter : parameters) {
             if (parameter.equals(Parameter.PATH)) {
-                Pattern p = Pattern.compile("^[A-Za-z0-9./_]+");
-                Matcher m = p.matcher(parameter.getValue());
+                Matcher m = pathPattern.matcher(parameter.getValue());
                 if (!m.matches()) {
                     log.error("Error while verifying parameter: " + parameter.getValue());
                     throw new ParsingException("Error while verifying parameter: " + parameter.getValue());
                 }
             } else if (parameter.equals(Parameter.SIZE)) {
-                Pattern p = Pattern.compile("^[0-9]+");
-                Matcher m = p.matcher(parameter.getValue());
+                Matcher m = sizePattern.matcher(parameter.getValue());
                 if (!m.matches()) {
                     log.error("Error while verifying parameter: " + parameter.getValue());
                     throw new ParsingException("Error while verifying parameter: " + parameter.getValue());

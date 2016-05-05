@@ -52,11 +52,6 @@ public class SplitTask extends AbstractTask {
                 // writes data into file
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.error("Error during writing " + partFile + ". Message " + e.getMessage());
