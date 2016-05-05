@@ -63,12 +63,15 @@ public class SizeConverter implements IConverter {
      */
     @Override
     public String convert(final String value) throws ParsingException {
+        log.debug("Start converting parameter value: " + value);
         try {
             for (Map.Entry<String, Long> entry : units.entrySet()) {
                 int unitIndex;
                 if ((unitIndex = value.indexOf(entry.getKey())) != -1) {
                     log.debug("Current size unit: " + entry.getKey());
-                    return String.valueOf(Integer.parseInt(value.substring(0, unitIndex)) * entry.getValue());
+                    String convertedValue = String.valueOf(Integer.parseInt(value.substring(0, unitIndex)) * entry.getValue());
+                    log.debug("Finish converting parameter value. Converted value: " + convertedValue + " bytes.");
+                    return convertedValue;
                 }
             }
         } catch (NumberFormatException e) {

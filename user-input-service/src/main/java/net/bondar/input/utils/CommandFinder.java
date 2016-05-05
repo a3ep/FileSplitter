@@ -46,6 +46,7 @@ public class CommandFinder implements ICommandFinder {
         log.debug("Finding current command.");
         for (ICommand command : commandHolder.getCommands()) {
             if (array.contains(command.name().toLowerCase())) {
+                log.debug("Current command: " + command.name());
                 return command;
             }
         }

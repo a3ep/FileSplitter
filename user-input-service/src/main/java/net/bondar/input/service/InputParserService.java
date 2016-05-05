@@ -61,7 +61,7 @@ public class InputParserService implements IInputParserService {
      * @see {@link IInputParserService}
      */
     public ICommand parse(final String[] args) throws ParsingException {
-        log.debug("Start parsing input: " + Arrays.toString(args));
+        log.debug("Start parsing input arguments: " + Arrays.toString(args));
         List<String> argsList = Arrays.asList(args);
         try {
             ICommand currentCommand = commandFinder.findCommand(argsList);
@@ -69,10 +69,11 @@ public class InputParserService implements IInputParserService {
                 currentCommand.setParameters(parameterParser.parse(argsList.subList(1, argsList.size())));
             }
             if (commandVerifier.verify(currentCommand)) {
-                log.debug("Finish parsing: " + Arrays.toString(args));
+                log.debug("Finish parsing input arguments. Current command: " + currentCommand.name() + ", parameters: "
+                        + currentCommand.getParametersValues());
                 return currentCommand;
             }
-        }catch (ParsingException e){
+        } catch (ParsingException e) {
             log.error("Error while parsing input arguments: " + argsList.toString());
             throw new ParsingException("Error while parsing input arguments: " + argsList.toString(), e);
         }

@@ -40,8 +40,9 @@ public class FileCommandVerifier implements ICommandVerifier {
      */
     @Override
     public boolean verify(final ICommand command) throws ParsingException {
-        log.debug("Start verifying parameters. Current command: " + command.name());
+        log.debug("Start verifying parameters. Command: " + command.name());
         if(!command.isParametric()){
+            log.debug("Finish verifying command's parameters. Command: " + command.name() + "is not parametric.");
             return true;
         }
         for (IParameter parameter : command.getParameters()) {
@@ -59,7 +60,7 @@ public class FileCommandVerifier implements ICommandVerifier {
                 }
             }
         }
-        log.debug("Finish verifying command's parameters. Current command: " + command.name());
+        log.debug("Finish verifying command's parameters. Command: " + command.name());
         return true;
     }
 }

@@ -45,6 +45,7 @@ public class ParameterFinder implements IParameterFinder {
     @Override
     public List<IParameter> find(final List<String> arguments) throws ParsingException {
         List<IParameter> result = new ArrayList<>();
+        log.debug("Start finding comand parameters...");
         parameterHolder.getParameters().stream().filter(parameter -> arguments.contains(parameter.getIdentifier())).forEach(parameter -> {
             log.debug("Found parameter: " + parameter.name());
             int parameterIndex = arguments.indexOf(parameter.getIdentifier());
@@ -55,6 +56,7 @@ public class ParameterFinder implements IParameterFinder {
             result.add(parameter);
         });
         if (!result.isEmpty()) {
+            log.debug("Finish finding command parameters. Parameters: " + result.toString());
             return result;
         }
         log.error("Error while finding parameters. Parameters not found.");

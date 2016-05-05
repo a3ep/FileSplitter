@@ -51,11 +51,12 @@ public class ParameterParser implements IParameterParser {
     @Override
     public List<IParameter> parse(final List<String> arguments) {
         List<IParameter> parameters = parameterFinder.find(arguments);
-        log.debug("Parsing parameter values.");
+        log.debug("Start parsing parameters values...");
         parameters.stream().filter(IParameter::isParsable).forEach(parameter -> {
             log.debug("Found parsable parameter: " + parameter.name());
             parameter.setValue(converterFactory.createConverter(parameter).convert(parameter.getValue()));
         });
+        log.debug("Finish parsing parameters values.");
         return parameters;
     }
 }
