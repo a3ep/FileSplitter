@@ -38,34 +38,6 @@ public interface IPartObject {
     long getEndPosition();
 
     /**
-     * Gets size of bytes, written by one thread during processing one part-file.
-     *
-     * @return size of bytes
-     */
-    long getWrittenSize();
-
-    /**
-     * Sets size of bytes, written by one thread during processing one part-file.
-     *
-     * @param writtenSize size of bytes, written by one thread during processing one part-file
-     */
-    void setWrittenSize(long writtenSize);
-
-    /**
-     * Gets size of bytes, written by one thread during procesing all part-files.
-     *
-     * @return size of bytes
-     */
-    long getTotalWrittenSize();
-
-    /**
-     * Sets size of bytes, written by one thread during processing all part-files.
-     *
-     * @param totalWrittenSize size of bytes, written by one thread during processing all part-files
-     */
-    void setTotalWrittenSize(long totalWrittenSize);
-
-    /**
      * Gets file size.
      *
      * @return file size

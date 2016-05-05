@@ -40,16 +40,6 @@ public class FilePartObject implements IPartObject {
     private final File partFile;
 
     /**
-     * Size of bytes, written by one thread during processing one part-file.
-     */
-    private long writtenSize;
-
-    /**
-     * Size of bytes, written by one thread during processing all part-files.
-     */
-    private long totalWrittenSize;
-
-    /**
      * Size of file.
      */
     private long fileSize;
@@ -118,26 +108,6 @@ public class FilePartObject implements IPartObject {
     @Override
     public long getEndPosition() {
         return endPosition;
-    }
-
-    @Override
-    public long getWrittenSize() {
-        return writtenSize;
-    }
-
-    @Override
-    public void setWrittenSize(long writtenSize) {
-        this.writtenSize = writtenSize;
-    }
-
-    @Override
-    public long getTotalWrittenSize() {
-        return totalWrittenSize;
-    }
-
-    @Override
-    public void setTotalWrittenSize(long totalWrittenSize) {
-        this.totalWrittenSize = totalWrittenSize;
     }
 
     @Override
