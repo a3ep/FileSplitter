@@ -1,6 +1,6 @@
 package net.bondar.statistics.service;
 
-import net.bondar.statistics.interfaces.IDataObject;
+import net.bondar.statistics.interfaces.ICalculatedDataObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Provides holding calculated statistical data.
  */
-public class DataObject implements IDataObject{
+public class CalculatedDataObject implements ICalculatedDataObject {
 
     /**
      * Total progress value.
@@ -30,14 +30,29 @@ public class DataObject implements IDataObject{
      */
     private final List<String> listOfIds;
 
-    public DataObject(List<String> listOfIds, double totalProgress, List<Double> partsProgress, double timeRemaining) {
+    /**
+     * Creates <code>CalculatedDataObject</code> instance.
+     *
+     * @param listOfIds list of statistics records ids
+     * @param totalProgress total progress value
+     * @param partsProgress list of parts progress values
+     * @param timeRemaining time remaining value
+     */
+    public CalculatedDataObject(List<String> listOfIds, double totalProgress, List<Double> partsProgress, double timeRemaining) {
         this.listOfIds = listOfIds;
         this.totalProgress = totalProgress;
         this.partsProgress = partsProgress;
         this.timeRemaining = timeRemaining;
     }
 
-    public DataObject(List<String> listOfIds, double totalProgress, double timeRemaining){
+    /**
+     * Creates <code>CalculatedDataObject</code> instance.
+     *
+     * @param listOfIds list of statistics records ids
+     * @param totalProgress total progress value
+     * @param timeRemaining time remaining value
+     */
+    public CalculatedDataObject(List<String> listOfIds, double totalProgress, double timeRemaining){
         this.listOfIds = listOfIds;
         this.totalProgress = totalProgress;
         this.partsProgress = new ArrayList<>();
@@ -85,7 +100,7 @@ public class DataObject implements IDataObject{
 
     @Override
     public String toString() {
-        return "DataObject{" +
+        return "CalculatedDataObject{" +
                 "totalProgress=" + totalProgress +
                 ", partsProgress=" + partsProgress +
                 ", timeRemaining=" + timeRemaining +

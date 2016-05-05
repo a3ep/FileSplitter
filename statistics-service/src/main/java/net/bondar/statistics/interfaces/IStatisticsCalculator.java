@@ -1,7 +1,5 @@
 package net.bondar.statistics.interfaces;
 
-import java.util.List;
-
 /**
  * Provides calculating statistical data.
  */
@@ -11,8 +9,8 @@ public interface IStatisticsCalculator {
      * Calculates statistical data.
      *
      * @param parameterObject object with statistics parameters
-     * @return <code>IDataObject</code>
-     * @see {@link IDataObject}
+     * @return <code>ICalculatedDataObject</code>
+     * @see {@link ICalculatedDataObject}
      */
-    IDataObject calculate(final IParameterObject parameterObject);
+    ICalculatedDataObject calculate(final IParameterObject parameterObject);
 }

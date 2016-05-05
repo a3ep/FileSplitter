@@ -63,9 +63,15 @@ public class UTestParser {
     @DataProvider(name = "testParseIncorrect")
     public Object[][] createIncorrectData() {
         return new Object[][]{
-                {"abc"},
-                {"split, -p, /home/test/test.txt, -s, asdasdas"},
+                {""},
+                {"01234"},
+                {"abcde"},
+                {"split, -p, /test.txt, -s, a1b2c3"},
+                {"sp1it, -p, /home/test/test.txt, -s, a1b2c3"},
+                {"sp1it, -p, /home/test/test.txt, -1, 10MB"},
                 {"merge"},
+                {"merge, -1, /test/test.txt" + partSuffix + "001"},
+                {"he1p"},
                 {"-p, /home/test/test.test, -s, 5M"}
         };
     }

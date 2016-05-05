@@ -1,9 +1,9 @@
 package net.bondar.statistics.utils.advanced;
 
-import net.bondar.statistics.interfaces.IDataObject;
+import net.bondar.statistics.interfaces.ICalculatedDataObject;
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsCalculator;
-import net.bondar.statistics.service.DataObject;
+import net.bondar.statistics.service.CalculatedDataObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -28,12 +28,12 @@ public class AdvancedStatisticsCalculator implements IStatisticsCalculator {
      * @return object with calculated statistical data
      */
     @Override
-    public IDataObject calculate(final IParameterObject parameterObject) {
+    public ICalculatedDataObject calculate(final IParameterObject parameterObject) {
         log.info("Start calculating statistical data: " + parameterObject.toString());
         List<Double> partsProgress = new ArrayList<>();
         partsProgress.addAll(parameterObject.getParameterList().stream().map(object -> object.getCurrentVolume()
                 / object.getTotalVolume()).collect(Collectors.toList()));
-        IDataObject result = new DataObject(parameterObject.getListOfIds(),
+        ICalculatedDataObject result = new CalculatedDataObject(parameterObject.getListOfIds(),
                 parameterObject.getCurrentVolume() / parameterObject.getTotalVolume(), partsProgress,
                 parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
         log.debug("Finish calculating statistical data: " + result.toString());

@@ -3,7 +3,7 @@ package net.bondar.statistics.utils.advanced;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
-import net.bondar.statistics.interfaces.IDataObject;
+import net.bondar.statistics.interfaces.ICalculatedDataObject;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
@@ -90,7 +90,7 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * @return formatted string with statistical information
      */
     @Override
-    public String format(final IDataObject dataObject) {
+    public String format(final ICalculatedDataObject dataObject) {
         String result;
         List<String> listOfIds = dataObject.getListOfIds();
         List<Double> partsProgress = dataObject.getPartsProgress();

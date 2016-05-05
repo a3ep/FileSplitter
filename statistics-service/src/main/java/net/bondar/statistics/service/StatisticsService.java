@@ -98,8 +98,8 @@ public class StatisticsService implements IStatisticsService {
             }, THREAD_NAME);
             statThread.setDaemon(true);
             statThread.start();
-        }catch (IllegalThreadStateException e){
-            log.error("Error while starting statistics thread. Message: "+e.getMessage());
+        } catch (IllegalThreadStateException e) {
+            log.error("Error while starting statistics thread. Message: " + e.getMessage());
             throw new StatisticsException("Error while showing statistical information.", e);
         }
     }

@@ -11,5 +11,5 @@ public interface IStatisticsFormatter {
      * @param dataObject object with calculated statistical data
      * @return formatted string with statistical information
      */
-    String format(final IDataObject dataObject);
+    String format(final ICalculatedDataObject dataObject);
 }

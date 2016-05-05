@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Provides holding calculated statistical data.
  */
-public interface IDataObject {
+public interface ICalculatedDataObject {
 
     /**
      * Gets total progress.
