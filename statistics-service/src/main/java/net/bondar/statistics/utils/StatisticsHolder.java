@@ -2,6 +2,8 @@ package net.bondar.statistics.utils;
 
 import net.bondar.statistics.interfaces.IStatisticsHolder;
 import net.bondar.statistics.interfaces.client.IStatObject;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +14,11 @@ import java.util.TreeSet;
  * Provides holding statistical data.
  */
 public class StatisticsHolder implements IStatisticsHolder {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Map with statistics records.
@@ -73,7 +80,9 @@ public class StatisticsHolder implements IStatisticsHolder {
      */
     @Override
     public synchronized void cleanRecords() {
+        log.debug("Cleaning records " + records.keySet().toString());
         records.clear();
+        log.debug("Cleaning records ids " + recordsIds.toString());
         recordsIds.clear();
     }
 }

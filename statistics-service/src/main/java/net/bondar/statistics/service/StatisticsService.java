@@ -81,18 +81,27 @@ public class StatisticsService implements IStatisticsService {
      */
     @Override
     public void showStatInfo(int period) throws StatisticsException {
-        statThread = new Thread(() -> {
-            try {
-                do {
-                    viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder.getAllRecords()))));
-                    Thread.sleep(period);
-                } while (!Thread.interrupted());
-            } catch (InterruptedException e) {
-                holder.cleanRecords();
-            }
-        }, THREAD_NAME);
-        statThread.setDaemon(true);
-        statThread.start();
+        try {
+            statThread = new Thread(() -> {
+                try {
+                    do {
+                        log.debug("Start showing statistical information.");
+                        viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder.getAllRecords()))));
+                        Thread.sleep(period);
+                    } while (!Thread.interrupted());
+                    log.debug("Finish showing statistical information.");
+                } catch (InterruptedException e) {
+                    log.info("Start cleaning statistics records...");
+                    holder.cleanRecords();
+                    log.info("Finish cleaning statistics records.");
+                }
+            }, THREAD_NAME);
+            statThread.setDaemon(true);
+            statThread.start();
+        }catch (IllegalThreadStateException e){
+            log.error("Error while starting statistics thread. Message: "+e.getMessage());
+            throw new StatisticsException("Error while showing statistical information.", e);
+        }
     }
 
     /**

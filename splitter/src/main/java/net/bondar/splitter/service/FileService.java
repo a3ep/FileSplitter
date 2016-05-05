@@ -72,6 +72,11 @@ public class FileService implements IService {
     private final IHelpViewer helpViewer;
 
     /**
+     * Input command.
+     */
+    private Command inputCommand = Command.EMPTY;
+
+    /**
      * Creates <code>FileService</code> instance.
      *
      * @param parameterHolder   parameter holder
@@ -106,15 +111,15 @@ public class FileService implements IService {
      */
     @Override
     public void run() {
-        log.debug("Start application.");
+        log.info("Start application.");
         String input;
-        while (true) {
+        while (!inputCommand.equals(Command.EXIT)) {
             try {
-                log.info("Input your parameters:");
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
                 log.debug("Introduced string -> " + input);
-                Command inputCommand = (Command) parserService.parse(input.split(" "));
+                IProcessor processor;
+                inputCommand = (Command) parserService.parse(input.split(" "));
                 switch (inputCommand) {
                     case HELP:
                         helpViewer.showHelp();
@@ -123,28 +128,29 @@ public class FileService implements IService {
                         log.debug("Closing resources...");
                         br.close();
                         log.debug("Application closed.");
-                        System.exit(0);
                         break;
                     case SPLIT:
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
-                        processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
+                        processor = processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()),
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
-                                inputCommand.name()).process();
+                                inputCommand.name());
+                        if (!processor.process()) inputCommand=Command.EXIT;
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
-                        processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
+                        processor = processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
-                                inputCommand.name()).process();
+                                inputCommand.name());
+                        if(!processor.process()) inputCommand=Command.EXIT;
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }
             } catch (RunException | CalculationsException | ParsingException | StatisticsException e) {
-                log.warn("File Splitter Application error. Message: " + e.getMessage() + "\n");
+                log.error("File Splitter Application error. Message: " + e.getMessage() + "\n");
             } catch (IOException e) {
-                log.warn("Error while processing input. Message " + e.getMessage());
+                log.error("Error while processing user input. Message " + e.getMessage());
             }
         }
     }

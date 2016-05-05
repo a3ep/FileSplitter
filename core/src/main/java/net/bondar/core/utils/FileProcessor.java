@@ -177,7 +177,7 @@ public class FileProcessor implements IProcessor {
      * @throws RunException when occurred exception during showing statistical information or splitter thread waiting for pool
      * @see {@link IProcessor}
      */
-    public void process() throws RunException {
+    public boolean process() throws RunException {
         try {
             // starts showing statistical information
             statisticsService.showStatInfo(Integer.parseInt(configHolder.getValue(STATISTICS_TIMER)));
@@ -197,9 +197,10 @@ public class FileProcessor implements IProcessor {
             //checks for working cleaner
             if (cleaner.isAlive()) {
                 cleaner.join();
-                System.exit(0);
+                return false;
             }
             processorStatus = ProcessorStatus.DONE;
+            return true;
         } catch (StatisticsException e) {
             log.error("Error while showing statistical information. Message " + e.getMessage());
             throw new RunException("Error while showing statistical information.", e);

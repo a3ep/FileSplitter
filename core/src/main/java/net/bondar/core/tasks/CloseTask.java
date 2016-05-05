@@ -76,7 +76,7 @@ public class CloseTask implements ICloseTask {
                 file.delete();
             }
         }catch (SecurityException e){
-            log.warn("Error while cleaning temporary files.");
+            log.warn("Error while cleaning temporary files. Message: "+e.getMessage());
         }
         log.debug("Finish cleaning temporary files.");
         log.info("Application closed.");

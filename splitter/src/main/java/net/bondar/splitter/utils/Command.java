@@ -12,6 +12,11 @@ import java.util.List;
 public enum Command implements ICommand {
 
     /**
+     * Empty command.
+     */
+    EMPTY(false, "Indicates empty command."),
+
+    /**
      * Exit command.
      */
     EXIT(false, "Closes application."),

@@ -11,8 +11,10 @@ public interface IProcessor {
 
     /**
      * Processes file.
+     *
+     * @return true if the file processed successfully, false otherwise
      */
-    void process();
+    boolean process();
 
     /**
      * Gets the complete file.
