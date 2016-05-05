@@ -10,6 +10,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * Provides cleaning temporary resources and closing application.
@@ -22,9 +24,9 @@ public class CloseTask implements ICloseTask {
     private final Logger log = LogManager.getLogger(getClass());
 
     /**
-     * Name of the threads that need to interrupt.
+     * List of futures that represented threads in a pool.
      */
-    private final String threadName;
+    private final List<Future> futures;
 
     /**
      * File splitter processor.
@@ -41,12 +43,12 @@ public class CloseTask implements ICloseTask {
      *
      * @param processor    file splitter processor
      * @param configHolder configuration holder
-     * @param threadName   name of the threads that need to interrupt
+     * @param futures   list of futures that represented threads in a pool
      */
-    public CloseTask(IProcessor processor, IConfigHolder configHolder, final String threadName) {
+    public CloseTask(IProcessor processor, IConfigHolder configHolder, final List<Future> futures) {
         this.processor = processor;
         this.configHolder = configHolder;
-        this.threadName = threadName;
+        this.futures = futures;
     }
 
     /**
@@ -57,14 +59,26 @@ public class CloseTask implements ICloseTask {
         if (processor.getProcessorStatus().equals(ProcessorStatus.DONE)) {
             return;
         }
-        log.debug("Interrupting threads...");
-        Thread.getAllStackTraces().keySet().stream().filter(thread -> thread.getName().contains(threadName)).forEach(Thread::interrupt);
-        log.debug("Cleaning temporary files...");
-        if (processor.getCommandName().equalsIgnoreCase(Command.SPLIT.name())) {
-            FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix")).forEach(File::delete);
-        } else {
-            processor.getFile().delete();
+        log.debug("Start interrupting threads...");
+        for (Future future:futures){
+            future.cancel(true);
         }
+        log.debug("Finish interrupting threads.");
+        log.debug("Start cleaning temporary files...");
+        try {
+            if (processor.getCommandName().equalsIgnoreCase(Command.SPLIT.name())) {
+                List<File> files = FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix"));
+                log.debug("Deleting temporary files.");
+                files.forEach(File::delete);
+            } else {
+                File file = processor.getFile();
+                log.debug("Deleting temporary file: "+file.getAbsolutePath());
+                file.delete();
+            }
+        }catch (SecurityException e){
+            log.warn("Error while cleaning temporary files.");
+        }
+        log.debug("Finish cleaning temporary files.");
         log.info("Application closed.");
     }
 }

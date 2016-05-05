@@ -6,6 +6,9 @@ import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.tasks.ICloseTask;
 import net.bondar.core.tasks.CloseTask;
 
+import java.util.List;
+import java.util.concurrent.Future;
+
 /**
  * Provides creating application closable.
  */
@@ -16,11 +19,11 @@ public class CloseTaskFactory implements AbstractCloseTaskFactory {
      *
      * @param processor    file processor
      * @param configHolder configuration holder
-     * @param threadName   name of the threads that need to interrupt
+     * @param futures      list of futures that represented threads in a pool
      * @return <code>CloseTask</code> instance
      */
     @Override
-    public ICloseTask createCloseTask(IProcessor processor, IConfigHolder configHolder, final String threadName) {
-        return new CloseTask(processor, configHolder, threadName);
+    public ICloseTask createCloseTask(IProcessor processor, IConfigHolder configHolder, final List<Future> futures) {
+        return new CloseTask(processor, configHolder, futures);
     }
 }

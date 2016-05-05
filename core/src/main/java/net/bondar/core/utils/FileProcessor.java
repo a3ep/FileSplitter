@@ -15,6 +15,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +78,11 @@ public class FileProcessor implements IProcessor {
     private final AbstractTaskFactory taskFactory;
 
     /**
+     * Close task factory.
+     */
+    private final AbstractCloseTaskFactory closeTaskFactory;
+
+    /**
      * Statistic service.
      */
     private final IStatisticsService statisticsService;
@@ -82,7 +90,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Interrupts active threads and cleans temporary files.
      */
-    private final Thread cleaner;
+    private Thread cleaner;
 
     /**
      * Processor status.
@@ -123,9 +131,9 @@ public class FileProcessor implements IProcessor {
         this.iterator = iteratorFactory.createIterator(FileCalculationUtils.getPartsList(file.getAbsolutePath(),
                 configHolder.getValue(PART_SUFFIX)));
         this.taskFactory = taskFactory;
+        this.closeTaskFactory = closeTaskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(this, configHolder, THREAD_NAME), CLEANER_NAME);
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
                 new NamedThreadFactory());
@@ -155,9 +163,9 @@ public class FileProcessor implements IProcessor {
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator(configHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
+        this.closeTaskFactory = closeTaskFactory;
         this.statisticsService = statisticsService;
         this.commandName = commandName;
-        cleaner = new Thread(closeTaskFactory.createCloseTask(this, configHolder, THREAD_NAME), CLEANER_NAME);
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
                 new NamedThreadFactory());
@@ -173,12 +181,15 @@ public class FileProcessor implements IProcessor {
         try {
             // starts showing statistical information
             statisticsService.showStatInfo(Integer.parseInt(configHolder.getValue(STATISTICS_TIMER)));
-            // creates shutdown hook with cleaner thread
-            Runtime.getRuntime().addShutdownHook(cleaner);
+            // creates list of futures that represented threads in a pool
+            List<Future> futures = new ArrayList<>();
             //distributes tasks between threads in thread pool
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                pool.execute(taskFactory.createTask(commandName, file, configHolder, iterator, statisticsService));
+                futures.add(pool.submit(taskFactory.createTask(commandName, file, configHolder, iterator, statisticsService)));
             }
+            // creates shutdown hook with cleaner thread
+            Runtime.getRuntime().addShutdownHook(cleaner = new Thread(closeTaskFactory
+                    .createCloseTask(this, configHolder, futures), CLEANER_NAME));
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             //stops showing statistical information
