@@ -62,7 +62,7 @@ public class FilePartObject implements IPartObject {
      * @param endPosition   index of the end position in a file
      * @param counter       part counter
      */
-    public FilePartObject(String partFileName, long startPosition, long endPosition, int counter) {
+    public FilePartObject(final String partFileName, final long startPosition, final long endPosition, final int counter) {
         this.status = "OK";
         this.partFileName = partFileName;
         this.startPosition = startPosition;
@@ -79,7 +79,7 @@ public class FilePartObject implements IPartObject {
      * @param endPosition   index of the end position in a file
      * @param counter       part counter
      */
-    public FilePartObject(File partFile, long startPosition, long endPosition, int counter) {
+    public FilePartObject(final File partFile, final long startPosition, final long endPosition, final int counter) {
         this.status = "OK";
         this.partFileName = "";
         this.startPosition = startPosition;

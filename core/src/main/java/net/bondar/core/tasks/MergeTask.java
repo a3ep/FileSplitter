@@ -29,7 +29,7 @@ public class MergeTask extends AbstractTask {
      * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public MergeTask(File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public MergeTask(final File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         super(file, configHolder, iterator, statisticsService);
 
     }

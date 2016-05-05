@@ -6,7 +6,7 @@ import net.bondar.input.interfaces.client.ICommand;
 import java.util.List;
 
 /**
- * Interface for class that provides finding command.
+ * Provides finding command.
  */
 public interface ICommandFinder {
 
@@ -17,6 +17,6 @@ public interface ICommandFinder {
      * @return current command
      * @throws ParsingException if command is not found
      */
-    ICommand findCommand(List<String> list) throws ParsingException;
+    ICommand findCommand(final List<String> list) throws ParsingException;
 
 }

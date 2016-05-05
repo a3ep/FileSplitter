@@ -5,7 +5,7 @@ import net.bondar.core.utils.ProcessorStatus;
 import java.io.File;
 
 /**
- * Interface for class that provides file processing.
+ * Provides file processing.
  */
 public interface IProcessor {
 

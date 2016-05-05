@@ -9,7 +9,7 @@ import net.bondar.statistics.interfaces.IStatisticsService;
 import java.io.File;
 
 /**
- * Interface for creating tasks.
+ * Provides creating tasks.
  */
 public abstract class AbstractTaskFactory {
 
@@ -23,6 +23,6 @@ public abstract class AbstractTaskFactory {
      * @param statisticsService statistics service
      * @return concrete task instance
      */
-    public abstract ITask createTask(String command, File file, IConfigHolder paramHolder,
+    public abstract ITask createTask(final String command, final File file, IConfigHolder paramHolder,
                                      Iterable iterator, IStatisticsService statisticsService);
 }

@@ -1,4 +1,4 @@
-package net.bondar.test.utils;
+package net.bondar.splitter.utils;
 
 import net.bondar.input.interfaces.client.ICommand;
 import net.bondar.input.interfaces.client.IParameter;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Contains user input commands.
  */
-public enum TestCommand implements ICommand {
+public enum Command implements ICommand {
 
     /**
      * Exit command.
@@ -37,7 +37,7 @@ public enum TestCommand implements ICommand {
      * @param parametric identifies contains parameters
      * @param parameters list of parameters
      */
-    TestCommand(boolean parametric, List<IParameter> parameters, String description) {
+    Command(boolean parametric, List<IParameter> parameters, String description) {
         this.parametric = parametric;
         this.parameters = parameters;
         this.description = description;
@@ -48,7 +48,7 @@ public enum TestCommand implements ICommand {
      *
      * @param parametric identifies contains parameters
      */
-    TestCommand(boolean parametric, String description) {
+    Command(final boolean parametric, String description) {
         this.parametric = parametric;
         this.description = description;
     }
@@ -56,6 +56,11 @@ public enum TestCommand implements ICommand {
     @Override
     public boolean isParametric() {
         return parametric;
+    }
+
+    @Override
+    public void setParametric(boolean parametric) {
+        this.parametric = parametric;
     }
 
     @Override
@@ -71,6 +76,11 @@ public enum TestCommand implements ICommand {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

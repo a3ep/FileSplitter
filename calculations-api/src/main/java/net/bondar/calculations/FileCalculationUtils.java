@@ -26,7 +26,7 @@ public class FileCalculationUtils {
      * @param files list of part-files
      * @return complete file size
      */
-    public static long getFileSize(List<File> files) {
+    public static long getFileSize(final List<File> files) {
         long fileSize = 0;
         for (File f : files) {
             fileSize += f.length();
@@ -42,7 +42,7 @@ public class FileCalculationUtils {
      * @param bufferSize default buffer size
      * @return required byte array size
      */
-    public static int getAvailableSize(long finish, long start, int bufferSize) {
+    public static int getAvailableSize(final long finish, final long start, final int bufferSize) {
         if ((finish - start) >= bufferSize) {
             return bufferSize;
         } else {
@@ -58,7 +58,7 @@ public class FileCalculationUtils {
      * @return list of part-files
      * @throws CalculationsException when occurred exception during collecting part-files
      */
-    public static List<File> getPartsList(String destination, String partNameSuffix) throws CalculationsException {
+    public static List<File> getPartsList(final String destination, final String partNameSuffix) throws CalculationsException {
         File specifiedFile = new File(destination);
         String destName = specifiedFile.getName();
         File file = specifiedFile.getParentFile();
@@ -67,7 +67,7 @@ public class FileCalculationUtils {
         List<File> parts = new LinkedList<>();
         Collections.addAll(parts, files);
         if (parts.isEmpty()) {
-            log.warn("Part-file not found. Please check your input");
+            log.error("Part-file not found. Please check your input");
             throw new CalculationsException("Error during collecting part-files. Exception: file not found. Please check your input");
         }
         return parts;

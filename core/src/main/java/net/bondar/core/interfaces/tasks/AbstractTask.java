@@ -59,7 +59,7 @@ public abstract class AbstractTask implements ITask {
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
-    public AbstractTask(File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public AbstractTask(final File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
         this.configHolder = configHolder;
         this.iterator = iterator;
@@ -75,7 +75,7 @@ public abstract class AbstractTask implements ITask {
      * @param bufferSize default buffer size
      * @throws IOException when read/write exception is occurring
      */
-    protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile, long finish, int bufferSize) throws IOException {
+    protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile, final long finish, final int bufferSize) throws IOException {
         while (start < finish) {
             //create buffer for copying
             byte[] array = new byte[FileCalculationUtils.getAvailableSize(finish, start, bufferSize)];

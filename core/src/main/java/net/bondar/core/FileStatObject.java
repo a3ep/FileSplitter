@@ -25,7 +25,7 @@ public class FileStatObject implements IStatObject {
      * @param totalWrittenSize the total size of bytes written to the file
      * @param fileSize         the size of file
      */
-    public FileStatObject(long startPosition, long endPosition, long partWrittenSize, long totalWrittenSize, long fileSize) {
+    public FileStatObject(final long startPosition, final long endPosition, final long partWrittenSize, final long totalWrittenSize, final long fileSize) {
         parameters.put(FileStatisticsParameter.PART_WRITTEN, partWrittenSize);
         parameters.put(FileStatisticsParameter.PART_SIZE, endPosition - startPosition);
         parameters.put(FileStatisticsParameter.TOTAL_WRITTEN, totalWrittenSize);
@@ -38,7 +38,7 @@ public class FileStatObject implements IStatObject {
     }
 
     @Override
-    public long getParameterByName(IStatisticsParameter name) {
-        return parameters.get(name);
+    public long getParameterValue(IStatisticsParameter parameter) {
+        return parameters.get(parameter);
     }
 }

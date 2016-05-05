@@ -73,7 +73,7 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
      * @return formatted string with statistical information
      */
     @Override
-    public String format(List<Double> dataList) {
+    public String format(final List<Double> dataList) {
         return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.remove(0))
                 + outerDelimiter.getValue() + " " + timerDescription + " " + innerDelimiter.getValue() + " "
                 + timerFormat.format(dataList.get(dataList.size() - 1));

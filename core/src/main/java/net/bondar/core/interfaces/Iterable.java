@@ -3,7 +3,7 @@ package net.bondar.core.interfaces;
 import net.bondar.core.FilePartObject;
 
 /**
- * Interface for class that provides iterating.
+ * Provides iterating.
  */
 public interface Iterable {
 

@@ -6,7 +6,7 @@ import net.bondar.input.interfaces.client.ICommand;
 import java.util.List;
 
 /**
- * Interface for class that provides holding commands.
+ * Provides holding commands.
  */
 public interface ICommandHolder {
 

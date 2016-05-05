@@ -3,7 +3,7 @@ package net.bondar.input.interfaces;
 import org.apache.commons.cli.Options;
 
 /**
- * Interface for class that provides holding options.
+ * Provides holding options.
  */
 public interface IOptionsHolder {
 

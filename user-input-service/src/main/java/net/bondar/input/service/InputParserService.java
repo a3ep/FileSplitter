@@ -60,7 +60,7 @@ public class InputParserService implements IInputParserService {
      * @throws ParsingException if received incorrect arguments
      * @see {@link IInputParserService}
      */
-    public ICommand parse(String[] args) throws ParsingException {
+    public ICommand parse(final String[] args) throws ParsingException {
         log.debug("Start parsing input: " + Arrays.toString(args));
         List<String> argsList = Arrays.asList(args);
         ICommand currentCommand = commandFinder.findCommand(argsList);

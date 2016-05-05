@@ -91,7 +91,7 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * @return formatted string with statistical information
      */
     @Override
-    public String format(List<Double> dataList) {
+    public String format(final List<Double> dataList) {
         List<String> listOfIds = new ArrayList<>(holder.getAllRecordsIds());
         Collections.sort(listOfIds);
         log.debug("Start formatting statistical data.");

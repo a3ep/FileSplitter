@@ -5,7 +5,7 @@ import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.client.ICommand;
 
 /**
- * Interface for class that provides parsing user input.
+ * Provides parsing user input.
  */
 public interface IInputParserService {
 
@@ -16,5 +16,5 @@ public interface IInputParserService {
      * @return user input command
      * @throws ParsingException if received incorrect arguments
      */
-    ICommand parse(String[] args) throws ParsingException;
+    ICommand parse(final String[] args) throws ParsingException;
 }

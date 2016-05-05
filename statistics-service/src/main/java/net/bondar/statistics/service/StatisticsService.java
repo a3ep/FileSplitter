@@ -102,7 +102,7 @@ public class StatisticsService implements IStatisticsService {
      * @param statObject object contains parameters for calculating statistical data
      */
     @Override
-    public void holdInformation(String id, IStatObject statObject) {
+    public void holdInformation(final String id, final IStatObject statObject) {
         holder.addRecord(id, statObject);
     }
 

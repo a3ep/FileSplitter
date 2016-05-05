@@ -53,18 +53,18 @@ public class StatisticsHolder implements IStatisticsHolder {
      * @return statistics record
      */
     @Override
-    public synchronized IStatObject getRecordById(String id) {
+    public synchronized IStatObject getRecordById(final String id) {
         return records.get(id);
     }
 
     /**
-     * Holds record to map of records.
+     * Holds record to map with statistics records.
      *
      * @param id         statistics record id
      * @param statObject <code>IStatObject</code> object contains parameters for calculating statistical data
      */
     @Override
-    public synchronized void addRecord(String id, IStatObject statObject) {
+    public synchronized void addRecord(final String id, final IStatObject statObject) {
         records.put(id, statObject);
     }
 

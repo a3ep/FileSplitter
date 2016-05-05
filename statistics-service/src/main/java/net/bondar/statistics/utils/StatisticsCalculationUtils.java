@@ -21,10 +21,11 @@ public class StatisticsCalculationUtils {
      * @param recordsMap map with statistics records
      * @return volume of performed work
      */
-    public static long calculateCurrentVolume(IStatisticsParameter parameter, Map<String, IStatObject> recordsMap) {
+    public static long calculateCurrentVolume(final IStatisticsParameter parameter,
+                                              final Map<String, IStatObject> recordsMap) {
         long currentSize = 0;
         for (Map.Entry<String, IStatObject> entry : recordsMap.entrySet()) {
-            currentSize += entry.getValue().getParameterByName(parameter);
+            currentSize += entry.getValue().getParameterValue(parameter);
         }
         return currentSize;
     }
@@ -36,8 +37,10 @@ public class StatisticsCalculationUtils {
      * @param recordsMap map with statistics records
      * @return total volume of work
      */
-    public static double calculateTotalVolume(IStatisticsParameter parameter, Map<String, IStatObject> recordsMap) {
-        return (double) recordsMap.entrySet().stream().map(entry -> entry.getValue().getParameterByName(parameter)).findFirst().get();
+    public static double calculateTotalVolume(final IStatisticsParameter parameter,
+                                              final Map<String, IStatObject> recordsMap) {
+        return (double) recordsMap.entrySet().stream().map(entry ->
+                entry.getValue().getParameterValue(parameter)).findFirst().get();
     }
 
     /**
@@ -48,10 +51,14 @@ public class StatisticsCalculationUtils {
      * @param recordsMap map with statistics records
      * @return a list of <code>ParameterObject</code>s
      */
-    public static List<ParameterObject> calculateParametersList(IStatisticsParameter current, IStatisticsParameter total, Map<String, IStatObject> recordsMap) {
+    public static List<ParameterObject> calculateParametersList(final IStatisticsParameter current,
+                                                                final IStatisticsParameter total,
+                                                                final Map<String, IStatObject> recordsMap) {
         List<ParameterObject> parameters = new ArrayList<>();
-        List<Long> currentVolumes = recordsMap.entrySet().stream().map(entry -> entry.getValue().getParameterByName(current)).collect(Collectors.toList());
-        List<Double> totalVolumes = recordsMap.entrySet().stream().map(entry -> (double) entry.getValue().getParameterByName(total)).collect(Collectors.toList());
+        List<Long> currentVolumes = recordsMap.entrySet().stream().map(entry ->
+                entry.getValue().getParameterValue(current)).collect(Collectors.toList());
+        List<Double> totalVolumes = recordsMap.entrySet().stream().map(entry ->
+                (double) entry.getValue().getParameterValue(total)).collect(Collectors.toList());
         for (int i = 0; i < totalVolumes.size(); i++) {
             parameters.add(new ParameterObject(currentVolumes.get(i), totalVolumes.get(i)));
         }

@@ -43,7 +43,7 @@ public class ParameterFinder implements IParameterFinder {
      * @see {@link IParameterHolder}
      */
     @Override
-    public List<IParameter> find(List<String> arguments) throws ParsingException {
+    public List<IParameter> find(final List<String> arguments) throws ParsingException {
         List<IParameter> result = new ArrayList<>();
         parameterHolder.getParameters().stream().filter(parameter -> arguments.contains(parameter.getIdentifier())).forEach(parameter -> {
             log.debug("Found parameter: " + parameter.name());

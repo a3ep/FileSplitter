@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces.client;
 
 /**
- * Interface for class that converting values.
+ * Provides converting values.
  */
 public interface IConverter {
 
@@ -11,5 +11,5 @@ public interface IConverter {
      * @param value value needs to convert
      * @return converted value
      */
-    String convert(String value);
+    String convert(final String value);
 }

@@ -24,7 +24,7 @@ public enum Parameter implements IParameter {
      * @param parsable   identifies needs to parse
      * @param value      parameter value
      */
-    Parameter(String identifier, boolean parsable, String value, String description) {
+    Parameter(String identifier, final boolean parsable, String value, String description) {
         this.identifier = identifier;
         this.parsable = parsable;
         this.value = value;
@@ -37,8 +37,18 @@ public enum Parameter implements IParameter {
     }
 
     @Override
+    public void setIdentifier(String identifier) {
+
+    }
+
+    @Override
     public boolean isParsable() {
         return parsable;
+    }
+
+    @Override
+    public void setParsable(boolean parsable) {
+        this.parsable = parsable;
     }
 
     @Override
@@ -54,6 +64,11 @@ public enum Parameter implements IParameter {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**

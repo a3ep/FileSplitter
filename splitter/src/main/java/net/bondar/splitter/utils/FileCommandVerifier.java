@@ -31,7 +31,7 @@ public class FileCommandVerifier implements ICommandVerifier {
      * @see {@link ICommandVerifier}
      */
     @Override
-    public boolean verify(ICommand command) throws ParsingException {
+    public boolean verify(final ICommand command) throws ParsingException {
         log.debug("Start verifying parameters. Current command: " + command.name());
         List<IParameter> parameters = command.getParameters();
         for (IParameter parameter : parameters) {

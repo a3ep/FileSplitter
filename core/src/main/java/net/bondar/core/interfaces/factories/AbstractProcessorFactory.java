@@ -1,11 +1,11 @@
 package net.bondar.core.interfaces.factories;
 
 import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.utils.FileSplitterProcessor;
+import net.bondar.core.utils.FileProcessor;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 /**
- * Interface for creating concrete processors.
+ * Provides creating concrete processors.
  */
 public interface AbstractProcessorFactory {
 
@@ -22,10 +22,11 @@ public interface AbstractProcessorFactory {
      * @param commandName       name of input command
      * @return concrete processor instance
      */
-    FileSplitterProcessor createProcessor(String fileDest, long partSize,
-                                          IConfigHolder parameterHolder,
-                                          AbstractIteratorFactory iteratorFactory,
-                                          AbstractTaskFactory taskFactory,
-                                          AbstractCloseTaskFactory closeTaskFactory,
-                                          IStatisticsService statisticsService, String commandName);
+    FileProcessor createProcessor(final String fileDest, final long partSize,
+                                  IConfigHolder parameterHolder,
+                                  AbstractIteratorFactory iteratorFactory,
+                                  AbstractTaskFactory taskFactory,
+                                  AbstractCloseTaskFactory closeTaskFactory,
+                                  IStatisticsService statisticsService,
+                                  final String commandName);
 }

@@ -3,7 +3,7 @@ package net.bondar.input.interfaces.client;
 import java.util.List;
 
 /**
- * Interface for a enum that contains commands.
+ * Contains commands.
  */
 public interface ICommand {
 
@@ -20,6 +20,13 @@ public interface ICommand {
      * @return parametric flag
      */
     boolean isParametric();
+
+    /**
+     * Sets parametric value.
+     *
+     * @param value setting value
+     */
+    void setParametric(boolean value);
 
     /**
      * Gets parameters.
@@ -41,4 +48,11 @@ public interface ICommand {
      * @return command description
      */
     String getDescription();
+
+    /**
+     * Sets command description.
+     *
+     * @param description setting description
+     */
+    void setDescription(String description);
 }

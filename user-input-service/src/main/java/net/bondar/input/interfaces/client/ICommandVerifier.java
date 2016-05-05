@@ -3,7 +3,7 @@ package net.bondar.input.interfaces.client;
 import net.bondar.input.exceptions.ParsingException;
 
 /**
- * Interface for class that provides verifying command's parameters.
+ * Provides verifying command's parameters.
  */
 public interface ICommandVerifier {
 
@@ -14,5 +14,5 @@ public interface ICommandVerifier {
      * @return true, if verify is successful, else - false
      * @throws ParsingException if received incorrect parameters
      */
-    boolean verify(ICommand command) throws ParsingException;
+    boolean verify(final ICommand command) throws ParsingException;
 }

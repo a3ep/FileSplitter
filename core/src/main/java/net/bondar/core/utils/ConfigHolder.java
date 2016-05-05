@@ -34,11 +34,11 @@ public class ConfigHolder implements IConfigHolder {
             if (inputStream != null) {
                 properties.load(inputStream);
             } else {
-                log.warn("Property file " + propertiesFile + " not found in the classpath)");
+                log.error("Property file " + propertiesFile + " not found in the classpath)");
                 throw new RunException("Property file " + propertiesFile + " not found in the classpath)");
             }
         } catch (IOException e) {
-            log.warn("Catches IOException, during loading properties. Message " + e.getMessage());
+            log.warn("Error during loading properties. Message " + e.getMessage());
             throw new RunException("Error during loading properties. Exception:" + e.getMessage());
         }
     }
@@ -50,7 +50,7 @@ public class ConfigHolder implements IConfigHolder {
      * @return parameter value
      * @see {@link IConfigHolder}
      */
-    public String getValue(String key) {
+    public String getValue(final String key) {
         return properties.getProperty(key);
     }
 }

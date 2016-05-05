@@ -5,7 +5,7 @@ import net.bondar.statistics.service.ParameterObject;
 import java.util.List;
 
 /**
- * Interface for class that provides holding statistical information parameters.
+ * Provides holding statistical information parameters.
  */
 public interface IParameterObject {
 

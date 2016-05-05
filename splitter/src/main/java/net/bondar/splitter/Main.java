@@ -17,6 +17,7 @@ import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.service.FileService;
+import net.bondar.splitter.utils.Command;
 import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;
 import net.bondar.statistics.formatters.DelimiterFormat;

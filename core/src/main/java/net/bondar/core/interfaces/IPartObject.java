@@ -3,7 +3,7 @@ package net.bondar.core.interfaces;
 import java.io.File;
 
 /**
- * Interface for part objects.
+ * Contains part object.
  */
 public interface IPartObject {
 

@@ -49,7 +49,7 @@ public class ParameterParser implements IParameterParser {
      * @see {@link IParameterParser}
      */
     @Override
-    public List<IParameter> parse(List<String> arguments) {
+    public List<IParameter> parse(final List<String> arguments) {
         List<IParameter> parameters = parameterFinder.find(arguments);
         log.debug("Parsing parameter values.");
         parameters.stream().filter(IParameter::isParsable).forEach(parameter -> {

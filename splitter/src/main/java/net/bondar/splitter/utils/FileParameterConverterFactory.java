@@ -27,7 +27,7 @@ public class FileParameterConverterFactory implements AbstractParameterConverter
      * @see {@link AbstractParameterConverterFactory}
      */
     @Override
-    public IConverter createConverter(IParameter parameter) throws ParsingException{
+    public IConverter createConverter(final IParameter parameter) throws ParsingException{
         if(parameter.equals(Parameter.SIZE)){
             return new SizeConverter();
         }

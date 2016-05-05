@@ -6,7 +6,7 @@ import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.tasks.ICloseTask;
 
 /**
- * Interface for creating closing tasks.
+ * Provides creating closing tasks.
  */
 public interface AbstractCloseTaskFactory {
 
@@ -18,5 +18,5 @@ public interface AbstractCloseTaskFactory {
      * @param threadName      name of the threads that need to interrupt
      * @return concrete closable instance
      */
-    ICloseTask createCloseTask(IProcessor processor, IConfigHolder parameterHolder, String threadName);
+    ICloseTask createCloseTask(final IProcessor processor, final IConfigHolder parameterHolder, final String threadName);
 }

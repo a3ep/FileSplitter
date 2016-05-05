@@ -42,7 +42,7 @@ public class CommandFinder implements ICommandFinder {
      * @see {@link ICommandHolder}
      */
     @Override
-    public ICommand findCommand(List<String> array) throws ParsingException {
+    public ICommand findCommand(final List<String> array) throws ParsingException {
         log.debug("Finding current command.");
         for (ICommand command : commandHolder.getCommands()) {
             if (array.contains(command.name().toLowerCase())) {

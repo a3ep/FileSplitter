@@ -8,10 +8,10 @@ import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
 import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.InputParserService;
 import net.bondar.input.utils.*;
-import net.bondar.test.utils.TestCommand;
-import net.bondar.test.utils.TestCommandVerifier;
-import net.bondar.test.utils.TestParameter;
-import net.bondar.test.utils.TestParameterConverterFactory;
+import net.bondar.splitter.utils.Command;
+import net.bondar.splitter.Parameter;
+import net.bondar.splitter.utils.FileCommandVerifier;
+import net.bondar.splitter.utils.FileParameterConverterFactory;
 import org.easymock.EasyMock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -47,13 +47,13 @@ public class UTestParser {
         expect(configHolder.getValue("partSuffix")).andReturn("_part_").anyTimes();
         EasyMock.replay(configHolder);
         partSuffix = configHolder.getValue("partSuffix");
-        ICommandHolder commandHolder = new CommandHolder(Arrays.asList(TestCommand.values()));
+        ICommandHolder commandHolder = new CommandHolder(Arrays.asList(Command.values()));
         ICommandFinder commandFinder = new CommandFinder(commandHolder);
-        IParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(TestParameter.values()));
+        IParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(Parameter.values()));
         IParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
-        AbstractParameterConverterFactory converterFactory = new TestParameterConverterFactory();
+        AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
         IParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
-        ICommandVerifier commandVerifier = new TestCommandVerifier();
+        ICommandVerifier commandVerifier = new FileCommandVerifier();
         inputParserService = new InputParserService(commandFinder, parameterParser, commandVerifier);
     }
 
@@ -87,7 +87,7 @@ public class UTestParser {
      * Tests the applications work with incorrect arguments.
      */
     @Test(dataProvider = "testParseIncorrect")
-    public void testParseIncorrect(String arg) {
+    public void testParseIncorrect(final String arg) {
         try {
             inputParserService.parse(arg.split(", "));
             fail("Expected incorrect arguments. Arguments: " + arg);
@@ -100,7 +100,7 @@ public class UTestParser {
      * Tests the applications work with correct arguments.
      */
     @Test(dataProvider = "testParseCorrect")
-    public void testCorrectArguments(String arg) {
+    public void testCorrectArguments(final String arg) {
         inputParserService.parse(arg.split(", "));
     }
 }

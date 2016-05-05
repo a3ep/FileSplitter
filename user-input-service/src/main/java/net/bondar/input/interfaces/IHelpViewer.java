@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces;
 
 /**
- * Interface for class that provide displaying help message.
+ * Provides displaying help message.
  */
 public interface IHelpViewer {
 

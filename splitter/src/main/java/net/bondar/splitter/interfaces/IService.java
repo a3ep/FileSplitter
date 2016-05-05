@@ -1,7 +1,7 @@
 package net.bondar.splitter.interfaces;
 
 /**
- * Interface for launching communication with user.
+ * Launches communication with user.
  */
 public interface IService {
 

@@ -26,7 +26,7 @@ public class AdvancedStatisticsCalculator implements IStatisticsCalculator {
      * @return list with statistical data
      */
     @Override
-    public List<Double> calculate(IParameterObject parameterObject) {
+    public List<Double> calculate(final IParameterObject parameterObject) {
         List<Double> result = new ArrayList<>();
         log.debug("Start calculating statistical information.");
         result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());

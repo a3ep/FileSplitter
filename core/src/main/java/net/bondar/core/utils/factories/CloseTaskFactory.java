@@ -20,7 +20,7 @@ public class CloseTaskFactory implements AbstractCloseTaskFactory {
      * @return <code>CloseTask</code> instance
      */
     @Override
-    public ICloseTask createCloseTask(IProcessor processor, IConfigHolder configHolder, String threadName) {
+    public ICloseTask createCloseTask(IProcessor processor, IConfigHolder configHolder, final String threadName) {
         return new CloseTask(processor, configHolder, threadName);
     }
 }

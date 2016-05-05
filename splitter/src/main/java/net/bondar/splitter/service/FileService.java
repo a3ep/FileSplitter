@@ -10,7 +10,7 @@ import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
-import net.bondar.splitter.Command;
+import net.bondar.splitter.utils.Command;
 import net.bondar.splitter.interfaces.IService;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsService;

@@ -3,7 +3,7 @@ package net.bondar.statistics.interfaces.client;
 import java.util.Map;
 
 /**
- * Interface for class that contains parameters for calculating statistical information.
+ * Contains parameters for calculating statistical information.
  */
 public interface IStatObject {
 
@@ -15,12 +15,12 @@ public interface IStatObject {
     Map<IStatisticsParameter, Long> getAllParameters();
 
     /**
-     * Gets parameter value for name.
+     * Gets parameter value.
      *
-     * @param name statistics parameter
+     * @param parameter statistics parameter
      * @return parameter value
      */
-    long getParameterByName(IStatisticsParameter name);
+    long getParameterValue(final IStatisticsParameter parameter);
 
 
 }

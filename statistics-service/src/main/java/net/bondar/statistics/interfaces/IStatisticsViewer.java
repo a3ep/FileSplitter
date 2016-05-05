@@ -1,7 +1,7 @@
 package net.bondar.statistics.interfaces;
 
 /**
- * Interface for class that provides displaying statistical information.
+ * Provides displaying statistical information.
  */
 public interface IStatisticsViewer {
 
@@ -10,12 +10,12 @@ public interface IStatisticsViewer {
      *
      * @param statInfo string with statistical information
      */
-    void showInLogs(String statInfo);
+    void showInLogs(final String statInfo);
 
     /**
      * Shows statistical information in console.
      *
      * @param statInfo string with statistical information
      */
-    void showInConsole(String statInfo);
+    void showInConsole(final String statInfo);
 }

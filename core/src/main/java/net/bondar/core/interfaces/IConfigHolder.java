@@ -1,7 +1,7 @@
 package net.bondar.core.interfaces;
 
 /**
- * Interface holding application configurations and parameters.
+ * Holds application configurations and parameters.
  */
 public interface IConfigHolder {
 
@@ -11,5 +11,5 @@ public interface IConfigHolder {
      * @param key key of the specified parameter
      * @return parameter value
      */
-    String getValue(String key);
+    String getValue(final String key);
 }

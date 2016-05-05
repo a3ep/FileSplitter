@@ -4,6 +4,7 @@ import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class MergeIterator implements Iterable {
      * @see {@link Iterable}
      */
     public MergeIterator(List<File> parts) {
-        this.parts = parts;
+        this.parts = new ArrayList<>(parts);
         for (File f : parts) {
             completeFileSize += f.length();
         }

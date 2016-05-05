@@ -5,7 +5,7 @@ import net.bondar.input.interfaces.client.IParameter;
 import java.util.List;
 
 /**
- * Interface for class that provides holding parameters.
+ * Provides holding parameters.
  */
 public interface IParameterHolder {
 

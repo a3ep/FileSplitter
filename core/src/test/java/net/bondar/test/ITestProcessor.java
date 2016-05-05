@@ -1,13 +1,12 @@
 package net.bondar.test;
 
 import net.bondar.calculations.FileCalculationUtils;
-import net.bondar.core.FileStatObject;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.core.utils.ConfigHolder;
-import net.bondar.core.utils.FileSplitterProcessor;
+import net.bondar.core.utils.FileProcessor;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.TaskFactory;
@@ -140,7 +139,7 @@ public class ITestProcessor {
     @Test
     public void testProcessSplit() {
         try {
-            new FileSplitterProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, configHolder, iteratorFactory,
+            new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, configHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
             List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
@@ -158,7 +157,7 @@ public class ITestProcessor {
     @Test
     public void testProcessMerge() {
         try {
-            FileSplitterProcessor mergeProcessor = new FileSplitterProcessor(specifiedParts.get(0).getAbsolutePath(),
+            FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(),
                     configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
@@ -187,7 +186,7 @@ public class ITestProcessor {
      * @param size file size
      * @return complete file
      */
-    private static File createFile(String dest, int size) {
+    private static File createFile(final String dest, final int size) {
         File file = new File(dest);
         try (RandomAccessFile output = new RandomAccessFile(file, "rw")) {
             byte[] buffer = new byte[PART_SIZE];
@@ -207,7 +206,7 @@ public class ITestProcessor {
      * @param size complete file size
      * @return list of part-files
      */
-    private static List<File> createParts(String dest, long size) {
+    private static List<File> createParts(final String dest, final long size) {
         List<File> parts = new ArrayList<>();
         long tmp = 0;
         for (int i = 1; tmp < size; i++) {

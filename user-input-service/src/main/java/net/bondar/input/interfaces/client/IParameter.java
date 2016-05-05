@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces.client;
 
 /**
- * Interface for a enum contains parameters.
+ * Contains parameters.
  */
 public interface IParameter {
 
@@ -20,11 +20,25 @@ public interface IParameter {
     String getIdentifier();
 
     /**
+     * Sets parameter identifier.
+     *
+     * @param identifier setting identifier
+     */
+    void setIdentifier(String identifier);
+
+    /**
      * Gets parsable flag.
      *
      * @return parsable flag
      */
     boolean isParsable();
+
+    /**
+     * Sets parsable value.
+     *
+     * @param value setting value
+     */
+    void setParsable(boolean value);
 
     /**
      * Gets parameter value.
@@ -46,4 +60,11 @@ public interface IParameter {
      * @return parameter description
      */
     String getDescription();
+
+    /**
+     * Sets paremeter description.
+     *
+     * @param description setting description
+     */
+    void setDescription(String description);
 }

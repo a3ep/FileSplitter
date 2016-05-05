@@ -28,8 +28,8 @@ public class TaskFactory extends AbstractTaskFactory {
      * @see {@link AbstractTask}
      */
     @Override
-    public ITask createTask(String commandName,
-                            File file,
+    public ITask createTask(final String commandName,
+                            final File file,
                             IConfigHolder configHolder,
                             Iterable iterator,
                             IStatisticsService statisticsService) {

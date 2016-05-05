@@ -1,7 +1,7 @@
 package net.bondar.statistics.interfaces.client;
 
 /**
- * Interface for enum that contains statistics parameters.
+ * Contains statistics parameters.
  */
 public interface IStatisticsParameter {
 }

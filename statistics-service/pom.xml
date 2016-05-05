@@ -11,7 +11,6 @@
     </parent>
 
     <artifactId>statistics-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.modulesName} statistics</name>
 
@@ -24,9 +23,8 @@
         <dependency>
             <groupId>net.bondar</groupId>
             <artifactId>calculations-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
-    
 </project>

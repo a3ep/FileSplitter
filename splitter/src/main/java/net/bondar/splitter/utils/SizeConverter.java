@@ -62,7 +62,7 @@ public class SizeConverter implements IConverter {
      * @see {@link IConverter}
      */
     @Override
-    public String convert(String value) throws ParsingException {
+    public String convert(final String value) throws ParsingException {
         try {
             for (Map.Entry<String, Long> entry : units.entrySet()) {
                 int unitIndex;

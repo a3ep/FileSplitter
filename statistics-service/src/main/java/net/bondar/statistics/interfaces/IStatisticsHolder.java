@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface for class that provides holding statistical data.
+ * Provides holding statistical data.
  */
 public interface IStatisticsHolder {
 
@@ -31,7 +31,7 @@ public interface IStatisticsHolder {
      * @param id         statistics record id
      * @param statObject <code>IStatObject</code> object contains parameters for calculating statistical data
      */
-    void addRecord(String id, IStatObject statObject);
+    void addRecord(final String id, final IStatObject statObject);
 
     /**
      * Gets all ids of statistics records.

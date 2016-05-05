@@ -4,7 +4,7 @@ import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.client.IStatObject;
 
 /**
- * Interface for class that provides working with statistical information.
+ * Provides working with statistical information.
  */
 public interface IStatisticsService {
 
@@ -14,7 +14,7 @@ public interface IStatisticsService {
      * @param period time in milliseconds between showing statistical information
      * @throws StatisticsException if error occurred while showing statistical information
      */
-    void showStatInfo(int period) throws StatisticsException;
+    void showStatInfo(final int period) throws StatisticsException;
 
     /**
      * Holds statistical information.
@@ -22,7 +22,7 @@ public interface IStatisticsService {
      * @param id         record id
      * @param statObject object contains parameters for calculating statistical data
      */
-    void holdInformation(String id, IStatObject statObject);
+    void holdInformation(final String id, final IStatObject statObject);
 
     /**
      * Stops of showing statistical information.

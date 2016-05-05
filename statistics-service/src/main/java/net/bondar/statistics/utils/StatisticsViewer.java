@@ -20,7 +20,7 @@ public class StatisticsViewer implements IStatisticsViewer {
      * @param statInfo string with statistical information
      */
     @Override
-    public void showInLogs(String statInfo) {
+    public void showInLogs(final String statInfo) {
         log.info(statInfo);
     }
 
@@ -30,7 +30,7 @@ public class StatisticsViewer implements IStatisticsViewer {
      * @param statInfo string with statistical information
      */
     @Override
-    public void showInConsole(String statInfo) {
+    public void showInConsole(final String statInfo) {
         System.out.println(statInfo);
     }
 }

@@ -1,7 +1,7 @@
 package net.bondar.input.interfaces.client;
 
 /**
- * Interface for creating concrete converters.
+ * Provides creating concrete converters.
  */
 public interface AbstractParameterConverterFactory {
 
@@ -11,5 +11,5 @@ public interface AbstractParameterConverterFactory {
      * @param parameter command parameter
      * @return concrete converter
      */
-    IConverter createConverter(IParameter parameter);
+    IConverter createConverter(final IParameter parameter);
 }

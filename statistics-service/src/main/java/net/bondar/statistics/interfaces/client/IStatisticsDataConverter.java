@@ -5,7 +5,7 @@ import net.bondar.statistics.interfaces.IParameterObject;
 import java.util.Map;
 
 /**
- * Interface for class that provides converting statistical data.
+ * Provides converting statistical data.
  */
 public interface IStatisticsDataConverter {
 
@@ -15,5 +15,5 @@ public interface IStatisticsDataConverter {
      * @param records map with statistics records
      * @return object contains converted statistical data
      */
-    IParameterObject convert(Map<String, IStatObject> records);
+    IParameterObject convert(final Map<String, IStatObject> records);
 }

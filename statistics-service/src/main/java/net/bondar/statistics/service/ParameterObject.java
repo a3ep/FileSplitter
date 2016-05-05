@@ -31,7 +31,7 @@ public class ParameterObject implements IParameterObject {
      * @param currentVolume current volume of performed work
      * @param totalVolume   total volume of work
      */
-    public ParameterObject(long currentVolume, double totalVolume, List<ParameterObject> parameterList) {
+    public ParameterObject(final long currentVolume, final double totalVolume, final List<ParameterObject> parameterList) {
         this.currentVolume = currentVolume;
         this.totalVolume = totalVolume;
         this.parameterList = parameterList;
@@ -43,7 +43,7 @@ public class ParameterObject implements IParameterObject {
      * @param currentVolume current volume of performed work
      * @param totalVolume   total volume of work
      */
-    public ParameterObject(long currentVolume, double totalVolume) {
+    public ParameterObject(final long currentVolume, final double totalVolume) {
         this.currentVolume = currentVolume;
         this.totalVolume = totalVolume;
         this.parameterList = new ArrayList<>();

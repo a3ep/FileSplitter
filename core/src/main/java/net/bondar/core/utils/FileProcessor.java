@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Provides process of splitting or merging file.
  */
-public class FileSplitterProcessor implements IProcessor {
+public class FileProcessor implements IProcessor {
 
     /**
      * Thread name.
@@ -35,17 +35,17 @@ public class FileSplitterProcessor implements IProcessor {
     private static final String CLEANER_NAME = "Cleaner";
 
     /**
-     * Part-file name suffix key.
+     * Part-file name suffix key for configuration holder.
      */
     private static final String PART_SUFFIX = "partSuffix";
 
     /**
-     * Thread count key.
+     * Thread count key for configuration holder.
      */
     private static final String THREADS_COUNT = "threadsCount";
 
     /**
-     * Statistics timer key.
+     * Statistics timer key for configuration holder.
      */
     private static final String STATISTICS_TIMER = "statisticsTimer";
 
@@ -70,7 +70,7 @@ public class FileSplitterProcessor implements IProcessor {
     private final ThreadPoolExecutor pool;
 
     /**
-     * Thread's task factory.
+     * Task factory.
      */
     private final AbstractTaskFactory taskFactory;
 
@@ -100,7 +100,7 @@ public class FileSplitterProcessor implements IProcessor {
     private File file;
 
     /**
-     * Creates <code>FileSplitterProcessor</code> instance.
+     * Creates <code>FileProcessor</code> instance.
      *
      * @param partFileDest      destination of the part-file
      * @param configHolder      configuration holder
@@ -111,13 +111,13 @@ public class FileSplitterProcessor implements IProcessor {
      * @param commandName       name of input command
      * @see {@link IProcessor}
      */
-    public FileSplitterProcessor(String partFileDest,
-                                 IConfigHolder configHolder,
-                                 AbstractIteratorFactory iteratorFactory,
-                                 AbstractTaskFactory taskFactory,
-                                 AbstractCloseTaskFactory closeTaskFactory,
-                                 IStatisticsService statisticsService,
-                                 String commandName) {
+    public FileProcessor(final String partFileDest,
+                         IConfigHolder configHolder,
+                         AbstractIteratorFactory iteratorFactory,
+                         AbstractTaskFactory taskFactory,
+                         AbstractCloseTaskFactory closeTaskFactory,
+                         IStatisticsService statisticsService,
+                         final String commandName) {
         this.configHolder = configHolder;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(configHolder.getValue(PART_SUFFIX))));
         this.iterator = iteratorFactory.createIterator(FileCalculationUtils.getPartsList(file.getAbsolutePath(),
@@ -132,7 +132,7 @@ public class FileSplitterProcessor implements IProcessor {
     }
 
     /**
-     * Creates <code>FileSplitterProcessor</code> instance.
+     * Creates <code>FileProcessor</code> instance.
      *
      * @param fileDest          the specified file destination
      * @param partSize          the specified size of the part-file
@@ -144,13 +144,13 @@ public class FileSplitterProcessor implements IProcessor {
      * @param commandName       name of input command
      * @see {@link IProcessor}
      */
-    public FileSplitterProcessor(String fileDest, long partSize,
-                                 IConfigHolder configHolder,
-                                 AbstractIteratorFactory iteratorFactory,
-                                 AbstractTaskFactory taskFactory,
-                                 AbstractCloseTaskFactory closeTaskFactory,
-                                 IStatisticsService statisticsService,
-                                 String commandName) {
+    public FileProcessor(final String fileDest, final long partSize,
+                         IConfigHolder configHolder,
+                         AbstractIteratorFactory iteratorFactory,
+                         AbstractTaskFactory taskFactory,
+                         AbstractCloseTaskFactory closeTaskFactory,
+                         IStatisticsService statisticsService,
+                         final String commandName) {
         this.configHolder = configHolder;
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator(configHolder, file.length(), partSize);

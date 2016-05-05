@@ -43,7 +43,7 @@ public class CloseTask implements ICloseTask {
      * @param configHolder configuration holder
      * @param threadName   name of the threads that need to interrupt
      */
-    public CloseTask(IProcessor processor, IConfigHolder configHolder, String threadName) {
+    public CloseTask(IProcessor processor, IConfigHolder configHolder, final String threadName) {
         this.processor = processor;
         this.configHolder = configHolder;
         this.threadName = threadName;

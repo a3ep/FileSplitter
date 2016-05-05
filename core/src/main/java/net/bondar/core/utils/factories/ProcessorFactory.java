@@ -5,16 +5,16 @@ import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
 import net.bondar.core.interfaces.factories.AbstractTaskFactory;
-import net.bondar.core.utils.FileSplitterProcessor;
+import net.bondar.core.utils.FileProcessor;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 /**
- * Provides creating <code>FileSplitterProcessor</code>.
+ * Provides creating <code>FileProcessor</code>.
  */
 public class ProcessorFactory implements AbstractProcessorFactory {
 
     /**
-     * Creates <code>FileSplitterProcessor</code> depending on the received parameters.
+     * Creates <code>FileProcessor</code> depending on the received parameters.
      *
      * @param fileDest          specified file destination
      * @param partSize          part-file size
@@ -24,21 +24,21 @@ public class ProcessorFactory implements AbstractProcessorFactory {
      * @param closeTaskFactory  closing task factory
      * @param statisticsService statistics service
      * @param commandName       name of input command
-     * @return <code>FileSplitterProcessor</code> instance
+     * @return <code>FileProcessor</code> instance
      * @see {@link AbstractProcessorFactory}
      */
     @Override
-    public FileSplitterProcessor createProcessor(String fileDest, long partSize,
-                                                 IConfigHolder configHolder,
-                                                 AbstractIteratorFactory iteratorFactory,
-                                                 AbstractTaskFactory taskFactory,
-                                                 AbstractCloseTaskFactory closeTaskFactory,
-                                                 IStatisticsService statisticsService,
-                                                 String commandName) {
+    public FileProcessor createProcessor(final String fileDest, final long partSize,
+                                         IConfigHolder configHolder,
+                                         AbstractIteratorFactory iteratorFactory,
+                                         AbstractTaskFactory taskFactory,
+                                         AbstractCloseTaskFactory closeTaskFactory,
+                                         IStatisticsService statisticsService,
+                                         final String commandName) {
         if (partSize == 0) {
-            return new FileSplitterProcessor(fileDest, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
+            return new FileProcessor(fileDest, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
         } else {
-            return new FileSplitterProcessor(fileDest, partSize, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
+            return new FileProcessor(fileDest, partSize, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
         }
     }
 }
