@@ -5,7 +5,6 @@ import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
 import net.bondar.statistics.interfaces.ICalculatedDataObject;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
-import net.bondar.statistics.interfaces.IStatisticsHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -52,11 +51,6 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
     private final TimerFormat timerFormat;
 
     /**
-     * Statistics holder.
-     */
-    private final IStatisticsHolder holder;
-
-    /**
      * Creates <code>AdvancedStatisticsFormatter</code> instance.
      *
      * @param totalProgressDescription description for total progress value
@@ -65,22 +59,19 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * @param innerDelimiter           delimiter between description and value
      * @param progressFormat           format for progress
      * @param timerFormat              format for timer
-     * @param holder                   statistics holder
      */
     public AdvancedStatisticsFormatter(String totalProgressDescription,
                                        String timerDescription,
                                        DelimiterFormat outerDelimiter,
                                        DelimiterFormat innerDelimiter,
                                        ProgressFormat progressFormat,
-                                       TimerFormat timerFormat,
-                                       IStatisticsHolder holder) {
+                                       TimerFormat timerFormat) {
         this.totalProgressDescription = totalProgressDescription;
         this.timerDescription = timerDescription;
         this.outerDelimiter = outerDelimiter;
         this.innerDelimiter = innerDelimiter;
         this.progressFormat = progressFormat;
         this.timerFormat = timerFormat;
-        this.holder = holder;
     }
 
     /**

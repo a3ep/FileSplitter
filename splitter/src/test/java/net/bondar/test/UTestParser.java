@@ -6,7 +6,7 @@ import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.*;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
 import net.bondar.input.interfaces.client.ICommandVerifier;
-import net.bondar.input.service.InputParserService;
+import net.bondar.input.service.ParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.utils.Command;
 import net.bondar.splitter.utils.FileCommandVerifier;
@@ -54,7 +54,7 @@ public class UTestParser {
         AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
         IParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
         ICommandVerifier commandVerifier = new FileCommandVerifier();
-        inputParserService = new InputParserService(commandFinder, parameterParser, commandVerifier);
+        inputParserService = new ParserService(commandFinder, parameterParser, commandVerifier);
     }
 
     /**

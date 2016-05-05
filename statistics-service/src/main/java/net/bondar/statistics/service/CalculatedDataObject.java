@@ -33,7 +33,7 @@ public class CalculatedDataObject implements ICalculatedDataObject {
     /**
      * Creates <code>CalculatedDataObject</code> instance.
      *
-     * @param listOfIds list of statistics records ids
+     * @param listOfIds     list of statistics records ids
      * @param totalProgress total progress value
      * @param partsProgress list of parts progress values
      * @param timeRemaining time remaining value
@@ -48,11 +48,11 @@ public class CalculatedDataObject implements ICalculatedDataObject {
     /**
      * Creates <code>CalculatedDataObject</code> instance.
      *
-     * @param listOfIds list of statistics records ids
+     * @param listOfIds     list of statistics records ids
      * @param totalProgress total progress value
      * @param timeRemaining time remaining value
      */
-    public CalculatedDataObject(List<String> listOfIds, double totalProgress, double timeRemaining){
+    public CalculatedDataObject(List<String> listOfIds, double totalProgress, double timeRemaining) {
         this.listOfIds = listOfIds;
         this.totalProgress = totalProgress;
         this.partsProgress = new ArrayList<>();

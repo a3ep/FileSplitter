@@ -21,6 +21,4 @@ public interface IStatObject {
      * @return parameter value
      */
     long getParameterValue(final IStatisticsParameter parameter);
-
-
 }

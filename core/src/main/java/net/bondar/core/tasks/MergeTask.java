@@ -53,7 +53,7 @@ public class MergeTask extends AbstractTask {
                 //Sets the file-pointer to the start position of partFile
                 outputFile.seek(start);
                 // writes data into file
-                log.debug("Start read-write operation, from " + part.getName()+" to " + file.getName());
+                log.debug("Start read-write operation, from " + part.getName() + " to " + file.getName());
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write " + part.getName() + " into " + file.getName());
                 log.info("Finish processing task: " + filePart.getPartFileName());

@@ -15,7 +15,7 @@ import net.bondar.core.utils.factories.TaskFactory;
 import net.bondar.input.interfaces.*;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
 import net.bondar.input.interfaces.client.ICommandVerifier;
-import net.bondar.input.service.InputParserService;
+import net.bondar.input.service.ParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.service.FileService;
 import net.bondar.splitter.utils.Command;
@@ -67,7 +67,7 @@ public class Main {
             AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
             IParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
             ICommandVerifier commandVerifier = new FileCommandVerifier();
-            IInputParserService parserService = new InputParserService(commandFinder, parameterParser,
+            IInputParserService parserService = new ParserService(commandFinder, parameterParser,
                     commandVerifier);
             IOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
             IHelpViewer helpViewer = new HelpViewer(optionsHolder);
@@ -78,9 +78,9 @@ public class Main {
             IStatisticsHolder statisticHolder = new StatisticsHolder();
             IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter();
             IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();
-            IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
-                    DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,
-                    statisticHolder);
+            IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION,
+                    TIMER_DESCRIPTION, DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE,
+                    TimerFormat.SECONDS);
             IStatisticsViewer statisticsViewer = new StatisticsViewer();
             IStatisticsService statisticsService = new StatisticsService(statisticHolder, statisticsDataConverter,
                     statisticsCalculator, statisticsFormatter, statisticsViewer);

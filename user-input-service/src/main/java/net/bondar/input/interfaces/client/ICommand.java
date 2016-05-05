@@ -43,13 +43,6 @@ public interface ICommand {
     void setParameters(List<IParameter> parameters);
 
     /**
-     * Gets parameters values.
-     *
-     * @return list of parameters values
-     */
-    List<String> getParametersValues();
-
-    /**
      * Gets command description.
      *
      * @return command description

@@ -62,7 +62,7 @@ public abstract class AbstractTask implements ITask {
      * Initialises <code>AbstractTask</code> fields.
      *
      * @param file              specified file
-     * @param configHolder       parameter holder
+     * @param configHolder      configuration holder
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
@@ -82,7 +82,8 @@ public abstract class AbstractTask implements ITask {
      * @param bufferSize default buffer size
      * @throws IOException when read/write exception is occurring
      */
-    protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile, final long finish, final int bufferSize) throws IOException {
+    protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile,
+                             final long finish, final int bufferSize) throws IOException {
         while (start < finish) {
             //create buffer for copying
             byte[] array = new byte[FileCalculationUtils.getAvailableSize(finish, start, bufferSize)];

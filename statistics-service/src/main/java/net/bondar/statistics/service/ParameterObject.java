@@ -35,7 +35,7 @@ public class ParameterObject implements IParameterObject {
     /**
      * Creates <code>ParameterObject</code> instance.
      *
-     * @param setOfIds list of statistics records ids
+     * @param setOfIds      list of statistics records ids
      * @param currentVolume current volume of performed work
      * @param totalVolume   total volume of work
      */
@@ -50,7 +50,7 @@ public class ParameterObject implements IParameterObject {
     /**
      * Creates <code>ParameterObject</code> instance.
      *
-     * @param setOfIds list of statistics records ids
+     * @param setOfIds      list of statistics records ids
      * @param currentVolume current volume of performed work
      * @param totalVolume   total volume of work
      */
@@ -68,7 +68,7 @@ public class ParameterObject implements IParameterObject {
      * @return list of statistics records ids
      */
     @Override
-    public List<String> getListOfIds(){
+    public List<String> getListOfIds() {
         return listOfIds;
     }
 

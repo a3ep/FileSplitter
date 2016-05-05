@@ -2,7 +2,8 @@ package net.bondar.splitter.service;
 
 import net.bondar.calculations.exceptions.CalculationsException;
 import net.bondar.core.exceptions.RunException;
-import net.bondar.core.interfaces.*;
+import net.bondar.core.interfaces.IConfigHolder;
+import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
@@ -10,8 +11,8 @@ import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IHelpViewer;
 import net.bondar.input.interfaces.IInputParserService;
-import net.bondar.splitter.utils.Command;
 import net.bondar.splitter.interfaces.IService;
+import net.bondar.splitter.utils.Command;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
@@ -135,7 +136,7 @@ public class FileService implements IService {
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()),
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
                                 inputCommand.name());
-                        if (!processor.process()) inputCommand=Command.EXIT;
+                        if (!processor.process()) inputCommand = Command.EXIT;
                         log.debug("Finish splitting file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                     case MERGE:
@@ -143,7 +144,7 @@ public class FileService implements IService {
                         processor = processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
                                 parameterHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
                                 inputCommand.name());
-                        if(!processor.process()) inputCommand=Command.EXIT;
+                        if (!processor.process()) inputCommand = Command.EXIT;
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }

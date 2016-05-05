@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Provides parsing user input arguments.
  */
-public class InputParserService implements IInputParserService {
+public class ParserService implements IInputParserService {
 
     /**
      * Logger.
@@ -39,14 +39,14 @@ public class InputParserService implements IInputParserService {
     private final ICommandVerifier commandVerifier;
 
     /**
-     * Creates <code>InputParserService</code>
+     * Creates <code>ParserService</code>
      *
      * @param commandFinder   command finder
      * @param parameterParser parameter parser
      */
-    public InputParserService(ICommandFinder commandFinder,
-                              IParameterParser parameterParser,
-                              ICommandVerifier commandVerifier) {
+    public ParserService(ICommandFinder commandFinder,
+                         IParameterParser parameterParser,
+                         ICommandVerifier commandVerifier) {
         this.commandFinder = commandFinder;
         this.parameterParser = parameterParser;
         this.commandVerifier = commandVerifier;

@@ -43,7 +43,7 @@ public class CloseTask implements ICloseTask {
      *
      * @param processor    file splitter processor
      * @param configHolder configuration holder
-     * @param futures   list of futures that represented threads in a pool
+     * @param futures      list of futures that represented threads in a pool
      */
     public CloseTask(IProcessor processor, IConfigHolder configHolder, final List<Future> futures) {
         this.processor = processor;
@@ -60,7 +60,7 @@ public class CloseTask implements ICloseTask {
             return;
         }
         log.debug("Start interrupting threads...");
-        for (Future future:futures){
+        for (Future future : futures) {
             future.cancel(true);
         }
         log.debug("Finish interrupting threads.");
@@ -72,11 +72,11 @@ public class CloseTask implements ICloseTask {
                 files.forEach(File::delete);
             } else {
                 File file = processor.getFile();
-                log.debug("Deleting temporary file: "+file.getAbsolutePath());
+                log.debug("Deleting temporary file: " + file.getAbsolutePath());
                 file.delete();
             }
-        }catch (SecurityException e){
-            log.warn("Error while cleaning temporary files. Message: "+e.getMessage());
+        } catch (SecurityException e) {
+            log.warn("Error while cleaning temporary files. Message: " + e.getMessage());
         }
         log.debug("Finish cleaning temporary files.");
         log.info("Application closed.");

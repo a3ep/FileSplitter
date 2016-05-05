@@ -5,7 +5,6 @@ import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Contains user input commands.
@@ -77,11 +76,6 @@ public enum Command implements ICommand {
     @Override
     public void setParameters(List<IParameter> parameters) {
         this.parameters = parameters;
-    }
-
-    @Override
-    public List<String> getParametersValues(){
-        return parameters.stream().map(IParameter::getValue).collect(Collectors.toList());
     }
 
     @Override

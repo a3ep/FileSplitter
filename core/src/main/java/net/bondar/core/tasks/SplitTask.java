@@ -52,7 +52,7 @@ public class SplitTask extends AbstractTask {
                 long finish = filePart.getEndPosition();
                 int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
                 // writes data into file
-                log.debug("Start read-write operation, from " + file.getName()+" to " + partFile.getName());
+                log.debug("Start read-write operation, from " + file.getName() + " to " + partFile.getName());
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
                 log.info("Finish processing task: " + filePart.getPartFileName());

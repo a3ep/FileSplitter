@@ -7,7 +7,6 @@ import net.bondar.input.interfaces.client.IParameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +29,7 @@ public class FileCommandVerifier implements ICommandVerifier {
      * Size pattern.
      */
     private final Pattern sizePattern = Pattern.compile("^[0-9]+");
+
     /**
      * Verifies current file command's parameters.
      *
@@ -41,7 +41,7 @@ public class FileCommandVerifier implements ICommandVerifier {
     @Override
     public boolean verify(final ICommand command) throws ParsingException {
         log.debug("Start verifying parameters. Command: " + command.name());
-        if(!command.isParametric()){
+        if (!command.isParametric()) {
             log.debug("Finish verifying command's parameters. Command: " + command.name() + " is not parametric.");
             return true;
         }
