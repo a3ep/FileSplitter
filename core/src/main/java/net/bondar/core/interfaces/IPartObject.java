@@ -1,5 +1,7 @@
 package net.bondar.core.interfaces;
 
+import net.bondar.core.PartObjectStatus;
+
 import java.io.File;
 
 /**
@@ -12,7 +14,7 @@ public interface IPartObject {
      *
      * @return status
      */
-    String getStatus();
+    PartObjectStatus getStatus();
 
     /**
      * Gets name of part-file.

@@ -1,5 +1,6 @@
 package net.bondar.splitter;
 
+
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
@@ -20,6 +21,7 @@ import net.bondar.splitter.service.FileService;
 import net.bondar.splitter.utils.Command;
 import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;
+import net.bondar.splitter.utils.Parameter;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
@@ -74,7 +76,7 @@ public class Main {
             AbstractTaskFactory taskFactory = new TaskFactory();
             AbstractCloseTaskFactory closableFactory = new CloseTaskFactory();
             IStatisticsHolder statisticHolder = new StatisticsHolder();
-            IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter(statisticHolder);
+            IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter();
             IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();
             IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION, TIMER_DESCRIPTION,
                     DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE, TimerFormat.SECONDS,

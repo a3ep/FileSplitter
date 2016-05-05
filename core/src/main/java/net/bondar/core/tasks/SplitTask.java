@@ -1,5 +1,6 @@
 package net.bondar.core.tasks;
 
+import net.bondar.core.PartObjectStatus;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.interfaces.tasks.AbstractTask;
@@ -39,7 +40,7 @@ public class SplitTask extends AbstractTask {
     @Override
     public void run() {
         filePart = iterator.getNext();
-        while (!filePart.getStatus().equals("NULL") && !Thread.currentThread().isInterrupted()) {
+        while (!filePart.getStatus().equals(PartObjectStatus.NULL) && !Thread.currentThread().isInterrupted()) {
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {

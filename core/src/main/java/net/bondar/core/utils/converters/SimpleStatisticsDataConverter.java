@@ -17,29 +17,16 @@ import java.util.TreeMap;
 public class SimpleStatisticsDataConverter implements IStatisticsDataConverter {
 
     /**
-     * Statistics holder.
-     */
-    private final IStatisticsHolder holder;
-
-    /**
-     * Creates <code>AdvancedStatisticsDataConverter</code> instance.
-     *
-     * @param holder statistics holder
-     */
-    public SimpleStatisticsDataConverter(IStatisticsHolder holder) {
-        this.holder = holder;
-    }
-
-    /**
      * Converts file statistical data.
      *
-     * @param records map with statistics records
+     * @param holder statistics holder
      * @return object contains converted statistical data
      */
     @Override
-    public IParameterObject convert(Map<String, IStatObject> records) {
+    public IParameterObject convert(IStatisticsHolder holder) {
+        Map<String, IStatObject> records = new TreeMap<>();
         while (records.isEmpty()) {
-            records = new TreeMap<>(holder.getAllRecords());
+            records = holder.getAllRecords();
         }
         return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records));

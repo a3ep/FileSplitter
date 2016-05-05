@@ -86,7 +86,7 @@ public class StatisticsService implements IStatisticsService {
                 try {
                     do {
                         log.debug("Start showing statistical information.");
-                        viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder.getAllRecords()))));
+                        viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder))));
                         Thread.sleep(period);
                     } while (!Thread.interrupted());
                     log.debug("Finish showing statistical information.");

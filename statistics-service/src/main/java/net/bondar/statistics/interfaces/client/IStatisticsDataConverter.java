@@ -1,6 +1,7 @@
 package net.bondar.statistics.interfaces.client;
 
 import net.bondar.statistics.interfaces.IParameterObject;
+import net.bondar.statistics.interfaces.IStatisticsHolder;
 
 import java.util.Map;
 
@@ -12,8 +13,8 @@ public interface IStatisticsDataConverter {
     /**
      * Converts statistical data.
      *
-     * @param records map with statistics records
+     * @param holder statistics holder
      * @return object contains converted statistical data
      */
-    IParameterObject convert(final Map<String, IStatObject> records);
+    IParameterObject convert(IStatisticsHolder holder);
 }

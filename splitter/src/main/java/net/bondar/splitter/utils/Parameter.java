@@ -1,4 +1,4 @@
-package net.bondar.splitter;
+package net.bondar.splitter.utils;
 
 import net.bondar.input.interfaces.client.IParameter;
 

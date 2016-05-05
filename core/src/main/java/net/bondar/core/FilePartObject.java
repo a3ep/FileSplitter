@@ -10,9 +10,9 @@ import java.io.File;
 public class FilePartObject implements IPartObject {
 
     /**
-     * Object status, should be "OK" or "NULL".
+     * Object status.
      */
-    private final String status;
+    private final PartObjectStatus status;
 
     /**
      * Part-file name.
@@ -63,7 +63,7 @@ public class FilePartObject implements IPartObject {
      * @param counter       part counter
      */
     public FilePartObject(final String partFileName, final long startPosition, final long endPosition, final int counter) {
-        this.status = "OK";
+        this.status = PartObjectStatus.OK;
         this.partFileName = partFileName;
         this.startPosition = startPosition;
         this.endPosition = endPosition;
@@ -80,7 +80,7 @@ public class FilePartObject implements IPartObject {
      * @param counter       part counter
      */
     public FilePartObject(final File partFile, final long startPosition, final long endPosition, final int counter) {
-        this.status = "OK";
+        this.status = PartObjectStatus.OK;
         this.partFileName = "";
         this.startPosition = startPosition;
         this.endPosition = endPosition;
@@ -92,7 +92,7 @@ public class FilePartObject implements IPartObject {
      * Creates <code>FilePartObject</code> NULL instance.
      */
     public FilePartObject() {
-        this.status = "NULL";
+        this.status = PartObjectStatus.NULL;
         this.partFileName = "";
         this.startPosition = -1;
         this.endPosition = -1;
@@ -101,7 +101,7 @@ public class FilePartObject implements IPartObject {
     }
 
     @Override
-    public String getStatus() {
+    public PartObjectStatus getStatus() {
         return status;
     }
 
