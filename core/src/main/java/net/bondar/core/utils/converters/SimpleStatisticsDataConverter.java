@@ -7,6 +7,8 @@ import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import net.bondar.statistics.service.ParameterObject;
 import net.bondar.statistics.utils.StatisticsCalculationUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,6 +17,11 @@ import java.util.TreeMap;
  * Provides converting simple file statistical data.
  */
 public class SimpleStatisticsDataConverter implements IStatisticsDataConverter {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Converts file statistical data.
@@ -28,7 +35,8 @@ public class SimpleStatisticsDataConverter implements IStatisticsDataConverter {
         while (records.isEmpty()) {
             records = holder.getAllRecords();
         }
-        return new ParameterObject(StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
+        log.debug("Converting statistical data: " + records.values());
+        return new ParameterObject(holder.getAllRecordsIds(), StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records));
     }
 }

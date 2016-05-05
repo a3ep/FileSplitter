@@ -6,5 +6,5 @@ package net.bondar.core.utils;
 public enum ProcessorStatus {
     DONE,
     PROCESS,
-    ERROR;
+    TERMINATED
 }

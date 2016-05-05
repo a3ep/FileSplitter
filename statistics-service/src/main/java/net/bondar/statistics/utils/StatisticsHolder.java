@@ -80,9 +80,7 @@ public class StatisticsHolder implements IStatisticsHolder {
      */
     @Override
     public synchronized void cleanRecords() {
-        log.debug("Cleaning records " + records.keySet().toString());
         records.clear();
-        log.debug("Cleaning records ids " + recordsIds.toString());
         recordsIds.clear();
     }
 }

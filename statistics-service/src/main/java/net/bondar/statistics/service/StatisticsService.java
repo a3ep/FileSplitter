@@ -85,11 +85,11 @@ public class StatisticsService implements IStatisticsService {
             statThread = new Thread(() -> {
                 try {
                     do {
-                        log.debug("Start showing statistical information.");
+                        log.info("Start display statistical information.");
                         viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder))));
                         Thread.sleep(period);
                     } while (!Thread.interrupted());
-                    log.debug("Finish showing statistical information.");
+                    log.info("Finish showing statistical information.");
                 } catch (InterruptedException e) {
                     log.info("Start cleaning statistics records...");
                     holder.cleanRecords();
@@ -120,6 +120,7 @@ public class StatisticsService implements IStatisticsService {
      */
     @Override
     public void stop() {
+        log.info("Finish display statistical information.");
         statThread.interrupt();
     }
 }

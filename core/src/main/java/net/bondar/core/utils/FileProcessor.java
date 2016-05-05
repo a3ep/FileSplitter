@@ -88,11 +88,6 @@ public class FileProcessor implements IProcessor {
     private final IStatisticsService statisticsService;
 
     /**
-     * Interrupts active threads and cleans temporary files.
-     */
-    private Thread cleaner;
-
-    /**
      * Processor status.
      */
     private ProcessorStatus processorStatus = ProcessorStatus.PROCESS;
@@ -178,28 +173,36 @@ public class FileProcessor implements IProcessor {
      * @see {@link IProcessor}
      */
     public boolean process() throws RunException {
+        log.info("Start processing. Processor status: " + processorStatus.name());
         try {
             // starts showing statistical information
             statisticsService.showStatInfo(Integer.parseInt(configHolder.getValue(STATISTICS_TIMER)));
             // creates list of futures that represented threads in a pool
             List<Future> futures = new ArrayList<>();
+            log.info("Start creating tasks...");
             //distributes tasks between threads in thread pool
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 futures.add(pool.submit(taskFactory.createTask(commandName, file, configHolder, iterator, statisticsService)));
             }
             // creates shutdown hook with cleaner thread
+            Thread cleaner;
             Runtime.getRuntime().addShutdownHook(cleaner = new Thread(closeTaskFactory
                     .createCloseTask(this, configHolder, futures), CLEANER_NAME));
+            log.info("Initializing shutdown thread pool.");
             pool.shutdown();
+            log.info("Waiting for thread pool termination...");
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             //stops showing statistical information
             statisticsService.stop();
             //checks for working cleaner
             if (cleaner.isAlive()) {
                 cleaner.join();
+                processorStatus = ProcessorStatus.TERMINATED;
+                log.info("Processing was terminated. Processor status: " + processorStatus.name());
                 return false;
             }
             processorStatus = ProcessorStatus.DONE;
+            log.info("Finish processing. Processor status: " + processorStatus.name());
             return true;
         } catch (StatisticsException e) {
             log.error("Error while showing statistical information. Message " + e.getMessage());

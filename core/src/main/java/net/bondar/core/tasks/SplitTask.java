@@ -41,6 +41,7 @@ public class SplitTask extends AbstractTask {
     public void run() {
         filePart = iterator.getNext();
         while (!filePart.getStatus().equals(PartObjectStatus.NULL) && !Thread.currentThread().isInterrupted()) {
+            log.info("Start processing task: " + filePart.getPartFileName() + " by thread " + Thread.currentThread().getName());
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
@@ -51,8 +52,10 @@ public class SplitTask extends AbstractTask {
                 long finish = filePart.getEndPosition();
                 int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
                 // writes data into file
+                log.debug("Start read-write operation, from " + file.getName()+" to " + partFile.getName());
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
+                log.info("Finish processing task: " + filePart.getPartFileName());
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.error("Error during writing " + partFile + ". Message " + e.getMessage());

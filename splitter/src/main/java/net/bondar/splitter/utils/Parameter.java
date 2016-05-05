@@ -91,4 +91,13 @@ public enum Parameter implements IParameter {
      */
     private String description;
 
+    @Override
+    public String toString() {
+        return "Parameter{" +
+                "identifier='" + identifier + '\'' +
+                ", parsable=" + parsable +
+                ", value='" + value + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

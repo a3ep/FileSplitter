@@ -5,6 +5,7 @@ import net.bondar.statistics.interfaces.client.IStatisticsParameter;
 import net.bondar.statistics.service.ParameterObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class StatisticsCalculationUtils {
         List<Double> totalVolumes = recordsMap.entrySet().stream().map(entry ->
                 (double) entry.getValue().getParameterValue(total)).collect(Collectors.toList());
         for (int i = 0; i < totalVolumes.size(); i++) {
-            parameters.add(new ParameterObject(currentVolumes.get(i), totalVolumes.get(i)));
+            parameters.add(new ParameterObject(new HashSet<>(), currentVolumes.get(i), totalVolumes.get(i)));
         }
         return parameters;
     }

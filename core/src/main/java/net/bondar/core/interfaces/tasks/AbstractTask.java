@@ -6,6 +6,8 @@ import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IPartObject;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.statistics.interfaces.IStatisticsService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,11 @@ import java.io.RandomAccessFile;
  * Provides tasks for thread pool.
  */
 public abstract class AbstractTask implements ITask {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Specified file.
@@ -87,7 +94,6 @@ public abstract class AbstractTask implements ITask {
             totalWritten += writtenSize;
             filePart.setWrittenSize(start - filePart.getStartPosition());
             filePart.setTotalWrittenSize(totalWritten);
-            ;
             statisticsService.holdInformation(Thread.currentThread().getName(),
                     new FileStatObject(filePart.getStartPosition(), filePart.getEndPosition(), filePart.getWrittenSize(),
                     filePart.getTotalWrittenSize(), filePart.getFileSize()));

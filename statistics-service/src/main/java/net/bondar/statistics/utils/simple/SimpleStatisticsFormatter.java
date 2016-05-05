@@ -3,14 +3,20 @@ package net.bondar.statistics.utils.simple;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
+import net.bondar.statistics.interfaces.IDataObject;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
-
-import java.util.List;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * Provides formatting of simple statistical data.
  */
 public class SimpleStatisticsFormatter implements IStatisticsFormatter {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Description for total progress value.
@@ -69,13 +75,17 @@ public class SimpleStatisticsFormatter implements IStatisticsFormatter {
     /**
      * Formats statistical data.
      *
-     * @param dataList list with statistical data
+     * @param dataObject object with calculated statistical data
      * @return formatted string with statistical information
      */
     @Override
-    public String format(final List<Double> dataList) {
-        return totalProgressDescription + " " + innerDelimiter.getValue() + " " + progressFormat.format(dataList.remove(0))
-                + outerDelimiter.getValue() + " " + timerDescription + " " + innerDelimiter.getValue() + " "
-                + timerFormat.format(dataList.get(dataList.size() - 1));
+    public String format(final IDataObject dataObject) {
+        log.debug("Start formatting statistical data: " + dataObject.toString());
+        String result = totalProgressDescription + " " + innerDelimiter.getValue() + " "
+                + progressFormat.format(dataObject.getTotalProgress()) + outerDelimiter.getValue() + " "
+                + timerDescription + " " + innerDelimiter.getValue() + " "
+                + timerFormat.format(dataObject.getTimeRemaining());
+        log.debug("Finish formatting statistical data. Formatted string: " + result);
+        return result;
     }
 }

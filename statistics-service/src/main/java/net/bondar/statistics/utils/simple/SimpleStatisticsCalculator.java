@@ -1,7 +1,9 @@
 package net.bondar.statistics.utils.simple;
 
+import net.bondar.statistics.interfaces.IDataObject;
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.service.DataObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -22,15 +24,15 @@ public class SimpleStatisticsCalculator implements IStatisticsCalculator {
      * Calculates statistical data.
      *
      * @param parameterObject object with statistics parameters
-     * @return list with statistical data
+     * @return object with calculated statistical data
      */
     @Override
-    public List<Double> calculate(final IParameterObject parameterObject) {
-        List<Double> result = new ArrayList<>();
-        log.debug("Start calculating statistical information.");
-        result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
-        result.add(parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
-        log.debug("Finish calculating statistical information: " + result.toString());
+    public IDataObject calculate(final IParameterObject parameterObject) {
+        log.debug("Start calculating statistical data: " + parameterObject.toString());
+        IDataObject result = new DataObject(parameterObject.getListOfIds(),
+                parameterObject.getCurrentVolume() / parameterObject.getTotalVolume(),
+                parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
+        log.debug("Finish calculating statistical data: " + result.toString());
         return result;
     }
 }

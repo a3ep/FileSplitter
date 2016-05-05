@@ -41,4 +41,11 @@ public class FileStatObject implements IStatObject {
     public long getParameterValue(IStatisticsParameter parameter) {
         return parameters.get(parameter);
     }
+
+    @Override
+    public String toString() {
+        return "FileStatObject{" +
+                "parameters=" + parameters +
+                '}';
+    }
 }

@@ -11,7 +11,8 @@ public interface IStatisticsCalculator {
      * Calculates statistical data.
      *
      * @param parameterObject object with statistics parameters
-     * @return list of statistical data
+     * @return <code>IDataObject</code>
+     * @see {@link IDataObject}
      */
-    List<Double> calculate(final IParameterObject parameterObject);
+    IDataObject calculate(final IParameterObject parameterObject);
 }

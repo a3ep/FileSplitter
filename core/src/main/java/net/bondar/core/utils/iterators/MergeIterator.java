@@ -2,6 +2,8 @@ package net.bondar.core.utils.iterators;
 
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +13,11 @@ import java.util.List;
  * Provides iteration for part-files during merging process.
  */
 public class MergeIterator implements Iterable {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * File part counter.

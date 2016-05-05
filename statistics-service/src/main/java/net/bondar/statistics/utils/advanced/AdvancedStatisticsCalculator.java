@@ -1,7 +1,9 @@
 package net.bondar.statistics.utils.advanced;
 
+import net.bondar.statistics.interfaces.IDataObject;
 import net.bondar.statistics.interfaces.IParameterObject;
 import net.bondar.statistics.interfaces.IStatisticsCalculator;
+import net.bondar.statistics.service.DataObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -23,17 +25,18 @@ public class AdvancedStatisticsCalculator implements IStatisticsCalculator {
      * Calculates statistical data.
      *
      * @param parameterObject object with statistics parameters
-     * @return list with statistical data
+     * @return object with calculated statistical data
      */
     @Override
-    public List<Double> calculate(final IParameterObject parameterObject) {
-        List<Double> result = new ArrayList<>();
-        log.debug("Start calculating statistical information.");
-        result.add(parameterObject.getCurrentVolume() / parameterObject.getTotalVolume());
-        result.addAll(parameterObject.getParameterList().stream().map(object -> object.getCurrentVolume()
+    public IDataObject calculate(final IParameterObject parameterObject) {
+        log.info("Start calculating statistical data: " + parameterObject.toString());
+        List<Double> partsProgress = new ArrayList<>();
+        partsProgress.addAll(parameterObject.getParameterList().stream().map(object -> object.getCurrentVolume()
                 / object.getTotalVolume()).collect(Collectors.toList()));
-        result.add(parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
-        log.debug("Finish calculating statistical information: " + result.toString());
+        IDataObject result = new DataObject(parameterObject.getListOfIds(),
+                parameterObject.getCurrentVolume() / parameterObject.getTotalVolume(), partsProgress,
+                parameterObject.getTotalVolume() / parameterObject.getCurrentVolume());
+        log.debug("Finish calculating statistical data: " + result.toString());
         return result;
     }
 }

@@ -108,4 +108,13 @@ public enum Command implements ICommand {
      * Command description.
      */
     private String description;
+
+    @Override
+    public String toString() {
+        return "Command{" +
+                "parametric=" + parametric +
+                ", parameters=" + parameters +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

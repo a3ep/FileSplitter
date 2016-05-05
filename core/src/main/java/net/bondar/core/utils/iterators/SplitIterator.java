@@ -3,11 +3,18 @@ package net.bondar.core.utils.iterators;
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 /**
  * Provides iteration for part-files during splitting process.
  */
 public class SplitIterator implements Iterable {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = LogManager.getLogger(getClass());
 
     /**
      * Part-file counter.

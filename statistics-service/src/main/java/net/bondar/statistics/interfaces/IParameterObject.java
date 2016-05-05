@@ -10,6 +10,13 @@ import java.util.List;
 public interface IParameterObject {
 
     /**
+     * Gets list of statistics records ids.
+     *
+     * @return list of statistics records ids
+     */
+    List<String> getListOfIds();
+
+    /**
      * Gets current volume of performed work.
      *
      * @return current volume of performed work
