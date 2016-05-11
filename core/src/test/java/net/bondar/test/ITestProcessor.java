@@ -1,9 +1,5 @@
 package net.bondar.test;
 
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.core.utils.FileProcessor;
 import net.bondar.core.utils.FilesFinder;
@@ -64,22 +60,22 @@ public class ITestProcessor {
     /**
      * Parameter holder.
      */
-    private static IConfigHolder configHolder;
+    private static ConfigHolder configHolder;
 
     /**
      * Iterator factory.
      */
-    private static AbstractIteratorFactory iteratorFactory;
+    private static IteratorFactory iteratorFactory;
 
     /**
      * Task factory.
      */
-    private static AbstractTaskFactory taskFactory;
+    private static TaskFactory taskFactory;
 
     /**
      * Closing task factory.
      */
-    private static AbstractCloseTaskFactory closeTaskFactory;
+    private static CloseTaskFactory closeTaskFactory;
 
     /**
      * Statistic service.

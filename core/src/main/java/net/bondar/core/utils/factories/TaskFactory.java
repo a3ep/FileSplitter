@@ -1,12 +1,11 @@
 package net.bondar.core.utils.factories;
 
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.core.interfaces.tasks.AbstractTask;
 import net.bondar.core.interfaces.tasks.ITask;
 import net.bondar.core.tasks.MergeTask;
 import net.bondar.core.tasks.SplitTask;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 import java.io.File;
@@ -14,7 +13,7 @@ import java.io.File;
 /**
  * Creates file tasks.
  */
-public class TaskFactory extends AbstractTaskFactory {
+public class TaskFactory {
 
     /**
      * Creates task depending on the received parameters.
@@ -27,10 +26,9 @@ public class TaskFactory extends AbstractTaskFactory {
      * @return concrete task instance
      * @see {@link AbstractTask}
      */
-    @Override
     public ITask createTask(final String commandName,
                             final File file,
-                            IConfigHolder configHolder,
+                            ConfigHolder configHolder,
                             Iterable iterator,
                             IStatisticsService statisticsService) {
         if (commandName.equalsIgnoreCase("split")) {

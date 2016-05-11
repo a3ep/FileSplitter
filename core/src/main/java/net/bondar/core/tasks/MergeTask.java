@@ -1,9 +1,9 @@
 package net.bondar.core.tasks;
 
 import net.bondar.core.PartObjectStatus;
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.interfaces.tasks.AbstractTask;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class MergeTask extends AbstractTask {
      * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public MergeTask(final File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public MergeTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         super(file, configHolder, iterator, statisticsService);
 
     }
@@ -42,7 +42,8 @@ public class MergeTask extends AbstractTask {
     public void run() {
         filePart = iterator.getNext();
         while (!filePart.getStatus().equals(PartObjectStatus.NULL) && !Thread.currentThread().isInterrupted()) {
-            log.info("Start processing task: " + filePart.getPartFile().getName() + " by thread " + Thread.currentThread().getName());
+            log.info("Start processing task #" + filePart.getCounter() + ": " + filePart.getPartFile().getName()
+                    + " by thread " + Thread.currentThread().getName());
             File part = filePart.getPartFile();
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
@@ -56,7 +57,7 @@ public class MergeTask extends AbstractTask {
                 log.debug("Start read-write operation, from " + part.getName() + " to " + file.getName());
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write " + part.getName() + " into " + file.getName());
-                log.info("Finish processing task: " + filePart.getPartFileName());
+                log.info("Finish processing task #" + filePart.getCounter() + ": " + filePart.getPartFileName());
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.error("Error during writing " + part.getName() + " into " + file.getName() + ". Message " + e.getMessage());

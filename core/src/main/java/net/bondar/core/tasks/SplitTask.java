@@ -1,9 +1,9 @@
 package net.bondar.core.tasks;
 
 import net.bondar.core.PartObjectStatus;
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.interfaces.tasks.AbstractTask;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class SplitTask extends AbstractTask {
      * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public SplitTask(final File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public SplitTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         super(file, configHolder, iterator, statisticsService);
     }
 
@@ -41,7 +41,8 @@ public class SplitTask extends AbstractTask {
     public void run() {
         filePart = iterator.getNext();
         while (!filePart.getStatus().equals(PartObjectStatus.NULL) && !Thread.currentThread().isInterrupted()) {
-            log.info("Start processing task: " + filePart.getPartFileName() + " by thread " + Thread.currentThread().getName());
+            log.info("Start processing task #" + filePart.getCounter() + ": " + filePart.getPartFileName()
+                    + " by thread " + Thread.currentThread().getName());
             File partFile = new File(file.getParent(), file.getName() + filePart.getPartFileName());
             try (RandomAccessFile sourceFile = new RandomAccessFile(file, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(partFile, "rw")) {
@@ -55,7 +56,7 @@ public class SplitTask extends AbstractTask {
                 log.debug("Start read-write operation, from " + file.getName() + " to " + partFile.getName());
                 readWrite(sourceFile, outputFile, finish, bufferSize);
                 log.debug("Finish to write: " + partFile.getName());
-                log.info("Finish processing task: " + filePart.getPartFileName());
+                log.info("Finish processing task #" + filePart.getCounter() + ": " + filePart.getPartFileName());
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.error("Error during writing " + partFile + ". Message " + e.getMessage());

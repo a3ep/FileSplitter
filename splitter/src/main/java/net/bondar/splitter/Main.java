@@ -1,11 +1,6 @@
 package net.bondar.splitter;
 
 
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
-import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.core.utils.converters.AdvancedStatisticsDataConverter;
 import net.bondar.core.utils.factories.CloseTaskFactory;
@@ -57,7 +52,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            IConfigHolder configHolder = new ConfigHolder();
+            ConfigHolder configHolder = new ConfigHolder();
             CommandHolder commandHolder = new CommandHolder(Arrays.asList(Command.values()));
             CommandFinder commandFinder = new CommandFinder(commandHolder);
             ParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(Parameter.values()));
@@ -67,10 +62,10 @@ public class Main {
             IParserService parserService = new ParserService(commandFinder, parameterParser);
             CliOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
             HelpViewer helpViewer = new HelpViewer(optionsHolder);
-            AbstractProcessorFactory processorFactory = new ProcessorFactory();
-            AbstractIteratorFactory iteratorFactory = new IteratorFactory();
-            AbstractTaskFactory taskFactory = new TaskFactory();
-            AbstractCloseTaskFactory closableFactory = new CloseTaskFactory();
+            ProcessorFactory processorFactory = new ProcessorFactory();
+            IteratorFactory iteratorFactory = new IteratorFactory();
+            TaskFactory taskFactory = new TaskFactory();
+            CloseTaskFactory closableFactory = new CloseTaskFactory();
             StatisticsHolder statisticHolder = new StatisticsHolder();
             IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter();
             IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();

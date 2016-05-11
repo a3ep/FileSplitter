@@ -1,13 +1,11 @@
 package net.bondar.core.utils;
 
 import net.bondar.core.exceptions.RunException;
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.factories.CloseTaskFactory;
+import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.NamedThreadFactory;
+import net.bondar.core.utils.factories.TaskFactory;
 import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
@@ -24,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Provides process of splitting or merging file.
  */
-public class FileProcessor implements IProcessor {
+public class FileProcessor {
 
     /**
      * Thread name.
@@ -59,7 +57,7 @@ public class FileProcessor implements IProcessor {
     /**
      * Configuration holder.
      */
-    private final IConfigHolder configHolder;
+    private final ConfigHolder configHolder;
 
     /**
      * Iterator.
@@ -74,12 +72,12 @@ public class FileProcessor implements IProcessor {
     /**
      * Task factory.
      */
-    private final AbstractTaskFactory taskFactory;
+    private final TaskFactory taskFactory;
 
     /**
      * Close task factory.
      */
-    private final AbstractCloseTaskFactory closeTaskFactory;
+    private final CloseTaskFactory closeTaskFactory;
 
     /**
      * Statistic service.
@@ -111,13 +109,12 @@ public class FileProcessor implements IProcessor {
      * @param closeTaskFactory  close task factory
      * @param statisticsService statistics service
      * @param commandName       name of input command
-     * @see {@link IProcessor}
      */
     public FileProcessor(final String partFileDest,
-                         IConfigHolder configHolder,
-                         AbstractIteratorFactory iteratorFactory,
-                         AbstractTaskFactory taskFactory,
-                         AbstractCloseTaskFactory closeTaskFactory,
+                         ConfigHolder configHolder,
+                         IteratorFactory iteratorFactory,
+                         TaskFactory taskFactory,
+                         CloseTaskFactory closeTaskFactory,
                          IStatisticsService statisticsService,
                          final String commandName) {
         this.configHolder = configHolder;
@@ -144,13 +141,12 @@ public class FileProcessor implements IProcessor {
      * @param closeTaskFactory  closing task factory
      * @param statisticsService statistics service
      * @param commandName       name of input command
-     * @see {@link IProcessor}
      */
     public FileProcessor(final String fileDest, final long partSize,
-                         IConfigHolder configHolder,
-                         AbstractIteratorFactory iteratorFactory,
-                         AbstractTaskFactory taskFactory,
-                         AbstractCloseTaskFactory closeTaskFactory,
+                         ConfigHolder configHolder,
+                         IteratorFactory iteratorFactory,
+                         TaskFactory taskFactory,
+                         CloseTaskFactory closeTaskFactory,
                          IStatisticsService statisticsService,
                          final String commandName) {
         this.configHolder = configHolder;
@@ -169,7 +165,6 @@ public class FileProcessor implements IProcessor {
      * Processes file.
      *
      * @throws RunException when occurred exception during showing statistical information or splitter thread waiting for pool
-     * @see {@link IProcessor}
      */
     public boolean process() throws RunException {
         log.info("Start processing. Processor status: " + processorStatus.name());
@@ -217,7 +212,6 @@ public class FileProcessor implements IProcessor {
      *
      * @return complete file
      */
-    @Override
     public File getFile() {
         return file;
     }
@@ -227,7 +221,6 @@ public class FileProcessor implements IProcessor {
      *
      * @return name of executing command
      */
-    @Override
     public String getCommandName() {
         return commandName;
     }
@@ -237,7 +230,6 @@ public class FileProcessor implements IProcessor {
      *
      * @return current processor status
      */
-    @Override
     public ProcessorStatus getProcessorStatus() {
         return processorStatus;
     }

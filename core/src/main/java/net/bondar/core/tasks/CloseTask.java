@@ -1,7 +1,7 @@
 package net.bondar.core.tasks;
 
-import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.tasks.ICloseTask;
+import net.bondar.core.utils.FileProcessor;
 import net.bondar.core.utils.ProcessorStatus;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -27,7 +27,7 @@ public class CloseTask implements ICloseTask {
     /**
      * File splitter processor.
      */
-    private IProcessor processor;
+    private FileProcessor processor;
 
 
     /**
@@ -36,7 +36,7 @@ public class CloseTask implements ICloseTask {
      * @param processor file splitter processor
      * @param futures   list of futures that represented threads in a pool
      */
-    public CloseTask(IProcessor processor, final List<Future> futures) {
+    public CloseTask(FileProcessor processor, final List<Future> futures) {
         this.processor = processor;
         this.futures = futures;
     }

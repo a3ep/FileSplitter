@@ -1,13 +1,11 @@
 package net.bondar.core;
 
-import net.bondar.core.interfaces.IPartObject;
-
 import java.io.File;
 
 /**
  * Contains file parameters for calculations.
  */
-public class FilePartObject implements IPartObject {
+public class FilePartObject {
 
     /**
      * Object status.
@@ -90,42 +88,34 @@ public class FilePartObject implements IPartObject {
         this.partFile = null;
     }
 
-    @Override
     public PartObjectStatus getStatus() {
         return status;
     }
 
-    @Override
     public String getPartFileName() {
         return partFileName;
     }
 
-    @Override
     public long getStartPosition() {
         return startPosition;
     }
 
-    @Override
     public long getEndPosition() {
         return endPosition;
     }
 
-    @Override
     public long getFileSize() {
         return fileSize;
     }
 
-    @Override
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
 
-    @Override
     public int getCounter() {
         return counter;
     }
 
-    @Override
     public File getPartFile() {
         return partFile;
     }

@@ -1,9 +1,9 @@
 package net.bondar.core.interfaces.tasks;
 
+import net.bondar.core.FilePartObject;
 import net.bondar.core.FileStatObject;
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.IPartObject;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -30,7 +30,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Parameter holder
      */
-    protected final IConfigHolder configHolder;
+    protected final ConfigHolder configHolder;
 
     /**
      * Iterator.
@@ -55,7 +55,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Object contains part-file parameters.
      */
-    protected IPartObject filePart;
+    protected FilePartObject filePart;
 
     /**
      * Initialises <code>AbstractTask</code> fields.
@@ -65,7 +65,7 @@ public abstract class AbstractTask implements ITask {
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
-    public AbstractTask(final File file, IConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    public AbstractTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
         this.configHolder = configHolder;
         this.iterator = iterator;

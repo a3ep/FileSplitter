@@ -1,17 +1,13 @@
 package net.bondar.core.utils.factories;
 
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
-import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.ConfigHolder;
 import net.bondar.core.utils.FileProcessor;
 import net.bondar.statistics.interfaces.IStatisticsService;
 
 /**
  * Provides creating <code>FileProcessor</code>.
  */
-public class ProcessorFactory implements AbstractProcessorFactory {
+public class ProcessorFactory {
 
     /**
      * Creates <code>FileProcessor</code> depending on the received parameters.
@@ -25,14 +21,12 @@ public class ProcessorFactory implements AbstractProcessorFactory {
      * @param statisticsService statistics service
      * @param commandName       name of input command
      * @return <code>FileProcessor</code> instance
-     * @see {@link AbstractProcessorFactory}
      */
-    @Override
     public FileProcessor createProcessor(final String fileDest, final long partSize,
-                                         IConfigHolder configHolder,
-                                         AbstractIteratorFactory iteratorFactory,
-                                         AbstractTaskFactory taskFactory,
-                                         AbstractCloseTaskFactory closeTaskFactory,
+                                         ConfigHolder configHolder,
+                                         IteratorFactory iteratorFactory,
+                                         TaskFactory taskFactory,
+                                         CloseTaskFactory closeTaskFactory,
                                          IStatisticsService statisticsService,
                                          final String commandName) {
         if (partSize == 0) {

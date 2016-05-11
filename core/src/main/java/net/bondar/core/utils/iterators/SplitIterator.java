@@ -1,8 +1,8 @@
 package net.bondar.core.utils.iterators;
 
 import net.bondar.core.FilePartObject;
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.utils.ConfigHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -39,7 +39,7 @@ public class SplitIterator implements Iterable {
     /**
      * Parameter holder.
      */
-    private IConfigHolder configHolder;
+    private ConfigHolder configHolder;
 
     /**
      * Creates <code>SplitIterator</code> instance.
@@ -48,7 +48,7 @@ public class SplitIterator implements Iterable {
      * @param partLength the specified part-file length
      * @see {@link Iterable}
      */
-    public SplitIterator(IConfigHolder configHolder, long fileLength, long partLength) {
+    public SplitIterator(ConfigHolder configHolder, long fileLength, long partLength) {
         this.configHolder = configHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;

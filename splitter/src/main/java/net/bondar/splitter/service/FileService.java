@@ -1,13 +1,13 @@
 package net.bondar.splitter.service;
 
 import net.bondar.core.exceptions.RunException;
-import net.bondar.core.interfaces.IConfigHolder;
-import net.bondar.core.interfaces.IProcessor;
-import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
-import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
-import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
-import net.bondar.core.interfaces.factories.AbstractTaskFactory;
+import net.bondar.core.utils.ConfigHolder;
+import net.bondar.core.utils.FileProcessor;
 import net.bondar.core.utils.FilesFinder;
+import net.bondar.core.utils.factories.CloseTaskFactory;
+import net.bondar.core.utils.factories.IteratorFactory;
+import net.bondar.core.utils.factories.ProcessorFactory;
+import net.bondar.core.utils.factories.TaskFactory;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IParserService;
 import net.bondar.input.utils.HelpViewer;
@@ -37,7 +37,7 @@ public class FileService implements IService {
     /**
      * Parameter holder.
      */
-    private final IConfigHolder configHolder;
+    private final ConfigHolder configHolder;
 
     /**
      * Input parser service.
@@ -47,22 +47,22 @@ public class FileService implements IService {
     /**
      * Processor factory.
      */
-    private final AbstractProcessorFactory processorFactory;
+    private final ProcessorFactory processorFactory;
 
     /**
      * Iterator factory.
      */
-    private final AbstractIteratorFactory iteratorFactory;
+    private final IteratorFactory iteratorFactory;
 
     /**
      * Task factory
      */
-    private final AbstractTaskFactory taskFactory;
+    private final TaskFactory taskFactory;
 
     /**
      * Closing task factory.
      */
-    private final AbstractCloseTaskFactory closeTaskFactory;
+    private final CloseTaskFactory closeTaskFactory;
 
     /**
      * Statistic service.
@@ -82,7 +82,7 @@ public class FileService implements IService {
     /**
      * Current processor.
      */
-    private IProcessor processor;
+    private FileProcessor processor;
 
     /**
      * Creates <code>FileService</code> instance.
@@ -96,12 +96,12 @@ public class FileService implements IService {
      * @param statisticsService statistics service
      * @param helpViewer        help viewer
      */
-    public FileService(IConfigHolder configHolder,
+    public FileService(ConfigHolder configHolder,
                        IParserService parserService,
-                       AbstractProcessorFactory processorFactory,
-                       AbstractIteratorFactory iteratorFactory,
-                       AbstractTaskFactory taskFactory,
-                       AbstractCloseTaskFactory closeTaskFactory,
+                       ProcessorFactory processorFactory,
+                       IteratorFactory iteratorFactory,
+                       TaskFactory taskFactory,
+                       CloseTaskFactory closeTaskFactory,
                        IStatisticsService statisticsService,
                        HelpViewer helpViewer) {
         this.configHolder = configHolder;

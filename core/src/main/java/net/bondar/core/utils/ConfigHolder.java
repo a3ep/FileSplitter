@@ -1,7 +1,6 @@
 package net.bondar.core.utils;
 
 import net.bondar.core.exceptions.RunException;
-import net.bondar.core.interfaces.IConfigHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,7 +11,7 @@ import java.util.Properties;
 /**
  * Holds application configurations and parameters.
  */
-public class ConfigHolder implements IConfigHolder {
+public class ConfigHolder {
 
     /**
      * Application properties.
@@ -23,7 +22,6 @@ public class ConfigHolder implements IConfigHolder {
      * Creates <code>ConfigHolder</code> instance.
      *
      * @throws RunException when occurred exception during loading properties
-     * @see {@link IConfigHolder}
      */
     public ConfigHolder() throws RunException {
         properties = new Properties();
@@ -48,7 +46,6 @@ public class ConfigHolder implements IConfigHolder {
      *
      * @param key key of the specified parameter
      * @return parameter value
-     * @see {@link IConfigHolder}
      */
     public String getValue(final String key) {
         return properties.getProperty(key);

@@ -15,11 +15,6 @@ import java.util.List;
 public class MergeIterator implements Iterable {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * File part counter.
      */
     private int counter = 1;
