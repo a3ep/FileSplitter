@@ -57,9 +57,7 @@ public class CliOptionsHolder {
      * @param commands setting commands options
      */
     public void setCommands(Options commands) {
-        for (ICommand command : commandHolder.getCommands()) {
-            commands.addOption(command.name().toLowerCase(), false, command.getDescription());
-        }
+        this.commands = commands;
     }
 
     /**

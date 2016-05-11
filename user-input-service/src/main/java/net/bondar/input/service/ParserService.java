@@ -4,7 +4,6 @@ package net.bondar.input.service;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.IParserService;
 import net.bondar.input.interfaces.client.ICommand;
-import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.utils.CommandFinder;
 import net.bondar.input.utils.ParameterParser;
 import org.apache.log4j.LogManager;
@@ -33,10 +32,6 @@ public class ParserService implements IParserService {
      */
     private final ParameterParser parameterParser;
 
-    /**
-     * Command verifier.
-     */
-    private final ICommandVerifier commandVerifier;
 
     /**
      * Creates <code>ParserService</code>
@@ -45,11 +40,9 @@ public class ParserService implements IParserService {
      * @param parameterParser parameter parser
      */
     public ParserService(CommandFinder commandFinder,
-                         ParameterParser parameterParser,
-                         ICommandVerifier commandVerifier) {
+                         ParameterParser parameterParser) {
         this.commandFinder = commandFinder;
         this.parameterParser = parameterParser;
-        this.commandVerifier = commandVerifier;
     }
 
     /**
@@ -68,16 +61,12 @@ public class ParserService implements IParserService {
             if (currentCommand.isParametric()) {
                 currentCommand.setParameters(parameterParser.parse(argsList.subList(1, argsList.size())));
             }
-            if (commandVerifier.verify(currentCommand)) {
-                log.info("Finish parsing input arguments. Current command: " + currentCommand.name() + ", parameters: "
-                        + currentCommand.getParameters());
-                return currentCommand;
-            }
+            log.info("Finish parsing input arguments. Current command: " + currentCommand.name() + ", parameters: "
+                    + currentCommand.getParameters());
+            return currentCommand;
         } catch (ParsingException e) {
             log.error("Error while parsing input arguments: " + argsList.toString());
             throw new ParsingException("Error while parsing input arguments: " + argsList.toString(), e);
         }
-        log.error("Error incorrect input arguments: " + argsList.toString());
-        throw new ParsingException("Error incorrect input arguments: " + argsList.toString());
     }
 }

@@ -12,14 +12,12 @@ import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.ProcessorFactory;
 import net.bondar.core.utils.factories.TaskFactory;
-import net.bondar.input.interfaces.*;
+import net.bondar.input.interfaces.IParserService;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
-import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.ParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.service.FileService;
 import net.bondar.splitter.utils.Command;
-import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;
 import net.bondar.splitter.utils.Parameter;
 import net.bondar.statistics.formatters.DelimiterFormat;
@@ -66,9 +64,7 @@ public class Main {
             ParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
             AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
             ParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
-            ICommandVerifier commandVerifier = new FileCommandVerifier();
-            IParserService parserService = new ParserService(commandFinder, parameterParser,
-                    commandVerifier);
+            IParserService parserService = new ParserService(commandFinder, parameterParser);
             CliOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
             HelpViewer helpViewer = new HelpViewer(optionsHolder);
             AbstractProcessorFactory processorFactory = new ProcessorFactory();

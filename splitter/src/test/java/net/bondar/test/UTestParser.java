@@ -5,11 +5,9 @@ import net.bondar.core.utils.ConfigHolder;
 import net.bondar.input.exceptions.ParsingException;
 import net.bondar.input.interfaces.*;
 import net.bondar.input.interfaces.client.AbstractParameterConverterFactory;
-import net.bondar.input.interfaces.client.ICommandVerifier;
 import net.bondar.input.service.ParserService;
 import net.bondar.input.utils.*;
 import net.bondar.splitter.utils.Command;
-import net.bondar.splitter.utils.FileCommandVerifier;
 import net.bondar.splitter.utils.FileParameterConverterFactory;
 import net.bondar.splitter.utils.Parameter;
 import org.easymock.EasyMock;
@@ -53,8 +51,7 @@ public class UTestParser {
         ParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
         AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
         ParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
-        ICommandVerifier commandVerifier = new FileCommandVerifier();
-        inputParserService = new ParserService(commandFinder, parameterParser, commandVerifier);
+        inputParserService = new ParserService(commandFinder, parameterParser);
     }
 
     /**

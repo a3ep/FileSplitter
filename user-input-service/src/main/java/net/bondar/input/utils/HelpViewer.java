@@ -48,7 +48,7 @@ public class HelpViewer {
      *
      */
     public void showHelp() {
-        log.debug("Showing help.");
+        log.debug("Display help.");
         helpFormatter.printHelp(COMMANDS_OPTIONS_DESCRIPTION, optionsHolder.getCommands());
         helpFormatter.printHelp(PARAMETERS_OPTIONS_DESCRIPTION, optionsHolder.getParameters());
     }
