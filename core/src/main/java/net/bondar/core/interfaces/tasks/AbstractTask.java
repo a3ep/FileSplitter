@@ -1,6 +1,5 @@
 package net.bondar.core.interfaces.tasks;
 
-import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.FileStatObject;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IPartObject;
@@ -86,7 +85,7 @@ public abstract class AbstractTask implements ITask {
                              final long finish, final int bufferSize) throws IOException {
         while (start < finish) {
             //create buffer for copying
-            byte[] array = new byte[FileCalculationUtils.getAvailableSize(finish, start, bufferSize)];
+            byte[] array = new byte[getAvailableSize(finish, start, bufferSize)];
             //process of copying
             sourceFile.read(array);
             outputFile.write(array);
@@ -97,5 +96,17 @@ public abstract class AbstractTask implements ITask {
                     new FileStatObject(filePart.getStartPosition(), filePart.getEndPosition(),
                             start - filePart.getStartPosition(), totalWritten, filePart.getFileSize()));
         }
+    }
+
+    /**
+     * Gets the required size of the byte array to write into the file.
+     *
+     * @param finish     index of the end position in a file.
+     * @param start      index of the start position in a file.
+     * @param bufferSize default buffer size
+     * @return required byte array size
+     */
+    private int getAvailableSize(final long finish, final long start, final int bufferSize) {
+        return ((finish - start) >= bufferSize) ? bufferSize : (int) (finish - start);
     }
 }

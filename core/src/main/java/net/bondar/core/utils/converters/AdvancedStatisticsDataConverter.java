@@ -38,6 +38,7 @@ public class AdvancedStatisticsDataConverter implements IStatisticsDataConverter
         return new ParameterObject(holder.getAllRecordsIds(),
                 StatisticsCalculationUtils.calculateCurrentVolume(FileStatisticsParameter.TOTAL_WRITTEN, records),
                 StatisticsCalculationUtils.calculateTotalVolume(FileStatisticsParameter.TOTAL_SIZE, records),
-                StatisticsCalculationUtils.calculateParametersList(FileStatisticsParameter.PART_WRITTEN, FileStatisticsParameter.PART_SIZE, records));
+                StatisticsCalculationUtils.calculateParametersList(FileStatisticsParameter.PART_WRITTEN,
+                        FileStatisticsParameter.PART_SIZE, records));
     }
 }

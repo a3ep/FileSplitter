@@ -1,12 +1,12 @@
 package net.bondar.test;
 
-import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.factories.AbstractCloseTaskFactory;
 import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.core.utils.FileProcessor;
+import net.bondar.core.utils.FilesFinder;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.TaskFactory;
@@ -141,7 +141,7 @@ public class ITestProcessor {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, configHolder, iteratorFactory,
                     taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
-            List<File> resultParts = FileCalculationUtils.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
+            List<File> resultParts = FilesFinder.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
                 assertTrue(FileUtils.contentEquals(specifiedParts.get(i), resultParts.get(i)));

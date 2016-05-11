@@ -1,6 +1,5 @@
 package net.bondar.core.utils;
 
-import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
@@ -123,7 +122,7 @@ public class FileProcessor implements IProcessor {
                          final String commandName) {
         this.configHolder = configHolder;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(configHolder.getValue(PART_SUFFIX))));
-        this.iterator = iteratorFactory.createIterator(FileCalculationUtils.getPartsList(file.getAbsolutePath(),
+        this.iterator = iteratorFactory.createIterator(FilesFinder.getPartsList(file.getAbsolutePath(),
                 configHolder.getValue(PART_SUFFIX)));
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;

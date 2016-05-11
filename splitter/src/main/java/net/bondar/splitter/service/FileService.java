@@ -1,6 +1,5 @@
 package net.bondar.splitter.service;
 
-import net.bondar.calculations.exceptions.CalculationsException;
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
@@ -148,7 +147,7 @@ public class FileService implements IService {
                         log.debug("Finish merging file -> " + inputCommand.getParameters().get(0).getValue() + "\n");
                         break;
                 }
-            } catch (RunException | CalculationsException | ParsingException | StatisticsException e) {
+            } catch (RunException | ParsingException | StatisticsException e) {
                 log.error("File Splitter Application error. Message: " + e.getMessage() + "\n");
             } catch (IOException e) {
                 log.error("Error while processing user input. Message " + e.getMessage());

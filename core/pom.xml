@@ -27,11 +27,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.bondar</groupId>
-            <artifactId>calculations-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>

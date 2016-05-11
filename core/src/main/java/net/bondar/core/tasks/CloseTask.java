@@ -1,10 +1,10 @@
 package net.bondar.core.tasks;
 
-import net.bondar.calculations.FileCalculationUtils;
 import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.tasks.ICloseTask;
 import net.bondar.core.utils.Command;
+import net.bondar.core.utils.FilesFinder;
 import net.bondar.core.utils.ProcessorStatus;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -67,7 +67,7 @@ public class CloseTask implements ICloseTask {
         log.debug("Start cleaning temporary files...");
         try {
             if (processor.getCommandName().equalsIgnoreCase(Command.SPLIT.name())) {
-                List<File> files = FileCalculationUtils.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix"));
+                List<File> files = FilesFinder.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix"));
                 log.debug("Deleting temporary files.");
                 files.forEach(File::delete);
             } else {
