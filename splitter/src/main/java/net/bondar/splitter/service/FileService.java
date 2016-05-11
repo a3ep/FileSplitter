@@ -140,8 +140,7 @@ public class FileService implements IService {
                         log.debug("Start splitting file -> " + inputCommand.getParameters().get(0).getValue());
                         processor = processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(),
                                 Long.parseLong(inputCommand.getParameters().get(1).getValue()),
-                                configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
-                                inputCommand.name());
+                                configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService);
                         if (!processor.process()) {
                             close();
                             break;
@@ -151,8 +150,7 @@ public class FileService implements IService {
                     case MERGE:
                         log.debug("Start merging file -> " + inputCommand.getParameters().get(0).getValue());
                         processor = processorFactory.createProcessor(inputCommand.getParameters().get(0).getValue(), 0,
-                                configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService,
-                                inputCommand.name());
+                                configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService);
                         if (!processor.process()) {
                             close();
                             break;

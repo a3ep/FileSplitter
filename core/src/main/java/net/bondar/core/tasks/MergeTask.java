@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 /**
  * Provides merge tasks for thread pool.
@@ -24,14 +25,14 @@ public class MergeTask extends AbstractTask {
     /**
      * Creates <code>MergeTask</code> instance.
      *
-     * @param file              specified file
+     * @param files             specified list of pert-files
      * @param configHolder      configuration holder
      * @param iterator          iterator
      * @param statisticsService statistics service
      * @see {@link AbstractTask}
      */
-    public MergeTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
-        super(file, configHolder, iterator, statisticsService);
+    public MergeTask(final List<File> files, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+        super(files, configHolder, iterator, statisticsService);
 
     }
 
@@ -41,10 +42,11 @@ public class MergeTask extends AbstractTask {
     @Override
     public void run() {
         filePart = iterator.getNext();
+        file = new File(files.get(0).getAbsolutePath().substring(0, files.get(0).getAbsolutePath().indexOf(configHolder.getValue("partSuffix"))));
         while (!filePart.getStatus().equals(PartObjectStatus.NULL) && !Thread.currentThread().isInterrupted()) {
             log.info("Start processing task #" + filePart.getCounter() + ": " + filePart.getPartFile().getName()
                     + " by thread " + Thread.currentThread().getName());
-            File part = filePart.getPartFile();
+            File part = files.get(filePart.getCounter()-1);
             try (RandomAccessFile sourceFile = new RandomAccessFile(part, "r");
                  RandomAccessFile outputFile = new RandomAccessFile(file, "rw")) {
                 log.debug("Start to write " + part.getName() + " into Complete file : " + file.getName());

@@ -38,16 +38,6 @@ public class ITestProcessor {
     private static final Logger log = LogManager.getLogger(ITestProcessor.class);
 
     /**
-     * Split command name.
-     */
-    private static final String SPLIT_COMMAND = "split";
-
-    /**
-     * Merge command name.
-     */
-    private static final String MERGE_COMMAND = "merge";
-
-    /**
      * Size of the part-file;
      */
     private static final int PART_SIZE = 1024 * 1024;
@@ -136,7 +126,7 @@ public class ITestProcessor {
     public void testProcessSplit() {
         try {
             new FileProcessor(specifiedFile.getAbsolutePath(), PART_SIZE, configHolder, iteratorFactory,
-                    taskFactory, closeTaskFactory, statisticsService, SPLIT_COMMAND).process();
+                    taskFactory, closeTaskFactory, statisticsService).process();
             List<File> resultParts = FilesFinder.getPartsList(specifiedFile.getAbsolutePath(), partSuffix);
             assertEquals(specifiedParts.size(), resultParts.size());
             for (int i = 0; i < specifiedParts.size(); i++) {
@@ -154,7 +144,7 @@ public class ITestProcessor {
     public void testProcessMerge() {
         try {
             FileProcessor mergeProcessor = new FileProcessor(specifiedParts.get(0).getAbsolutePath(),
-                    configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, MERGE_COMMAND);
+                    configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService);
             mergeProcessor.process();
             File resultFile = mergeProcessor.getFile();
             assertEquals(specifiedFile.length(), resultFile.length());

@@ -2,6 +2,7 @@ package net.bondar.core.utils;
 
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.interfaces.tasks.ITask;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.NamedThreadFactory;
@@ -23,11 +24,6 @@ import java.util.concurrent.TimeUnit;
  * Provides process of splitting or merging file.
  */
 public class FileProcessor {
-
-    /**
-     * Thread name.
-     */
-    private static final String THREAD_NAME = "Worker";
 
     /**
      * Name for cleaner thread.
@@ -90,14 +86,14 @@ public class FileProcessor {
     private ProcessorStatus processorStatus = ProcessorStatus.PROCESS;
 
     /**
-     * Name of input command.
-     */
-    private final String commandName;
-
-    /**
      * Complete file.
      */
     private File file;
+
+    /**
+     * List of part-files.
+     */
+    private List<File> files = new ArrayList<>();
 
     /**
      * Creates <code>FileProcessor</code> instance.
@@ -108,23 +104,24 @@ public class FileProcessor {
      * @param taskFactory       thread's task factory
      * @param closeTaskFactory  close task factory
      * @param statisticsService statistics service
-     * @param commandName       name of input command
      */
     public FileProcessor(final String partFileDest,
                          ConfigHolder configHolder,
                          IteratorFactory iteratorFactory,
                          TaskFactory taskFactory,
                          CloseTaskFactory closeTaskFactory,
-                         IStatisticsService statisticsService,
-                         final String commandName) {
+                         IStatisticsService statisticsService) {
         this.configHolder = configHolder;
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(configHolder.getValue(PART_SUFFIX))));
-        this.iterator = iteratorFactory.createIterator(FilesFinder.getPartsList(file.getAbsolutePath(),
-                configHolder.getValue(PART_SUFFIX)));
+        this.files = FilesFinder.getPartsList(file.getAbsolutePath(), configHolder.getValue(PART_SUFFIX));
+        long fileLength = 0;
+        for(File file: files){
+            fileLength+=file.length();
+        }
+        this.iterator = iteratorFactory.createIterator(configHolder, fileLength, files.get(0).length());
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;
         this.statisticsService = statisticsService;
-        this.commandName = commandName;
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
                 new NamedThreadFactory());
@@ -140,22 +137,19 @@ public class FileProcessor {
      * @param taskFactory       thread's task factory
      * @param closeTaskFactory  closing task factory
      * @param statisticsService statistics service
-     * @param commandName       name of input command
      */
     public FileProcessor(final String fileDest, final long partSize,
                          ConfigHolder configHolder,
                          IteratorFactory iteratorFactory,
                          TaskFactory taskFactory,
                          CloseTaskFactory closeTaskFactory,
-                         IStatisticsService statisticsService,
-                         final String commandName) {
+                         IStatisticsService statisticsService) {
         this.configHolder = configHolder;
         this.file = new File(fileDest);
         this.iterator = iteratorFactory.createIterator(configHolder, file.length(), partSize);
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;
         this.statisticsService = statisticsService;
-        this.commandName = commandName;
         int threadsCount = Integer.parseInt(configHolder.getValue(THREADS_COUNT));
         pool = new ThreadPoolExecutor(threadsCount, threadsCount, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(),
                 new NamedThreadFactory());
@@ -180,7 +174,8 @@ public class FileProcessor {
             log.info("Start creating tasks...");
             //distributes tasks between threads in thread pool
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                futures.add(pool.submit(taskFactory.createTask(commandName, file, configHolder, iterator, statisticsService)));
+                ITask task = taskFactory.createTask(file, files, configHolder, iterator, statisticsService);
+                futures.add(pool.submit(task));
             }
             log.info("Initializing shutdown thread pool.");
             pool.shutdown();
@@ -214,15 +209,6 @@ public class FileProcessor {
      */
     public File getFile() {
         return file;
-    }
-
-    /**
-     * Gets name of executing command.
-     *
-     * @return name of executing command
-     */
-    public String getCommandName() {
-        return commandName;
     }
 
     /**

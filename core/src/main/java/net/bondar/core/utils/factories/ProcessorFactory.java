@@ -19,7 +19,6 @@ public class ProcessorFactory {
      * @param taskFactory       task factory
      * @param closeTaskFactory  closing task factory
      * @param statisticsService statistics service
-     * @param commandName       name of input command
      * @return <code>FileProcessor</code> instance
      */
     public FileProcessor createProcessor(final String fileDest, final long partSize,
@@ -27,12 +26,11 @@ public class ProcessorFactory {
                                          IteratorFactory iteratorFactory,
                                          TaskFactory taskFactory,
                                          CloseTaskFactory closeTaskFactory,
-                                         IStatisticsService statisticsService,
-                                         final String commandName) {
+                                         IStatisticsService statisticsService) {
         if (partSize == 0) {
-            return new FileProcessor(fileDest, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
+            return new FileProcessor(fileDest, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService);
         } else {
-            return new FileProcessor(fileDest, partSize, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService, commandName);
+            return new FileProcessor(fileDest, partSize, configHolder, iteratorFactory, taskFactory, closeTaskFactory, statisticsService);
         }
     }
 }

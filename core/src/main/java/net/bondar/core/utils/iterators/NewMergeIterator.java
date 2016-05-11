@@ -3,13 +3,11 @@ package net.bondar.core.utils.iterators;
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.utils.ConfigHolder;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 /**
- * Provides iteration for part-files during splitting process.
+ *
  */
-public class SplitIterator implements Iterable {
+public class NewMergeIterator implements Iterable{
 
     /**
      * Part-file counter.
@@ -43,19 +41,14 @@ public class SplitIterator implements Iterable {
      * @param partLength the specified part-file length
      * @see {@link Iterable}
      */
-    public SplitIterator(ConfigHolder configHolder, long fileLength, long partLength) {
+    public NewMergeIterator(ConfigHolder configHolder, long fileLength, long partLength) {
         this.configHolder = configHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;
     }
 
-    /**
-     * Gets the next <code>FilePartObject</code> object.
-     *
-     * @return <code>FilePartObject</code> object with necessary parameters
-     * @see {@link Iterable}
-     */
-    public synchronized FilePartObject getNext() {
+    @Override
+    public FilePartObject getNext() {
         if (currentPosition > fileLength) return new FilePartObject();
         long start = currentPosition;
         long end = currentPosition + partLength;

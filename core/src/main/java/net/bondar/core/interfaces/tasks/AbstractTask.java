@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides tasks for thread pool.
@@ -18,14 +20,14 @@ import java.io.RandomAccessFile;
 public abstract class AbstractTask implements ITask {
 
     /**
-     * Logger.
-     */
-    private final Logger log = LogManager.getLogger(getClass());
-
-    /**
      * Specified file.
      */
-    protected final File file;
+    protected File file;
+
+    /**
+     * Specified list of part-files.
+     */
+    protected List<File> files;
 
     /**
      * Parameter holder
@@ -67,6 +69,23 @@ public abstract class AbstractTask implements ITask {
      */
     public AbstractTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
+        this.files = new ArrayList<>();
+        this.configHolder = configHolder;
+        this.iterator = iterator;
+        this.statisticsService = statisticsService;
+    }
+
+    /**
+     * Initialises <code>AbstractTask</code> fields.
+     *
+     * @param files             specified part-files
+     * @param configHolder      configuration holder
+     * @param iterator          iterator
+     * @param statisticsService statistics service
+     */
+    public AbstractTask(final List<File> files, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+        this.file = null;
+        this.files = files;
         this.configHolder = configHolder;
         this.iterator = iterator;
         this.statisticsService = statisticsService;
