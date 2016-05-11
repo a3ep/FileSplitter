@@ -1,15 +1,11 @@
 package net.bondar.core.tasks;
 
-import net.bondar.core.interfaces.IConfigHolder;
 import net.bondar.core.interfaces.IProcessor;
 import net.bondar.core.interfaces.tasks.ICloseTask;
-import net.bondar.core.utils.Command;
-import net.bondar.core.utils.FilesFinder;
 import net.bondar.core.utils.ProcessorStatus;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.io.File;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -33,21 +29,15 @@ public class CloseTask implements ICloseTask {
      */
     private IProcessor processor;
 
-    /**
-     * Configuration holder.
-     */
-    private IConfigHolder configHolder;
 
     /**
      * Creates <code>CloseTask</code> instance.
      *
-     * @param processor    file splitter processor
-     * @param configHolder configuration holder
-     * @param futures      list of futures that represented threads in a pool
+     * @param processor file splitter processor
+     * @param futures   list of futures that represented threads in a pool
      */
-    public CloseTask(IProcessor processor, IConfigHolder configHolder, final List<Future> futures) {
+    public CloseTask(IProcessor processor, final List<Future> futures) {
         this.processor = processor;
-        this.configHolder = configHolder;
         this.futures = futures;
     }
 
@@ -64,21 +54,5 @@ public class CloseTask implements ICloseTask {
             future.cancel(true);
         }
         log.debug("Finish interrupting threads.");
-        log.debug("Start cleaning temporary files...");
-        try {
-            if (processor.getCommandName().equalsIgnoreCase(Command.SPLIT.name())) {
-                List<File> files = FilesFinder.getPartsList(processor.getFile().getAbsolutePath(), configHolder.getValue("partSuffix"));
-                log.debug("Deleting temporary files.");
-                files.forEach(File::delete);
-            } else {
-                File file = processor.getFile();
-                log.debug("Deleting temporary file: " + file.getAbsolutePath());
-                file.delete();
-            }
-        } catch (SecurityException e) {
-            log.warn("Error while cleaning temporary files. Message: " + e.getMessage());
-        }
-        log.debug("Finish cleaning temporary files.");
-        log.info("Application closed.");
     }
 }

@@ -18,12 +18,11 @@ public class CloseTaskFactory implements AbstractCloseTaskFactory {
      * Creates concrete cleaning-closing task.
      *
      * @param processor    file processor
-     * @param configHolder configuration holder
      * @param futures      list of futures that represented threads in a pool
      * @return <code>CloseTask</code> instance
      */
     @Override
-    public ICloseTask createCloseTask(IProcessor processor, IConfigHolder configHolder, final List<Future> futures) {
-        return new CloseTask(processor, configHolder, futures);
+    public ICloseTask createCloseTask(IProcessor processor, final List<Future> futures) {
+        return new CloseTask(processor, futures);
     }
 }

@@ -17,9 +17,8 @@ public interface AbstractCloseTaskFactory {
      * Creates closing task.
      *
      * @param processor       file processor
-     * @param parameterHolder parameter holder
      * @param futures         list of futures that represented threads in a pool
      * @return concrete closable instance
      */
-    ICloseTask createCloseTask(final IProcessor processor, final IConfigHolder parameterHolder, final List<Future> futures);
+    ICloseTask createCloseTask(final IProcessor processor, final List<Future> futures);
 }

@@ -178,15 +178,15 @@ public class FileProcessor implements IProcessor {
             statisticsService.showStatInfo(Integer.parseInt(configHolder.getValue(STATISTICS_TIMER)));
             // creates list of futures that represented threads in a pool
             List<Future> futures = new ArrayList<>();
+            // creates shutdown hook with cleaner thread
+            Thread cleaner;
+            Runtime.getRuntime().addShutdownHook(cleaner = new Thread(closeTaskFactory
+                    .createCloseTask(this, futures), CLEANER_NAME));
             log.info("Start creating tasks...");
             //distributes tasks between threads in thread pool
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
                 futures.add(pool.submit(taskFactory.createTask(commandName, file, configHolder, iterator, statisticsService)));
             }
-            // creates shutdown hook with cleaner thread
-            Thread cleaner;
-            Runtime.getRuntime().addShutdownHook(cleaner = new Thread(closeTaskFactory
-                    .createCloseTask(this, configHolder, futures), CLEANER_NAME));
             log.info("Initializing shutdown thread pool.");
             pool.shutdown();
             log.info("Waiting for thread pool termination...");
