@@ -89,7 +89,7 @@ public class StatisticsService implements IStatisticsService {
                         viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder))));
                         Thread.sleep(period);
                     } while (!Thread.interrupted());
-                    log.info("Finish showing statistical information.");
+                    log.info("Finish display statistical information.");
                 } catch (InterruptedException e) {
                     log.info("Start cleaning statistics records...");
                     holder.cleanRecords();

@@ -13,10 +13,10 @@ public interface ICommandFinder {
     /**
      * Finds command.
      *
-     * @param list list of arguments
+     * @param commandString first string of input
      * @return current command
      * @throws ParsingException if command is not found
      */
-    ICommand findCommand(final List<String> list) throws ParsingException;
+    ICommand findCommand(final String commandString) throws ParsingException;
 
 }

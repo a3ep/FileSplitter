@@ -12,12 +12,26 @@ public interface IOptionsHolder {
      *
      * @return commands options
      */
-    Options getCommandOptions();
+    Options getCommands();
+
+    /**
+     * Sets commands options.
+     *
+     * @param commands setting commands options
+     */
+    void setCommands(Options commands);
 
     /**
      * Gets parameters options.
      *
      * @return parameters options
      */
-    Options getParameterOptions();
+    Options getParameters();
+
+    /**
+     * Sets parameters options.
+     *
+     * @param parameters setting parameters options
+     */
+    void setParameters(Options parameters);
 }

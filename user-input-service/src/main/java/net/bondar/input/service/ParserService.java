@@ -64,7 +64,7 @@ public class ParserService implements IInputParserService {
         log.info("Start parsing input arguments: " + Arrays.toString(args));
         List<String> argsList = Arrays.asList(args);
         try {
-            ICommand currentCommand = commandFinder.findCommand(argsList);
+            ICommand currentCommand = commandFinder.findCommand(argsList.get(0));
             if (currentCommand.isParametric()) {
                 currentCommand.setParameters(parameterParser.parse(argsList.subList(1, argsList.size())));
             }

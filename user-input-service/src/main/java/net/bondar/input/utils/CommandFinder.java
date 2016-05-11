@@ -36,21 +36,21 @@ public class CommandFinder implements ICommandFinder {
     /**
      * Finds command in the specified array of strings.
      *
-     * @param array the specified array of strings
+     * @param commandString first string of input
      * @return current command
      * @throws ParsingException if command is not found
      * @see {@link ICommandHolder}
      */
     @Override
-    public ICommand findCommand(final List<String> array) throws ParsingException {
+    public ICommand findCommand(final String commandString) throws ParsingException {
         log.debug("Finding current command.");
         for (ICommand command : commandHolder.getCommands()) {
-            if (array.contains(command.name().toLowerCase())) {
+            if (commandString.equals(command.name().toLowerCase())) {
                 log.debug("Current command: " + command.name());
                 return command;
             }
         }
         log.error("Error while finding command.");
-        throw new ParsingException("Error while finding command in " + array.toString());
+        throw new ParsingException("Error while finding command in " + commandString);
     }
 }

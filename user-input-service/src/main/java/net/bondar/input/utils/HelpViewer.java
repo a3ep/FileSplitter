@@ -14,12 +14,12 @@ public class HelpViewer implements IHelpViewer {
     /**
      * String with commands options description.
      */
-    private static final String COMMANDS_OPTIONS_DESCRIPTION = "===FileSplitter Commands Options===";
+    private static final String COMMANDS_OPTIONS_DESCRIPTION = "===Commands Options===";
 
     /**
      * String with parameters options description.
      */
-    private static final String PARAMETERS_OPTIONS_DESCRIPTION = "===FileSplitter Parameters Options===";
+    private static final String PARAMETERS_OPTIONS_DESCRIPTION = "===Parameters Options===";
 
     /**
      * Logger.
@@ -54,7 +54,7 @@ public class HelpViewer implements IHelpViewer {
     @Override
     public void showHelp() {
         log.debug("Showing help.");
-        helpFormatter.printHelp(COMMANDS_OPTIONS_DESCRIPTION, optionsHolder.getCommandOptions());
-        helpFormatter.printHelp(PARAMETERS_OPTIONS_DESCRIPTION, optionsHolder.getParameterOptions());
+        helpFormatter.printHelp(COMMANDS_OPTIONS_DESCRIPTION, optionsHolder.getCommands());
+        helpFormatter.printHelp(PARAMETERS_OPTIONS_DESCRIPTION, optionsHolder.getParameters());
     }
 }
