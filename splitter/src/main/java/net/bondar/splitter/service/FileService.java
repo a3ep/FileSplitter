@@ -9,8 +9,8 @@ import net.bondar.core.interfaces.factories.AbstractIteratorFactory;
 import net.bondar.core.interfaces.factories.AbstractProcessorFactory;
 import net.bondar.core.interfaces.factories.AbstractTaskFactory;
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.IHelpViewer;
-import net.bondar.input.interfaces.IInputParserService;
+import net.bondar.input.interfaces.IParserService;
+import net.bondar.input.utils.HelpViewer;
 import net.bondar.splitter.interfaces.IService;
 import net.bondar.splitter.utils.Command;
 import net.bondar.statistics.exceptions.StatisticsException;
@@ -40,7 +40,7 @@ public class FileService implements IService {
     /**
      * Input parser service.
      */
-    private final IInputParserService parserService;
+    private final IParserService parserService;
 
     /**
      * Processor factory.
@@ -70,7 +70,7 @@ public class FileService implements IService {
     /**
      * Help viewer.
      */
-    private final IHelpViewer helpViewer;
+    private final HelpViewer helpViewer;
 
     /**
      * Input command.
@@ -90,13 +90,13 @@ public class FileService implements IService {
      * @param helpViewer        help viewer
      */
     public FileService(IConfigHolder parameterHolder,
-                       IInputParserService parserService,
+                       IParserService parserService,
                        AbstractProcessorFactory processorFactory,
                        AbstractIteratorFactory iteratorFactory,
                        AbstractTaskFactory taskFactory,
                        AbstractCloseTaskFactory closeTaskFactory,
                        IStatisticsService statisticsService,
-                       IHelpViewer helpViewer) {
+                       HelpViewer helpViewer) {
         this.parameterHolder = parameterHolder;
         this.parserService = parserService;
         this.processorFactory = processorFactory;

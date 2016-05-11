@@ -2,11 +2,11 @@ package net.bondar.input.service;
 
 
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.ICommandFinder;
-import net.bondar.input.interfaces.IInputParserService;
-import net.bondar.input.interfaces.IParameterParser;
+import net.bondar.input.interfaces.IParserService;
 import net.bondar.input.interfaces.client.ICommand;
 import net.bondar.input.interfaces.client.ICommandVerifier;
+import net.bondar.input.utils.CommandFinder;
+import net.bondar.input.utils.ParameterParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Provides parsing user input arguments.
  */
-public class ParserService implements IInputParserService {
+public class ParserService implements IParserService {
 
     /**
      * Logger.
@@ -26,12 +26,12 @@ public class ParserService implements IInputParserService {
     /**
      * Command finder.
      */
-    private final ICommandFinder commandFinder;
+    private final CommandFinder commandFinder;
 
     /**
      * Parameter parser.
      */
-    private final IParameterParser parameterParser;
+    private final ParameterParser parameterParser;
 
     /**
      * Command verifier.
@@ -44,8 +44,8 @@ public class ParserService implements IInputParserService {
      * @param commandFinder   command finder
      * @param parameterParser parameter parser
      */
-    public ParserService(ICommandFinder commandFinder,
-                         IParameterParser parameterParser,
+    public ParserService(CommandFinder commandFinder,
+                         ParameterParser parameterParser,
                          ICommandVerifier commandVerifier) {
         this.commandFinder = commandFinder;
         this.parameterParser = parameterParser;
@@ -58,7 +58,7 @@ public class ParserService implements IInputParserService {
      * @param args user input arguments
      * @return current command
      * @throws ParsingException if received incorrect arguments
-     * @see {@link IInputParserService}
+     * @see {@link IParserService}
      */
     public ICommand parse(final String[] args) throws ParsingException {
         log.info("Start parsing input arguments: " + Arrays.toString(args));

@@ -1,7 +1,6 @@
 package net.bondar.input.utils;
 
 
-import net.bondar.input.interfaces.IParameterHolder;
 import net.bondar.input.interfaces.client.IParameter;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * Provides holding parameters.
  */
-public class ParameterHolder implements IParameterHolder {
+public class ParameterHolder {
 
     /**
      * List of parameters.
@@ -29,9 +28,7 @@ public class ParameterHolder implements IParameterHolder {
      * Gets list of parameters.
      *
      * @return list of parameters
-     * @see {@link IParameterHolder}
      */
-    @Override
     public List<IParameter> getParameters() {
         return parameters;
     }

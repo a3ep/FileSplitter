@@ -1,6 +1,5 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.interfaces.ICommandHolder;
 import net.bondar.input.interfaces.client.ICommand;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 /**
  * Provides holding commands.
  */
-public class CommandHolder implements ICommandHolder {
+public class CommandHolder {
 
     /**
      * List of commands.
@@ -28,9 +27,7 @@ public class CommandHolder implements ICommandHolder {
      * Gets list of commands.
      *
      * @return list of commands
-     * @see {@link ICommandHolder}
      */
-    @Override
     public List<ICommand> getCommands() {
         return commands;
     }

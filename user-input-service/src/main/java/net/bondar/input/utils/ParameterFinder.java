@@ -1,8 +1,6 @@
 package net.bondar.input.utils;
 
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.IParameterFinder;
-import net.bondar.input.interfaces.IParameterHolder;
 import net.bondar.input.interfaces.client.IParameter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -13,7 +11,7 @@ import java.util.List;
 /**
  * Provides finding parameters.
  */
-public class ParameterFinder implements IParameterFinder {
+public class ParameterFinder {
 
     /**
      * Logger.
@@ -23,14 +21,14 @@ public class ParameterFinder implements IParameterFinder {
     /**
      * Parameter holder.
      */
-    private final IParameterHolder parameterHolder;
+    private final ParameterHolder parameterHolder;
 
     /**
      * Creates <code>ParameterFinder</code> instance.
      *
      * @param parameterHolder parameter holder
      */
-    public ParameterFinder(IParameterHolder parameterHolder) {
+    public ParameterFinder(ParameterHolder parameterHolder) {
         this.parameterHolder = parameterHolder;
     }
 
@@ -40,9 +38,7 @@ public class ParameterFinder implements IParameterFinder {
      * @param arguments list of arguments
      * @return list of parameters
      * @throws ParsingException if parameters are not found
-     * @see {@link IParameterHolder}
      */
-    @Override
     public List<IParameter> find(final List<String> arguments) throws ParsingException {
         List<IParameter> result = new ArrayList<>();
         log.debug("Start finding command parameters...");

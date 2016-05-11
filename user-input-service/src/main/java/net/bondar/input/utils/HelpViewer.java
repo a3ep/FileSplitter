@@ -1,7 +1,5 @@
 package net.bondar.input.utils;
 
-import net.bondar.input.interfaces.IHelpViewer;
-import net.bondar.input.interfaces.IOptionsHolder;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -9,7 +7,7 @@ import org.apache.log4j.Logger;
 /**
  * Provides displaying help message.
  */
-public class HelpViewer implements IHelpViewer {
+public class HelpViewer {
 
     /**
      * String with commands options description.
@@ -34,24 +32,21 @@ public class HelpViewer implements IHelpViewer {
     /**
      * Options holder.
      */
-    private final IOptionsHolder optionsHolder;
+    private final CliOptionsHolder optionsHolder;
 
     /**
      * Creates <code>HelpViewer</code> instance.
      *
      * @param optionsHolder options holder
-     * @see {@link IHelpViewer}
      */
-    public HelpViewer(IOptionsHolder optionsHolder) {
+    public HelpViewer(CliOptionsHolder optionsHolder) {
         this.optionsHolder = optionsHolder;
     }
 
     /**
      * Shows help message.
      *
-     * @see {@link IHelpViewer}
      */
-    @Override
     public void showHelp() {
         log.debug("Showing help.");
         helpFormatter.printHelp(COMMANDS_OPTIONS_DESCRIPTION, optionsHolder.getCommands());

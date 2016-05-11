@@ -7,7 +7,7 @@ import net.bondar.input.interfaces.client.ICommand;
 /**
  * Provides parsing user input.
  */
-public interface IInputParserService {
+public interface IParserService {
 
     /**
      * Parses user input arguments.

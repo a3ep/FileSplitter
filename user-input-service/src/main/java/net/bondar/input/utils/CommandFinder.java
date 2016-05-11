@@ -1,18 +1,14 @@
 package net.bondar.input.utils;
 
 import net.bondar.input.exceptions.ParsingException;
-import net.bondar.input.interfaces.ICommandFinder;
-import net.bondar.input.interfaces.ICommandHolder;
 import net.bondar.input.interfaces.client.ICommand;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
 /**
  * Provides finding file command.
  */
-public class CommandFinder implements ICommandFinder {
+public class CommandFinder {
 
     /**
      * Logger.
@@ -22,14 +18,14 @@ public class CommandFinder implements ICommandFinder {
     /**
      * Command holder.
      */
-    private final ICommandHolder commandHolder;
+    private final CommandHolder commandHolder;
 
     /**
      * Creates <code>CommandFinder</code> instance.
      *
      * @param commandHolder command holder
      */
-    public CommandFinder(ICommandHolder commandHolder) {
+    public CommandFinder(CommandHolder commandHolder) {
         this.commandHolder = commandHolder;
     }
 
@@ -39,9 +35,7 @@ public class CommandFinder implements ICommandFinder {
      * @param commandString first string of input
      * @return current command
      * @throws ParsingException if command is not found
-     * @see {@link ICommandHolder}
      */
-    @Override
     public ICommand findCommand(final String commandString) throws ParsingException {
         log.debug("Finding current command.");
         for (ICommand command : commandHolder.getCommands()) {

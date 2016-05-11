@@ -60,17 +60,17 @@ public class Main {
     public static void main(String[] args) {
         try {
             IConfigHolder configHolder = new ConfigHolder();
-            ICommandHolder commandHolder = new CommandHolder(Arrays.asList(Command.values()));
-            ICommandFinder commandFinder = new CommandFinder(commandHolder);
-            IParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(Parameter.values()));
-            IParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
+            CommandHolder commandHolder = new CommandHolder(Arrays.asList(Command.values()));
+            CommandFinder commandFinder = new CommandFinder(commandHolder);
+            ParameterHolder parameterHolder = new ParameterHolder(Arrays.asList(Parameter.values()));
+            ParameterFinder parameterFinder = new ParameterFinder(parameterHolder);
             AbstractParameterConverterFactory converterFactory = new FileParameterConverterFactory();
-            IParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
+            ParameterParser parameterParser = new ParameterParser(parameterFinder, converterFactory);
             ICommandVerifier commandVerifier = new FileCommandVerifier();
-            IInputParserService parserService = new ParserService(commandFinder, parameterParser,
+            IParserService parserService = new ParserService(commandFinder, parameterParser,
                     commandVerifier);
-            IOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
-            IHelpViewer helpViewer = new HelpViewer(optionsHolder);
+            CliOptionsHolder optionsHolder = new CliOptionsHolder(commandHolder, parameterHolder);
+            HelpViewer helpViewer = new HelpViewer(optionsHolder);
             AbstractProcessorFactory processorFactory = new ProcessorFactory();
             AbstractIteratorFactory iteratorFactory = new IteratorFactory();
             AbstractTaskFactory taskFactory = new TaskFactory();
