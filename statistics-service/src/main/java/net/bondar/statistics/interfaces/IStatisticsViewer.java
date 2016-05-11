@@ -6,16 +6,9 @@ package net.bondar.statistics.interfaces;
 public interface IStatisticsViewer {
 
     /**
-     * Shows statistical information in log.
+     * Shows statistical information.
      *
      * @param statInfo string with statistical information
      */
-    void showInLogs(final String statInfo);
-
-    /**
-     * Shows statistical information in console.
-     *
-     * @param statInfo string with statistical information
-     */
-    void showInConsole(final String statInfo);
+    void show(final String statInfo);
 }

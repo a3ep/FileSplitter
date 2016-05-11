@@ -1,14 +1,12 @@
 package net.bondar.statistics.service;
 
-import net.bondar.statistics.interfaces.ICalculatedDataObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Provides holding calculated statistical data.
  */
-public class CalculatedDataObject implements ICalculatedDataObject {
+public class CalculatedDataObject {
 
     /**
      * Total progress value.
@@ -64,7 +62,6 @@ public class CalculatedDataObject implements ICalculatedDataObject {
      *
      * @return total progress value
      */
-    @Override
     public double getTotalProgress() {
         return totalProgress;
     }
@@ -83,7 +80,6 @@ public class CalculatedDataObject implements ICalculatedDataObject {
      *
      * @return time remaining value
      */
-    @Override
     public double getTimeRemaining() {
         return timeRemaining;
     }
@@ -93,7 +89,6 @@ public class CalculatedDataObject implements ICalculatedDataObject {
      *
      * @return list of statistics records ids
      */
-    @Override
     public List<String> getListOfIds() {
         return listOfIds;
     }

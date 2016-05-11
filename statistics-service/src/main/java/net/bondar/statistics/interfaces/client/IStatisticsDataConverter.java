@@ -1,7 +1,7 @@
 package net.bondar.statistics.interfaces.client;
 
-import net.bondar.statistics.interfaces.IParameterObject;
-import net.bondar.statistics.interfaces.IStatisticsHolder;
+import net.bondar.statistics.service.ParameterObject;
+import net.bondar.statistics.utils.StatisticsHolder;
 
 /**
  * Provides converting statistical data.
@@ -14,5 +14,5 @@ public interface IStatisticsDataConverter {
      * @param holder statistics holder
      * @return object contains converted statistical data
      */
-    IParameterObject convert(IStatisticsHolder holder);
+    ParameterObject convert(StatisticsHolder holder);
 }

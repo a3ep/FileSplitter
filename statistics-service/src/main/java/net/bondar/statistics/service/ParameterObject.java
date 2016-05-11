@@ -1,7 +1,5 @@
 package net.bondar.statistics.service;
 
-import net.bondar.statistics.interfaces.IParameterObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +8,7 @@ import java.util.Set;
 /**
  * Provides holding statistical parameters.
  */
-public class ParameterObject implements IParameterObject {
+public class ParameterObject {
 
     /**
      * Current volume of performed work.
@@ -67,7 +65,6 @@ public class ParameterObject implements IParameterObject {
      *
      * @return list of statistics records ids
      */
-    @Override
     public List<String> getListOfIds() {
         return listOfIds;
     }
@@ -77,7 +74,6 @@ public class ParameterObject implements IParameterObject {
      *
      * @return current volume of performed work
      */
-    @Override
     public long getCurrentVolume() {
         return currentVolume;
     }
@@ -87,7 +83,6 @@ public class ParameterObject implements IParameterObject {
      *
      * @return total volume of work
      */
-    @Override
     public double getTotalVolume() {
         return totalVolume;
     }
@@ -97,7 +92,6 @@ public class ParameterObject implements IParameterObject {
      *
      * @return a list of <code>IParameterObject</code>s
      */
-    @Override
     public List<ParameterObject> getParameterList() {
         return parameterList;
     }

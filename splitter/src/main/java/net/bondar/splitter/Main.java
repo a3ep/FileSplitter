@@ -27,7 +27,7 @@ import net.bondar.statistics.interfaces.*;
 import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
 import net.bondar.statistics.service.StatisticsService;
 import net.bondar.statistics.utils.StatisticsHolder;
-import net.bondar.statistics.utils.StatisticsViewer;
+import net.bondar.statistics.utils.viewers.LogStatisticsViewer;
 import net.bondar.statistics.utils.advanced.AdvancedStatisticsCalculator;
 import net.bondar.statistics.utils.advanced.AdvancedStatisticsFormatter;
 import org.apache.log4j.LogManager;
@@ -71,13 +71,13 @@ public class Main {
             AbstractIteratorFactory iteratorFactory = new IteratorFactory();
             AbstractTaskFactory taskFactory = new TaskFactory();
             AbstractCloseTaskFactory closableFactory = new CloseTaskFactory();
-            IStatisticsHolder statisticHolder = new StatisticsHolder();
+            StatisticsHolder statisticHolder = new StatisticsHolder();
             IStatisticsDataConverter statisticsDataConverter = new AdvancedStatisticsDataConverter();
             IStatisticsCalculator statisticsCalculator = new AdvancedStatisticsCalculator();
             IStatisticsFormatter statisticsFormatter = new AdvancedStatisticsFormatter(PROGRESS_DESCRIPTION,
                     TIMER_DESCRIPTION, DelimiterFormat.COMMA, DelimiterFormat.COLON, ProgressFormat.PERCENTAGE,
                     TimerFormat.SECONDS);
-            IStatisticsViewer statisticsViewer = new StatisticsViewer();
+            IStatisticsViewer statisticsViewer = new LogStatisticsViewer();
             IStatisticsService statisticsService = new StatisticsService(statisticHolder, statisticsDataConverter,
                     statisticsCalculator, statisticsFormatter, statisticsViewer);
             new FileService(configHolder, parserService, processorFactory, iteratorFactory, taskFactory, closableFactory,

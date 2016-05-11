@@ -1,5 +1,8 @@
 package net.bondar.statistics.interfaces;
 
+import net.bondar.statistics.service.CalculatedDataObject;
+import net.bondar.statistics.service.ParameterObject;
+
 /**
  * Provides calculating statistical data.
  */
@@ -10,7 +13,6 @@ public interface IStatisticsCalculator {
      *
      * @param parameterObject object with statistics parameters
      * @return <code>ICalculatedDataObject</code>
-     * @see {@link ICalculatedDataObject}
      */
-    ICalculatedDataObject calculate(final IParameterObject parameterObject);
+    CalculatedDataObject calculate(final ParameterObject parameterObject);
 }

@@ -3,8 +3,8 @@ package net.bondar.statistics.utils.advanced;
 import net.bondar.statistics.formatters.DelimiterFormat;
 import net.bondar.statistics.formatters.ProgressFormat;
 import net.bondar.statistics.formatters.TimerFormat;
-import net.bondar.statistics.interfaces.ICalculatedDataObject;
 import net.bondar.statistics.interfaces.IStatisticsFormatter;
+import net.bondar.statistics.service.CalculatedDataObject;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -81,7 +81,7 @@ public class AdvancedStatisticsFormatter implements IStatisticsFormatter {
      * @return formatted string with statistical information
      */
     @Override
-    public String format(final ICalculatedDataObject dataObject) {
+    public String format(final CalculatedDataObject dataObject) {
         String result;
         List<String> listOfIds = dataObject.getListOfIds();
         List<Double> partsProgress = dataObject.getPartsProgress();

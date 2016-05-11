@@ -4,6 +4,7 @@ import net.bondar.statistics.exceptions.StatisticsException;
 import net.bondar.statistics.interfaces.*;
 import net.bondar.statistics.interfaces.client.IStatObject;
 import net.bondar.statistics.interfaces.client.IStatisticsDataConverter;
+import net.bondar.statistics.utils.StatisticsHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -25,7 +26,7 @@ public class StatisticsService implements IStatisticsService {
     /**
      * Statistics holder.
      */
-    private final IStatisticsHolder holder;
+    private final StatisticsHolder holder;
 
     /**
      * Statistics data converter.
@@ -61,7 +62,7 @@ public class StatisticsService implements IStatisticsService {
      * @param formatter     statistics formatter
      * @param viewer        statistics viewer
      */
-    public StatisticsService(IStatisticsHolder holder,
+    public StatisticsService(StatisticsHolder holder,
                              IStatisticsDataConverter dataConverter,
                              IStatisticsCalculator calculator,
                              IStatisticsFormatter formatter,
@@ -86,7 +87,7 @@ public class StatisticsService implements IStatisticsService {
                 try {
                     do {
                         log.info("Start display statistical information.");
-                        viewer.showInLogs(formatter.format(calculator.calculate(dataConverter.convert(holder))));
+                        viewer.show(formatter.format(calculator.calculate(dataConverter.convert(holder))));
                         Thread.sleep(period);
                     } while (!Thread.interrupted());
                     log.info("Finish display statistical information.");
