@@ -1,4 +1,4 @@
-package net.bondar.core.utils.iterators;
+package net.bondar.core.utils;
 
 import net.bondar.core.FilePartObject;
 import net.bondar.core.interfaces.Iterable;
@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 /**
  * Provides iteration for part-files during splitting process.
  */
-public class SplitIterator implements Iterable {
+public class FileIterator implements Iterable {
 
     /**
      * Part-file counter.
@@ -37,13 +37,13 @@ public class SplitIterator implements Iterable {
     private ConfigHolder configHolder;
 
     /**
-     * Creates <code>SplitIterator</code> instance.
+     * Creates <code>FileIterator</code> instance.
      *
      * @param fileLength the specified file length
      * @param partLength the specified part-file length
      * @see {@link Iterable}
      */
-    public SplitIterator(ConfigHolder configHolder, long fileLength, long partLength) {
+    public FileIterator(ConfigHolder configHolder, long fileLength, long partLength) {
         this.configHolder = configHolder;
         this.fileLength = fileLength;
         this.partLength = partLength;

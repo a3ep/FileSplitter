@@ -2,7 +2,6 @@ package net.bondar.core.utils;
 
 import net.bondar.core.exceptions.RunException;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.core.interfaces.tasks.ITask;
 import net.bondar.core.utils.factories.CloseTaskFactory;
 import net.bondar.core.utils.factories.IteratorFactory;
 import net.bondar.core.utils.factories.NamedThreadFactory;
@@ -115,10 +114,10 @@ public class FileProcessor {
         this.file = new File(partFileDest.substring(0, partFileDest.indexOf(configHolder.getValue(PART_SUFFIX))));
         this.files = FilesFinder.getPartsList(file.getAbsolutePath(), configHolder.getValue(PART_SUFFIX));
         long fileLength = 0;
-        for(File file: files){
-            fileLength+=file.length();
+        for (File file : files) {
+            fileLength += file.length();
         }
-        this.iterator = iteratorFactory.createIterator(configHolder, fileLength, files.get(0).length());
+        this.iterator = iteratorFactory.createIterator(configHolder, fileLength + files.size() - 1, files.get(0).length());
         this.taskFactory = taskFactory;
         this.closeTaskFactory = closeTaskFactory;
         this.statisticsService = statisticsService;
@@ -158,6 +157,7 @@ public class FileProcessor {
     /**
      * Processes file.
      *
+     * @return true if process ok, otherwise false
      * @throws RunException when occurred exception during showing statistical information or splitter thread waiting for pool
      */
     public boolean process() throws RunException {
@@ -174,8 +174,7 @@ public class FileProcessor {
             log.info("Start creating tasks...");
             //distributes tasks between threads in thread pool
             for (int i = 0; i < pool.getCorePoolSize(); i++) {
-                ITask task = taskFactory.createTask(file, files, configHolder, iterator, statisticsService);
-                futures.add(pool.submit(task));
+                futures.add(pool.submit(taskFactory.createTask(file, files, configHolder, iterator, statisticsService)));
             }
             log.info("Initializing shutdown thread pool.");
             pool.shutdown();

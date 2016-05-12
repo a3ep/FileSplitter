@@ -49,14 +49,8 @@ public class SplitTask extends AbstractTask {
                 log.debug("Start to write: " + partFile.getName());
                 // /Sets the file-pointer to the start position of partFile
                 sourceFile.seek(filePart.getStartPosition());
-                start = filePart.getStartPosition();
-                long finish = filePart.getEndPosition();
-                int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
                 // writes data into file
-                log.debug("Start read-write operation, from " + file.getName() + " to " + partFile.getName());
-                readWrite(sourceFile, outputFile, finish, bufferSize);
-                log.debug("Finish to write: " + partFile.getName());
-                log.info("Finish processing task #" + filePart.getCounter() + ": " + filePart.getPartFileName());
+                readWrite(sourceFile, outputFile, filePart);
                 filePart = iterator.getNext();
             } catch (IOException e) {
                 log.error("Error during writing " + partFile + ". Message " + e.getMessage());

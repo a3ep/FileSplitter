@@ -1,7 +1,7 @@
 package net.bondar.core.exceptions;
 
 /**
- * Custom application exception.
+     * Custom application exception.
  */
 public class RunException extends RuntimeException {
 

@@ -6,7 +6,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 /**
- * Provides finding file command.
+ * Provides finding commands.
  */
 public class CommandFinder {
 

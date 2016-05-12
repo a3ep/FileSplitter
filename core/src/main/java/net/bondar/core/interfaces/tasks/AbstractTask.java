@@ -5,7 +5,6 @@ import net.bondar.core.FileStatObject;
 import net.bondar.core.interfaces.Iterable;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -18,6 +17,11 @@ import java.util.List;
  * Provides tasks for thread pool.
  */
 public abstract class AbstractTask implements ITask {
+
+    /**
+     * Logger.
+     */
+    private final Logger log = Logger.getLogger(getClass());
 
     /**
      * Specified file.
@@ -96,12 +100,15 @@ public abstract class AbstractTask implements ITask {
      *
      * @param sourceFile file from which data is read
      * @param outputFile file in witch data is wrote
-     * @param finish     end position of part-file
-     * @param bufferSize default buffer size
+     * @param filePart   object with file parameters
      * @throws IOException when read/write exception is occurring
      */
     protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile,
-                             final long finish, final int bufferSize) throws IOException {
+                             final FilePartObject filePart) throws IOException {
+        log.debug("Start read-write operation from " + filePart.getPartFileName() + " to " + file.getName());
+        start = filePart.getStartPosition();
+        long finish = filePart.getEndPosition();
+        int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
         while (start < finish) {
             //create buffer for copying
             byte[] array = new byte[getAvailableSize(finish, start, bufferSize)];
@@ -115,6 +122,8 @@ public abstract class AbstractTask implements ITask {
                     new FileStatObject(filePart.getStartPosition(), filePart.getEndPosition(),
                             start - filePart.getStartPosition(), totalWritten, filePart.getFileSize()));
         }
+        log.debug("Finish to write " + filePart.getPartFileName() + " into " + file.getName());
+        log.info("Finish processing task #" + filePart.getCounter() + ": " + filePart.getPartFileName());
     }
 
     /**
