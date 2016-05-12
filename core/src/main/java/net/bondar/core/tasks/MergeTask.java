@@ -2,7 +2,6 @@ package net.bondar.core.tasks;
 
 import net.bondar.core.PartObjectStatus;
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.core.interfaces.tasks.AbstractTask;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;

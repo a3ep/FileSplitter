@@ -1,8 +1,9 @@
-package net.bondar.core.interfaces.tasks;
+package net.bondar.core.tasks;
 
 import net.bondar.core.FilePartObject;
 import net.bondar.core.FileStatObject;
 import net.bondar.core.interfaces.Iterable;
+import net.bondar.core.interfaces.tasks.ITask;
 import net.bondar.core.utils.ConfigHolder;
 import net.bondar.statistics.interfaces.IStatisticsService;
 import org.apache.log4j.Logger;
@@ -41,7 +42,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Iterator.
      */
-    protected final Iterable iterator;
+    final Iterable iterator;
 
     /**
      * Statistic service.
@@ -61,7 +62,7 @@ public abstract class AbstractTask implements ITask {
     /**
      * Object contains part-file parameters.
      */
-    protected FilePartObject filePart;
+    FilePartObject filePart;
 
     /**
      * Initialises <code>AbstractTask</code> fields.
@@ -71,7 +72,7 @@ public abstract class AbstractTask implements ITask {
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
-    public AbstractTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    AbstractTask(final File file, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = file;
         this.files = new ArrayList<>();
         this.configHolder = configHolder;
@@ -87,7 +88,7 @@ public abstract class AbstractTask implements ITask {
      * @param iterator          iterator
      * @param statisticsService statistics service
      */
-    public AbstractTask(final List<File> files, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
+    AbstractTask(final List<File> files, ConfigHolder configHolder, Iterable iterator, IStatisticsService statisticsService) {
         this.file = null;
         this.files = files;
         this.configHolder = configHolder;
@@ -103,15 +104,14 @@ public abstract class AbstractTask implements ITask {
      * @param filePart   object with file parameters
      * @throws IOException when read/write exception is occurring
      */
-    protected void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile,
-                             final FilePartObject filePart) throws IOException {
+    void readWrite(RandomAccessFile sourceFile, RandomAccessFile outputFile,
+                   final FilePartObject filePart) throws IOException {
         log.debug("Start read-write operation from " + filePart.getPartFileName() + " to " + file.getName());
         start = filePart.getStartPosition();
         long finish = filePart.getEndPosition();
-        int bufferSize = Integer.parseInt(configHolder.getValue("bufferSize"));
         while (start < finish) {
             //create buffer for copying
-            byte[] array = new byte[getAvailableSize(finish, start, bufferSize)];
+            byte[] array = new byte[getAvailableSize(finish, start, Integer.parseInt(configHolder.getValue("bufferSize")))];
             //process of copying
             sourceFile.read(array);
             outputFile.write(array);

@@ -1,7 +1,7 @@
 package net.bondar.core.utils.factories;
 
 import net.bondar.core.interfaces.Iterable;
-import net.bondar.core.interfaces.tasks.AbstractTask;
+import net.bondar.core.tasks.AbstractTask;
 import net.bondar.core.interfaces.tasks.ITask;
 import net.bondar.core.tasks.MergeTask;
 import net.bondar.core.tasks.SplitTask;
